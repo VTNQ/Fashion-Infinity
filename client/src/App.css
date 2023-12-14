@@ -1,7 +1,13 @@
 .App {
   text-align: center;
 }
-
+.bg-jewelry {
+  background-color: #161616;
+  /* You can add more styles as needed */
+}
+.bg-img{
+  background-image: url(https://images.unsplash.com/photo-1577495508048-b635879837f1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80);
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

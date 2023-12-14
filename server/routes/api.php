@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Forgotpassword;
+use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::post("/register", [\App\Http\Controllers\RegisterController::class, 'register'])->name('register');
+Route::post('/register/google', [\App\Http\Controllers\RegisterController::class, 'registerGoogle'])->name('registerGoogle');
+Route::post('/Login',[LoginController::class,'Login'])->name('Login');
+Route::post('/login/google',[LoginController::class,'LoginGoogle'])->name('LoginGoogle');
+Route::post('/reset',[Forgotpassword::class,'CheckEmail'])->name('CheckEmail');
