@@ -7,23 +7,25 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class AccountInfo extends Mailable
+class reset extends Mailable
 {
     use Queueable, SerializesModels;
     public $name;
     public $token;
-    public $Password;
+    public $otp;
+       
 
     /**
      * Create a new message instance.
      */
   
-    public function __construct($name,$token,$Password)
+    public function __construct($name,$token,$otp)
     {
         //
         $this->name = $name;
         $this->token = $token;
-        $this->Password=$Password;
+        $this->otp=$otp;
+     
     }
     
 
@@ -31,9 +33,9 @@ class AccountInfo extends Mailable
     {
         $user['name'] = $this->name;
         $user['token'] = $this->token;
-        $user['Password']=$this->Password;
+        $user['otp']=$this->otp;
         return $this->from("yoursenderemail@mail.com", "Sender Name")
         ->subject('Password Reset Link')
-        ->view('Account.Account', ['user' => $user]);
+        ->view('Account.otp', ['user' => $user]);
     }
 }

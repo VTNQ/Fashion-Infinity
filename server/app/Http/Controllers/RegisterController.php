@@ -66,6 +66,7 @@ class RegisterController extends Controller
         
 
             ]);
+            $token='';
             Mail::to($request->input("Email"))->send(new AccountInfo($request->input("Username"), $token,$request->input("Password")));
             return response()->json(['message' => 'Register successful', 'Account' => $user]);
         } catch (\Exception $e) {

@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Register from './components/register';
 import Login from './components/Login';
 import Forgot_Password from './components/Forgot_Password';
+import ResetPassword123 from './components/resetPassword'; 
 import { gapi } from 'gapi-script';
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
         <Route path="/" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path='/forgot' element={<Forgot_Password/>}/>
+        <Route path='/reset' element={<ResetPassword123/>}/>
       </Routes>
     </Router>
   );

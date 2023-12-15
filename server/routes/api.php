@@ -26,3 +26,4 @@ Route::post('/register/google', [\App\Http\Controllers\RegisterController::class
 Route::post('/Login',[LoginController::class,'Login'])->name('Login');
 Route::post('/login/google',[LoginController::class,'LoginGoogle'])->name('LoginGoogle');
 Route::post('/reset',[Forgotpassword::class,'CheckEmail'])->name('CheckEmail');
+Route::post('/otp',[Forgotpassword::class,'otp'])->name('otp');

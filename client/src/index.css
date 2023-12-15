@@ -9,7 +9,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.input{
+  border: none;
+  line-height: 50px;
+  text-align: center;
+  font-size: 32px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 200;
+  color: white;
+  margin: 0 2px;
+  width: 66px;
+  border: 2px solid #55525c;
+  padding: 10px;
+  border-radius: 6px;
+   background-color: #161616;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
