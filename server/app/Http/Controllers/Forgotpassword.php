@@ -47,7 +47,7 @@ class Forgotpassword extends Controller
 
                 if($user){
                  
-                   
+                        Account::where('otp',$request->input('otp'))->update(['otp'=>null]);
                         return response()->json(['message' => 'Password reset email sent successfully', 'user' => $user]);
                    
                 }else{

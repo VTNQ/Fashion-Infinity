@@ -33,7 +33,7 @@ const handleSubmit = (e) => {
     sendOtpRequest(); // Gọi hàm khi người dùng nhấn nút submit
 };
 const sendOtpRequest = async () => {
-    if(minutes==0 && seconds==0){
+    if(minutes===0 && seconds===0){
         Swal.fire({
             icon: "error",
             title: "OTP is invalid",
@@ -72,23 +72,42 @@ const sendOtpRequest = async () => {
 
     
 };
+
 useEffect(()=>{
     const interval = setInterval(() => {
         setCountdown((prevCountdown) => {
             const newCountdown = Math.max(prevCountdown - 1, 0);
-
+               
             // Store the new countdown value in localStorage
             localStorage.setItem('countdown', newCountdown.toString());
 
             return newCountdown;
         });
     }, 1000);
-    return ()=>clearInterval(interval);
-},[]);
+   
+    return () => {
+        // Cleanup function when the component unmounts
+        clearInterval(interval);
+    };
+}, []);
+useEffect(() => {
+    const handleBeforeUnload = () => {
+        // Store the current countdown value in localStorage
+        localStorage.setItem('countdown', countDown.toString());
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+        // Cleanup function when the component unmounts or changes page
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+}, [countDown]);
 useEffect(()=>{
-    if(performance.navigation.type === performance.navigation.TYPE_RELOAD){
-        setCountdown(initialCountdown);
-        window.location.href="/forgot";
+    const navigationType = performance.navigation.type;
+    if (navigationType === performance.navigation.TYPE_RELOAD) {
+        
+        window.location.href = "/forgot";
     }
 },[initialCountdown]);
 const minutes = Math.max(Math.floor(countDown / 60),0);
@@ -120,8 +139,8 @@ const seconds = Math.max(countDown % 60,0);
                         <div className="py-6 space-x-2">
                             {/* Add your content here */}
                         </div>
-                        <h2 className="mb-2 text-[2rem] text-white font-bold">Forgot Password</h2>
-                        <p className="text-gray-100">Time:{String(minutes).padStart(2,'0')}:{String(seconds).padStart(2,'0')}</p>
+                        <h2 className="mb-2 text-[2rem] text-white font-bold">{String(minutes).padStart(2,'0')}:{String(seconds).padStart(2,'0')}</h2>
+                        <p className="text-gray-100">Enter Your OTP;</p>
                         <form onSubmit={handleSubmit} className="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
                             <div className="pb-2 pt-4 flex justify-between">
                             {otpInputs.map((input, index) => (
@@ -143,14 +162,7 @@ const seconds = Math.max(countDown % 60,0);
                             
 
                             {/* Additional content */}
-                            <div className="flex justify-between">
-                                <div className="text-right text-gray-400 hover:underline hover:text-gray-100">
-                                    <a href="#">Don't Have Account</a>
-                                </div>
-                                <div className="text-right text-gray-400 hover:underline hover:text-gray-100">
-                                    <a href="#">Forgot Password?</a>
-                                </div>
-                            </div>
+                         
 
                             <div className="px-4 pb-2 pt-4">
                                 <button

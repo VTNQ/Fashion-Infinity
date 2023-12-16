@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import logoimage from "../images/logo-trang-suc-5.png";
 import Swal from "sweetalert2";
-import { useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 function Forgot() {
+ 
     const history=useNavigate();
     const [loading, setloading] = useState(false);
     const [formData, setFormData] = useState({
@@ -23,6 +24,8 @@ function Forgot() {
 
         setErrors(newErrors)
     }
+  
+   
     const handleSubmit = async (e) => {
         setloading(true);
         try {
@@ -139,11 +142,9 @@ function Forgot() {
 
                             <div className="flex justify-between">
                                 <div className="text-right text-gray-400 hover:underline hover:text-gray-100">
-                                    <a href="#" >Don't Have Account</a>
+                                    <a href="#" onClick={()=>history('/login')} >Back</a>
                                 </div>
-                                <div className="text-right text-gray-400 hover:underline hover:text-gray-100">
-                                    <a href="#">Forgot Password?</a>
-                                </div>
+                             
                             </div>
 
                             <div className="px-4 pb-2 pt-4">

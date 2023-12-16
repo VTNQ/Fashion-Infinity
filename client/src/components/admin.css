@@ -78,7 +78,7 @@ body {
   position: relative;
 }
 .layout-boxed {
-  background: url('../src/images/boxed-bg.jpg') repeat fixed;
+  background: url('../images/boxed-bg.jpg') repeat fixed;
 }
 /*
  * Content Wrapper - contins main content
@@ -526,6 +526,9 @@ li a{
 }
 .img-circle {
   border-radius: 50%;
+}
+.sidebar{
+  background-color: #222d32;
 }
 .pull-left {
   float: left!important;

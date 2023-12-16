@@ -7,6 +7,7 @@ import { GoogleLogin } from "react-google-login";
 import {useNavigate} from "react-router-dom";
 
 function Login() {
+    const [username, setUsername] = useState('');
     const [loading, setloading] = useState(false);
     function Logingoogle({ onSuccess, onFailure }) {
         const clientId = '459264668372-o7aqna11uh89jqtbuc05o285tsphoopc.apps.googleusercontent.com'; // Replace with your actual client ID
@@ -132,12 +133,16 @@ function Login() {
             const responseData=await response.json();
             if(response.ok){
                if(responseData.message){
+                setUsername(responseData.Username);
                 Swal.fire({
                     icon: "success",
                     title: responseData.message,
                     showConfirmButton: false,
                     timer: 1500
-                });
+                }).then(()=>{
+                    navigate('/admin', { state: { username: responseData.Username } });
+                });;
+               
                }
                   
                 

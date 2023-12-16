@@ -23,10 +23,10 @@ class LoginController extends Controller
     }
     public function Login(Request $request){
         try {
-            $existingAccount = Account::where('Email', $request->input('Email'))->where('Password',md5($request->input('Password')))->first();
+            $existingAccount = Account::where('Email', $request->input('Email'))->where('Password',md5($request->input('Password')))->where('Accounttype',0)->first();
         
            if($existingAccount){
-            return response()->json(['message' => 'Login successful', 'Account' => $existingAccount]);
+            return response()->json(['message' => 'Login successful', 'Username' => $existingAccount->Username, 'Account' => $existingAccount]);
            }else{
             return response()->json(['errorMessage' => 'Invalid email or password'], 401);
            }
