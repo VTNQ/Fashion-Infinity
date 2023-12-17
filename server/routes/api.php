@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\category;
 use App\Http\Controllers\Forgotpassword;
 use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
@@ -27,3 +28,7 @@ Route::post('/Login',[LoginController::class,'Login'])->name('Login');
 Route::post('/login/google',[LoginController::class,'LoginGoogle'])->name('LoginGoogle');
 Route::post('/reset',[Forgotpassword::class,'CheckEmail'])->name('CheckEmail');
 Route::post('/otp',[Forgotpassword::class,'otp'])->name('otp');
+Route::post('/AddCategory',[category::class,'AddCategory'])->name('AddCategory');
+Route::get('/getcategories',[category::class,'getcategories'])->name('getcategories');
+Route::put("/categories/{id}",[category::class,'updateCategory'])->name('updateCategory');
+Route::put("/deleteCategory/{id}",[category::class,'deleteCategory'])->name('deleteCategory');

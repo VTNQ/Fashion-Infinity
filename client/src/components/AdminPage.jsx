@@ -69,8 +69,8 @@ function AdminPage(){
                 <li><a href="pages/layout/collapsed-sidebar.html"><i className="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
               </ul>
             </li>
-            <li>
-              <a onClick={() => navigate('/category', { state: { username: username } })}>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username } })}>
                 <i className="fa fa-th"></i> <span>category</span> 
               </a>
             </li>
