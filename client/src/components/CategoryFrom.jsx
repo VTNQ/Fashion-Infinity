@@ -1,5 +1,6 @@
 import image from '../images/user2-160x160.jpg';
 import { useEffect, useState } from 'react';
+import {useNavigate} from "react-router-dom";
 import Swal from 'sweetalert2';
 import axios  from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -11,6 +12,7 @@ function CategoryFrom() {
   const location = useLocation();
   const username = location.state?.username || 'Default Username';
   const [perPage,setperPage]=useState(5);
+  const navigate=useNavigate();
   const [currentPage,setCurrentPage]=useState(0);
   const [formData, setFormData] = useState({
     NameCategory: '',
@@ -181,7 +183,15 @@ function CategoryFrom() {
         const response = await axios.put(`http://127.0.0.1:8000/api/categories/${formData.ID}`, {
           UpdateNameCategory: formData.UpdateNameCategory,
         });
-        if (response.data.message) {
+        if (response.data.exists) {
+          Swal.fire({
+            icon: "error",
+            title:"Category is exists",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+         
+        }else if(response.data.message){
           Swal.fire({
             icon: "success",
             title: "update category successfully",
@@ -192,6 +202,7 @@ function CategoryFrom() {
           const response=await axios.get('http://127.0.0.1:8000/api/getcategories');
           setCategories(response.data);
         }
+      
       } catch (error) {
         console.error('Update error:', error);
         if (error.response) {
@@ -268,8 +279,8 @@ function CategoryFrom() {
 
           <ul className="sidebar-menu">
             <li className="header">MAIN NAVIGATION</li>
-            <li className="active treeview">
-              <a href="#">
+            <li className="active treeview text-white">
+              <a className='cursor-pointer'  onClick={() => navigate('/admin', { state: { username: username } })}>
                 <i className="fa fa-dashboard"></i> <span>Dashboard</span> <i className="fa fa-angle-left pull-right"></i>
               </a>
 
