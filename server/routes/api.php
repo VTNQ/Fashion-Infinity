@@ -3,6 +3,7 @@
 use App\Http\Controllers\category;
 use App\Http\Controllers\Forgotpassword;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PictureController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,3 +33,6 @@ Route::post('/AddCategory',[category::class,'AddCategory'])->name('AddCategory')
 Route::get('/getcategories',[category::class,'getcategories'])->name('getcategories');
 Route::put("/categories/{id}",[category::class,'updateCategory'])->name('updateCategory');
 Route::put("/deleteCategory/{id}",[category::class,'deleteCategory'])->name('deleteCategory');
+Route::post('/uploadImage',[PictureController::class,'uploadImage'])->name('uploadImage');
+Route::get('/getPicture',[PictureController::class,'getPicture'])->name('getPicture');
+Route::put('/Updatestatus/{id}',[PictureController::class,'Updatestatus'])->name('Updatestatus');

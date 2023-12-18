@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 class category extends Controller
 {
     public function deleteCategory(Request $request,$ID){
+        
         try{
             $deleterows=ModelsCategory::where('ID',$ID)->delete();
             if($deleterows>0){
@@ -19,11 +20,22 @@ class category extends Controller
         }
     }
     public function updateCategory(Request $request,$ID){
+       
         try{
-            $updatedRows = ModelsCategory::where('ID',$ID)->update(['Name' => $request->input('UpdateNameCategory')]);
-            if($updatedRows>0){
+            $exists = ModelsCategory::where("Name", $request->input('UpdateNameCategory'))->first();
+            if ($exists) {
+                return response()->json(['exists' => true, 'message' => 'Category already exists']);
+            }else{
+                $updatedRows = ModelsCategory::where('ID', $ID)->update(['Name' => $request->input('UpdateNameCategory')]);
+                
+            if ($updatedRows > 0) {
                 return response()->json(['message' => 'Category updated successfully']);
             }
+            }
+            
+          
+            
+        
             
         }catch(\Exception $e){
             return response()->json(['error' => 'Failed to update category'], 500);
