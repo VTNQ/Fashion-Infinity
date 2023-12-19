@@ -36,3 +36,4 @@ Route::put("/deleteCategory/{id}",[category::class,'deleteCategory'])->name('del
 Route::post('/uploadImage',[PictureController::class,'uploadImage'])->name('uploadImage');
 Route::get('/getPicture',[PictureController::class,'getPicture'])->name('getPicture');
 Route::put('/Updatestatus/{id}',[PictureController::class,'Updatestatus'])->name('Updatestatus');
+Route::put('/updateImage/{id}',[PictureController::class,'updateImage'])->name('updateImage');

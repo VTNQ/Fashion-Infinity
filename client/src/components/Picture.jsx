@@ -8,6 +8,7 @@ import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
 import '../components/admin.css'
 function Picture() {
+  const [selectedImageNames, setSelectedImageNames] = useState([]);
   const [searchTerm, setSearchtem] = useState('');
   const [loading, setloading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -27,11 +28,68 @@ function Picture() {
     const selectedCategory=Picture.find(category=>category.ID==categoryId)
     if(selectedCategory){
       setFormData({
-        
+        UpdateImage:[selectedCategory.link],
+        status:selectedCategory.status.toString(),
+        ID:selectedCategory.ID,
       })
     }
+   
     setPopupVisibility(true);
   }
+  const handleUpdateImage = async (e) => {
+    e.preventDefault();
+    setloading(true);
+
+    try {
+      const formDataApi = new FormData();
+
+      if (formData.UpdateImage.length > 0) {
+        formData.UpdateImage.forEach((image, index) => {
+          // Đặt tên trường là 'UpdateImage', không phải `UpdateImage[${index}]`
+          formDataApi.append('UpdateImage', image);
+        });
+      }
+
+      // Chắc chắn rằng bạn đã đặt Content-Type đúng để tương tác với Laravel
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const response = await axios.put(`http://127.0.0.1:8000/api/updateImage/${formData.ID}`, formDataApi, config);
+
+      if (response.data.message) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Image updated successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        setFormData({
+          UpdateImage: [],
+          status: '1',
+          ID: '',
+        });
+
+        setpreviewedit([]);
+        setPopupVisibility(false);
+      } else if (response.data.error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to update image',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } catch (error) {
+      console.error('Image update error:', error);
+    } finally {
+      setloading(false);
+    }
+};
+
   const closingAnimation = {
     animation: 'flipright 0.5s',
   };
@@ -64,9 +122,12 @@ function Picture() {
 
   const navigate = useNavigate();
   const [previewImage, setpreviewImage] = useState([]);
+  const [previewedit,setpreviewedit]=useState([]);
   const [formData, setFormData] = useState({
     Image: [],
     status: '1',
+    UpdateImage:[],
+    ID:''
   });
   const handleStatusChange = (e) => {
     setFormData({
@@ -75,17 +136,95 @@ function Picture() {
     });
 
   }
+  const validateImageFormat=(file)=>{
+    return new Promise((resolve,reject)=>{
+      const render=new FileReader();
+      render.onloadend=function(){
+        const arr=new Uint8Array(render.result).subarray(0,4);
+        let header='';
+        for(let i=0;i<arr.length;i++){
+          header+=arr[i].toString(16);
+        }
+        if(header.startsWith('89504e47')){
+          resolve(true);
+        }else if(header.startsWith('ffd8ff')){
+          resolve(true)
+        }else if(header.startsWith('47494638')){
+          resolve(true);
+        }else{
+          reject('Invalid image format')
+        }
+      };
+      render.onerror=function(){
+        reject('error reading the file');
+      };
+      render.readAsArrayBuffer(file);
+    })
+  }
   const filteredCategories = Picture.filter(category =>
 
     category.status.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
-  const handleImageChange = (e) => {
+  const handleImageupdate=async (e)=>{
     const selectedImage = Array.from(e.target.files);
-    setpreviewImage(selectedImage.map((image) => URL.createObjectURL(image)));
-    setFormData({
-      ...formData,
-      Image: selectedImage,
-    });
+  
+    try {
+   
+      await Promise.all(selectedImage.map(validateImageFormat));
+  
+      setpreviewedit(selectedImage.map((image) => URL.createObjectURL(image)));
+      setFormData({
+        ...formData,
+        UpdateImage: selectedImage,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: error,
+        showConfirmButton: true,
+      });
+      setpreviewedit([]);
+      setFormData({
+        ...formData,
+        UpdateImage: [],
+      });
+      document.getElementById('UpdateimageInput').value = '';
+
+      // Clear selected image names on error
+ 
+    
+    }
+  }
+
+  const handleImageChange = async (e) => {
+    const selectedImage = Array.from(e.target.files);
+  
+    try {
+   
+      await Promise.all(selectedImage.map(validateImageFormat));
+  
+      setpreviewImage(selectedImage.map((image) => URL.createObjectURL(image)));
+      setFormData({
+        ...formData,
+        Image: selectedImage,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: error,
+        showConfirmButton: true,
+      });
+      setpreviewImage([]);
+      setFormData({
+        ...formData,
+        Image: [],
+      });
+      document.getElementById('imageInput').value = '';
+
+      // Clear selected image names on error
+ 
+    
+    }
   };
   const handleImageUpload = async (e) => {
     e.preventDefault();
@@ -106,7 +245,7 @@ function Picture() {
       formData.Image.forEach((image) => {
         formDataApi.append('Image', image);
       });
-
+      
       formDataApi.append('status', formData.status);
 
       const response = await axios.post('http://127.0.0.1:8000/api/uploadImage', formDataApi);
@@ -354,8 +493,9 @@ function Picture() {
                     <div className="form-group">
                       <label >Name</label>
                       <input type='file' name='Image' className="form-control" id="imageInput" placeholder="Enter Name Category" onChange={handleImageChange} multiple />
-
-                    </div>
+ 
+   
+             </div>
                     <div className="form-group">
                       <label >Name</label>
                       <select name="status" className="form-control" value={formData.status} onChange={handleStatusChange}>
@@ -478,17 +618,43 @@ function Picture() {
 
  <div >
  
-                <h3 className="box-title">Edit Category</h3>
+                <h3 className="box-title">Edit Picture</h3>
               </div>
-              <form role="form" >
+              <form role="form" onSubmit={handleUpdateImage}>
                 <div className="box-body">
                   {/* Form fields go here */}
                   <div className="form-group">
                     <label className='float-left'>Name</label>
-                    <input name='UpdateNameCategory' className="form-control" value={formData.UpdateNameCategory} onChange={handleImageUpload} id="exampleInputEmail1" placeholder="Enter Name Category"  />
+                     <input type='file' name='UpdateImage'  className="form-control" id="UpdateimageInput" placeholder="Enter Name Category" onChange={handleImageupdate} multiple />
+                  
+                  </div>
+                  <div className="form-group">
+                    <label className='float-left'>Name</label>
+                    <select name="status" className="border border-gray-300 px-3  py-1 rounded-md focus:outline-none focus:border-blue-500 w-[100%]" value={searchTerm} onChange={(e) => setSearchtem(e.target.value)}>
+
+<option value="1">Main</option>
+<option value="2">extra</option>
+</select>
                   
                   </div>
 
+                  {previewedit.length > 0 ? (
+  <div className='form-group'>
+    <label>Preview</label>
+    <div className="img form-group flex">
+      {previewedit.map((preview, index) => (
+        <img key={index} src={preview} alt={`Preview ${index}`} width="100" height="100" />
+      ))}
+    </div>
+  </div>
+) : (
+  <div className='form-group'>
+    <label>Preview</label>
+    <div className="img form-group flex">
+      <img src={formData.UpdateImage} width="100" height="100" alt="" />
+    </div>
+  </div>
+)}
                 </div>
 
                 <div className="box-footer">
