@@ -24,41 +24,35 @@ function Picture() {
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
     animation: 'flipleft 0.5s', // Default animation
   };
-  const handleEditClick = (categoryId) => {
-    const selectedCategory=Picture.find(category=>category.ID==categoryId)
-    if(selectedCategory){
-      setFormData({
-        UpdateImage:[selectedCategory.link],
-        status:selectedCategory.status.toString(),
-        ID:selectedCategory.ID,
-      })
-    }
-   
+  const handleEditClick = (item) => {
+    setFormData({
+      UpdateImage: [item.link],
+      status: item.status.toString(),
+      ID: item.ID,
+    });
     setPopupVisibility(true);
   }
   const handleUpdateImage = async (e) => {
     e.preventDefault();
     setloading(true);
-
+  
     try {
       const formDataApi = new FormData();
-
-      if (formData.UpdateImage.length > 0) {
-        formData.UpdateImage.forEach((image, index) => {
-          // Đặt tên trường là 'UpdateImage', không phải `UpdateImage[${index}]`
-          formDataApi.append('UpdateImage', image);
-        });
-      }
-
-      // Chắc chắn rằng bạn đã đặt Content-Type đúng để tương tác với Laravel
+  
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       };
-
-      const response = await axios.put(`http://127.0.0.1:8000/api/updateImage/${formData.ID}`, formDataApi, config);
-
+  
+      formData.UpdateImage.forEach((image) => {
+        formDataApi.append('UpdateImage', image);
+      });
+  
+      formDataApi.append('status', formData.status);
+  
+      const response = await axios.post(`http://127.0.0.1:8000/api/updateImage/${formData.ID}`, formDataApi, config);
+  
       if (response.data.message) {
         Swal.fire({
           icon: 'success',
@@ -66,13 +60,13 @@ function Picture() {
           showConfirmButton: false,
           timer: 1500,
         });
-
+  
         setFormData({
           UpdateImage: [],
           status: '1',
           ID: '',
         });
-
+  
         setpreviewedit([]);
         setPopupVisibility(false);
       } else if (response.data.error) {
@@ -84,11 +78,12 @@ function Picture() {
         });
       }
     } catch (error) {
-      console.error('Image update error:', error);
+      console.error('Image update error:', error.response.data);
     } finally {
       setloading(false);
     }
-};
+  };
+  
 
   const closingAnimation = {
     animation: 'flipright 0.5s',
@@ -184,11 +179,7 @@ function Picture() {
         showConfirmButton: true,
       });
       setpreviewedit([]);
-      setFormData({
-        ...formData,
-        UpdateImage: [],
-      });
-      document.getElementById('UpdateimageInput').value = '';
+     
 
       // Clear selected image names on error
  
@@ -229,46 +220,40 @@ function Picture() {
   const handleImageUpload = async (e) => {
     e.preventDefault();
     setloading(true);
+  
     try {
       const formDataApi = new FormData();
-
-      // Check if status is "main" and more than one image is selected
-      if (formData.status === '1' && formData.Image.length > 1) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Main category can only have one image',
-          showConfirmButton: true,
-        });
-        return;
-      }
-
-      formData.Image.forEach((image) => {
-        formDataApi.append('Image', image);
-      });
-      
+      formDataApi.append('Image', e.target[0].files[0]); // Assuming the file input is the first element in the form
       formDataApi.append('status', formData.status);
-
-      const response = await axios.post('http://127.0.0.1:8000/api/uploadImage', formDataApi);
-
-      if (response.data.message) {
+  
+      const response = await fetch('http://127.0.0.1:8000/api/uploadImage', {
+        method: 'POST',
+        body: formDataApi,
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        
         Swal.fire({
           icon: 'success',
           title: 'Image uploaded successfully',
           showConfirmButton: false,
           timer: 1500,
         });
+  
         setFormData({
           Image: null,
           status: '1',
-
         });
-
+  
         setpreviewImage([]);
-        document.getElementById('imageInput').value = '';
-      } else if (response.data.error) {
+        // Use the reset method to clear all form fields
+        e.target.reset();
+      } else {
         Swal.fire({
           icon: 'error',
-          title: 'Failed to upload image',
+          title: data.error || 'Failed to upload image',
           showConfirmButton: false,
           timer: 1500,
         });
@@ -279,8 +264,7 @@ function Picture() {
       setloading(false);
     }
   };
-
-
+  
   const handlePageclick = (data) => {
     setCurrentPage(data.selected);
   };
@@ -565,7 +549,7 @@ function Picture() {
                               <span className="slider" ></span>
                             </label>
                           </td>
-                          <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEditClick(item.ID)} >Edit</button></td>
+                          <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEditClick(item)} >Edit</button></td>
                           <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" >Remove</button></td>
                         </tr>
                       ))}
