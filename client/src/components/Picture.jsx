@@ -8,99 +8,15 @@ import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
 import '../components/admin.css'
 function Picture() {
-  const [selectedImageNames, setSelectedImageNames] = useState([]);
+ 
   const [searchTerm, setSearchtem] = useState('');
   const [loading, setloading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [perPage, setperPage] = useState(5);
   const [Picture, setPicture] = useState([]);
-  const [IsClosingPopup,setIsClosingPopup]=useState(false);
-  const popupContentStyle = {
-    background: 'white',
-    padding: '20px',
-    maxWidth: '400px',
-    textAlign: 'center',
-    borderRadius: '8px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    animation: 'flipleft 0.5s', // Default animation
-  };
-  const handleEditClick = (item) => {
-    setFormData({
-      UpdateImage: [item.link],
-      status: item.status.toString(),
-      ID: item.ID,
-    });
-    setPopupVisibility(true);
-  }
-  const handleUpdateImage = async (e) => {
-    e.preventDefault();
-    setloading(true);
-  
-    try {
-      const formDataApi = new FormData();
-  
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      };
-  
-      formData.UpdateImage.forEach((image) => {
-        formDataApi.append('UpdateImage', image);
-      });
-  
-      formDataApi.append('status', formData.status);
-  
-      const response = await axios.post(`http://127.0.0.1:8000/api/updateImage/${formData.ID}`, formDataApi, config);
-  
-      if (response.data.message) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Image updated successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-  
-        setFormData({
-          UpdateImage: [],
-          status: '1',
-          ID: '',
-        });
-  
-        setpreviewedit([]);
-        setPopupVisibility(false);
-      } else if (response.data.error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed to update image',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-    } catch (error) {
-      console.error('Image update error:', error.response.data);
-    } finally {
-      setloading(false);
-    }
-  };
-  
 
-  const closingAnimation = {
-    animation: 'flipright 0.5s',
-  };
-  const [isPopupVisible, setPopupVisibility] = useState(false);
-  const handleClosepopup=()=>{
-    
-    setIsClosingPopup(true);
-    setTimeout(() => {
-      setFormData({
-       
-      })
-      setPopupVisibility(false);
-      setIsClosingPopup(false);
-    }, 500);
-   
-  }
+
+  
   useEffect(() => {
     const fetchdata = async () => {
       try {
@@ -117,12 +33,12 @@ function Picture() {
 
   const navigate = useNavigate();
   const [previewImage, setpreviewImage] = useState([]);
-  const [previewedit,setpreviewedit]=useState([]);
+
   const [formData, setFormData] = useState({
     Image: [],
     status: '1',
-    UpdateImage:[],
-    ID:''
+    ID:'',
+
   });
   const handleStatusChange = (e) => {
     setFormData({
@@ -131,6 +47,7 @@ function Picture() {
     });
 
   }
+  
   const validateImageFormat=(file)=>{
     return new Promise((resolve,reject)=>{
       const render=new FileReader();
@@ -160,32 +77,7 @@ function Picture() {
 
     category.status.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
-  const handleImageupdate=async (e)=>{
-    const selectedImage = Array.from(e.target.files);
   
-    try {
-   
-      await Promise.all(selectedImage.map(validateImageFormat));
-  
-      setpreviewedit(selectedImage.map((image) => URL.createObjectURL(image)));
-      setFormData({
-        ...formData,
-        UpdateImage: selectedImage,
-      });
-    } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: error,
-        showConfirmButton: true,
-      });
-      setpreviewedit([]);
-     
-
-      // Clear selected image names on error
- 
-    
-    }
-  }
 
   const handleImageChange = async (e) => {
     const selectedImage = Array.from(e.target.files);
@@ -220,40 +112,47 @@ function Picture() {
   const handleImageUpload = async (e) => {
     e.preventDefault();
     setloading(true);
-  
+
     try {
       const formDataApi = new FormData();
-      formDataApi.append('Image', e.target[0].files[0]); // Assuming the file input is the first element in the form
-      formDataApi.append('status', formData.status);
-  
-      const response = await fetch('http://127.0.0.1:8000/api/uploadImage', {
-        method: 'POST',
-        body: formDataApi,
+
+      // Check if status is "main" and more than one image is selected
+      if (formData.status === '1' && formData.Image.length > 1) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Main category can only have one image',
+          showConfirmButton: true,
+        });
+        return;
+      }
+
+      formData.Image.forEach((image) => {
+        formDataApi.append('Image[]', image); // Note the square brackets to handle multiple files
       });
-  
-      const data = await response.json();
-  
-      if (response.ok) {
-        
+
+      formDataApi.append('status', formData.status);
+
+      const response = await axios.post('http://127.0.0.1:8000/api/uploadImage', formDataApi);
+
+      if (response.data.message) {
         Swal.fire({
           icon: 'success',
           title: 'Image uploaded successfully',
           showConfirmButton: false,
           timer: 1500,
         });
-  
         setFormData({
           Image: null,
           status: '1',
         });
-  
+        const responseData = await axios.get('http://127.0.0.1:8000/api/getPicture');
+        setPicture(responseData.data);
         setpreviewImage([]);
-        // Use the reset method to clear all form fields
-        e.target.reset();
-      } else {
+        document.getElementById('imageInput').value = '';
+      } else if (response.data.error) {
         Swal.fire({
           icon: 'error',
-          title: data.error || 'Failed to upload image',
+          title: 'Failed to upload image',
           showConfirmButton: false,
           timer: 1500,
         });
@@ -264,41 +163,82 @@ function Picture() {
       setloading(false);
     }
   };
+
+  // ... (your existing code)
+
   
   const handlePageclick = (data) => {
     setCurrentPage(data.selected);
   };
-
   const handleToggleSwitchChange = async (index) => {
-   try{
-    const response=await fetch(`http://127.0.0.1:8000/api/Updatestatus/${index}`,{
-    method:'PUT',
-    headers:{
-      'Content-Type': 'application/json',
-    },
-    body:JSON.stringify({}),
-    });
-    if(!response.ok){
-      const errorData=await response.json();
-      Swal.fire({
-        icon: "error",
-        title: errorData.error,
-        showConfirmButton: false,
-        timer: 1500
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/Updatestatus/${index}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: '1', // Include the data you want to send in the request body
+        }),
       });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        Swal.fire({
+          icon: 'error',
+          title: errorData.error,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+  
+      const updatedPicture = [...Picture];
+      if (updatedPicture[index]) {
+        updatedPicture[index].status = '1';
+        setPicture(updatedPicture);
+      } else {
+        console.error('Picture not found at index:', index);
+      }
+  
+      const responseData = await axios.get('http://127.0.0.1:8000/api/getPicture');
+      setPicture(responseData.data);
+    } catch (error) {
+      console.error(error);
     }
-    
-    const updatedPicture=[...Picture];
-    updatedPicture[index].status =  1 ;
-    setPicture(updatedPicture);
-    const responsedata = await axios.get("http://127.0.0.1:8000/api/getPicture");
-    setPicture(responsedata.data);
-
-    console.log('Change successful');
-   }catch(error){
-    console.error(error);
-   }
   };
+  const deletePicture = async (idpicture) => {
+    const confirmation = await Swal.fire({
+        title: 'Are you sure you want to delete?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+    });
+
+    if (confirmation.isConfirmed) {
+        try {
+            const response = await axios.put(`http://127.0.0.1:8000/api/DeletePicture/${idpicture}`);
+            if (response.data.message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Deletion successful',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+
+                const responseData = await axios.get('http://127.0.0.1:8000/api/getPicture');
+                setPicture(responseData.data);
+            }
+        } catch (error) {
+            console.error('Error deleting picture:', error);
+            // Handle error, show a message, or log it
+        }
+    }
+};
+
+  
   const indexOflastCategory = (currentPage + 1) * perPage;
   const indexOfFirtCategory = indexOflastCategory - perPage;
   const currentCategories = filteredCategories.slice(indexOfFirtCategory, indexOflastCategory)
@@ -532,7 +472,6 @@ function Picture() {
                         <th>#</th>
                         <th>Picture</th>
                         <th>Status</th>
-                        <th>Update</th>
                         <th>Delete</th>
                       </tr>
                     </thead>
@@ -540,7 +479,7 @@ function Picture() {
                       {currentCategories.map((item, index) => (
                         <tr key={item.ID}>
                           <td>{index + 1}</td>
-                          <td><img src={item.link} width="100" height="100" style={{ objectFit: 'cover' }} alt="" /></td>
+                          <td><img src={`http://127.0.0.1:8000/${item.link}`} width="100" height="100" style={{ objectFit: 'cover' }} alt="" /></td>
                           <td>
                             <label className="switch">
                               <input type="checkbox" id={`toggleSwitch-${index}`}
@@ -549,8 +488,8 @@ function Picture() {
                               <span className="slider" ></span>
                             </label>
                           </td>
-                          <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEditClick(item)} >Edit</button></td>
-                          <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" >Remove</button></td>
+                      
+                          <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={()=>deletePicture(item.ID)} >Remove</button></td>
                         </tr>
                       ))}
 
@@ -592,66 +531,7 @@ function Picture() {
           </div>
           <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
         </footer>
-        {isPopupVisible && (
- <div className="popup-container">
-  
- <div className="popup-content" style={IsClosingPopup ? {...popupContentStyle,...closingAnimation}:popupContentStyle}>
-  <div className='flex justify-end'>
-  <button onClick={handleClosepopup} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded float-right "><i className="fas fa-times"></i></button>
-  </div>
-
- <div >
- 
-                <h3 className="box-title">Edit Picture</h3>
-              </div>
-              <form role="form" onSubmit={handleUpdateImage}>
-                <div className="box-body">
-                  {/* Form fields go here */}
-                  <div className="form-group">
-                    <label className='float-left'>Name</label>
-                     <input type='file' name='UpdateImage'  className="form-control" id="UpdateimageInput" placeholder="Enter Name Category" onChange={handleImageupdate} multiple />
-                  
-                  </div>
-                  <div className="form-group">
-                    <label className='float-left'>Name</label>
-                    <select name="status" className="border border-gray-300 px-3  py-1 rounded-md focus:outline-none focus:border-blue-500 w-[100%]" value={searchTerm} onChange={(e) => setSearchtem(e.target.value)}>
-
-<option value="1">Main</option>
-<option value="2">extra</option>
-</select>
-                  
-                  </div>
-
-                  {previewedit.length > 0 ? (
-  <div className='form-group'>
-    <label>Preview</label>
-    <div className="img form-group flex">
-      {previewedit.map((preview, index) => (
-        <img key={index} src={preview} alt={`Preview ${index}`} width="100" height="100" />
-      ))}
-    </div>
-  </div>
-) : (
-  <div className='form-group'>
-    <label>Preview</label>
-    <div className="img form-group flex">
-      <img src={formData.UpdateImage} width="100" height="100" alt="" />
-    </div>
-  </div>
-)}
-                </div>
-
-                <div className="box-footer">
-                  <button type="submit" className="btn btn-primary">
-                    Update
-                  </button>
-                </div>
-              </form>
-   
-  
- </div>
-</div>
-)}
+    
       </div>
 
     </div>
