@@ -281,22 +281,27 @@ function CategoryFrom() {
             <li className="header">MAIN NAVIGATION</li>
             <li className="active treeview text-white">
               <a className='cursor-pointer'  onClick={() => navigate('/admin', { state: { username: username } })}>
-                <i className="fa fa-dashboard"></i> <span>Dashboard</span> <i className="fa fa-angle-left pull-right"></i>
+                <i className="fa fa-dashboard"></i> <span>Dashboard</span> 
               </a>
 
             </li>
             <li className="treeview">
 
-              <ul className="treeview-menu">
-                <li><a href="pages/layout/top-nav.html"><i className="fa fa-circle-o"></i> Top Navigation</a></li>
-                <li><a href="pages/layout/boxed.html"><i className="fa fa-circle-o"></i> Boxed</a></li>
-                <li><a href="pages/layout/fixed.html"><i className="fa fa-circle-o"></i> Fixed</a></li>
-                <li><a href="pages/layout/collapsed-sidebar.html"><i className="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-              </ul>
+             
             </li>
-            <li>
-              <a href="pages/widgets.html">
+            <li className="active treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username } })}>
                 <i className="fa fa-th"></i> <span>category</span>
+              </a>
+            </li>
+            <li className='active treeview text-white'>
+              <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username } })}>
+                <i className="fa fa-th"></i> <span>Picture</span>
+              </a>
+            </li>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/Origin', { state: { username: username } })}>
+                <i className="fa fa-th"></i> <span>Origin</span> 
               </a>
             </li>
             <li className="treeview">

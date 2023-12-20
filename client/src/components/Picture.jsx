@@ -135,6 +135,7 @@ function Picture() {
       const response = await axios.post('http://127.0.0.1:8000/api/uploadImage', formDataApi);
 
       if (response.data.message) {
+        setloading(false);
         Swal.fire({
           icon: 'success',
           title: 'Image uploaded successfully',
@@ -149,6 +150,7 @@ function Picture() {
         setPicture(responseData.data);
         setpreviewImage([]);
         document.getElementById('imageInput').value = '';
+        
       } else if (response.data.error) {
         Swal.fire({
           icon: 'error',
@@ -293,7 +295,7 @@ function Picture() {
               <li className="header">MAIN NAVIGATION</li>
               <li className="active treeview text-white">
                 <a className='cursor-pointer' onClick={() => navigate('/admin', { state: { username: username } })}>
-                  <i className="fa fa-dashboard"></i> <span>Dashboard</span> <i className="fa fa-angle-left pull-right"></i>
+                  <i className="fa fa-dashboard"></i> <span>Dashboard</span> 
                 </a>
 
               </li>
@@ -306,11 +308,21 @@ function Picture() {
                   <li><a href="pages/layout/collapsed-sidebar.html"><i className="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
                 </ul>
               </li>
-              <li>
-                <a href="pages/widgets.html">
+              <li className='active treeview text-white'>
+                <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username } })}>
                   <i className="fa fa-th"></i> <span>category</span>
                 </a>
               </li>
+              <li className='active treeview text-white'>
+                <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username } })}>
+                  <i className="fa fa-th"></i> <span>Picture</span>
+                </a>
+              </li>
+              <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/Origin', { state: { username: username } })}>
+                <i className="fa fa-th"></i> <span>Origin</span> 
+              </a>
+            </li>
               <li className="treeview">
                 <a href="#">
                   <i className="fa fa-pie-chart"></i>

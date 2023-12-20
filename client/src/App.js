@@ -8,6 +8,7 @@ import Forgot_Password from './components/Forgot_Password';
 import Category from './components/CategoryFrom';
 import ResetPassword123 from './components/resetPassword'; 
 import Picture from './components/Picture';
+import Origin from './components/Origin';
 
 import { gapi } from 'gapi-script';
 
@@ -31,6 +32,7 @@ function App() {
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/category' element={<Category/>}/>
         <Route path='/Picture' element={<Picture/>}/>
+        <Route path='/Origin' element={<Origin/>}/>
       </Routes>
     </Router>
   );

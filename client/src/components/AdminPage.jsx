@@ -48,27 +48,12 @@ function AdminPage(){
           <ul className="sidebar-menu">
             <li className="header">MAIN NAVIGATION</li>
             <li className="active treeview">
-              <a href="#">
-                <i className="fa fa-dashboard"></i> <span>Dashboard</span> <i className="fa fa-angle-left pull-right"></i>
+              <a href="" onClick={() => navigate('/admin', { state: { username: username } })}>
+                <i className="fa fa-dashboard" ></i> <span>Dashboard</span> 
               </a>
-              <ul className="treeview-menu">
-                <li className="active"><a href="index.html"><i className="fa fa-circle-o"></i> Dashboard v1</a></li>
-                <li><a href="index2.html"><i className="fa fa-circle-o"></i> Dashboard v2</a></li>
-              </ul>
+              
             </li>
-            <li className="treeview">
-              <a href="#">
-                <i className="fa fa-files-o"></i>
-                <span>Layout Options</span>
-                <span className="label label-primary pull-right">4</span>
-              </a>
-              <ul className="treeview-menu">
-                <li><a href="pages/layout/top-nav.html"><i className="fa fa-circle-o"></i> Top Navigation</a></li>
-                <li><a href="pages/layout/boxed.html"><i className="fa fa-circle-o"></i> Boxed</a></li>
-                <li><a href="pages/layout/fixed.html"><i className="fa fa-circle-o"></i> Fixed</a></li>
-                <li><a href="pages/layout/collapsed-sidebar.html"><i className="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-              </ul>
-            </li>
+           
             <li className="treeview text-white">
               <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username } })}>
                 <i className="fa fa-th"></i> <span>category</span> 
@@ -77,6 +62,11 @@ function AdminPage(){
             <li className="treeview text-white">
               <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username } })}>
                 <i className="fa fa-th"></i> <span>Picture</span> 
+              </a>
+            </li>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/Origin', { state: { username: username } })}>
+                <i className="fa fa-th"></i> <span>Origin</span> 
               </a>
             </li>
             <li className="treeview">

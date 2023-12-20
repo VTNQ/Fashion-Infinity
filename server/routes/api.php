@@ -3,6 +3,7 @@
 use App\Http\Controllers\category;
 use App\Http\Controllers\Forgotpassword;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\OriginController;
 use App\Http\Controllers\PictureController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,3 +38,4 @@ Route::post('/uploadImage',[PictureController::class,'uploadImage'])->name('uplo
 Route::get('/getPicture',[PictureController::class,'getPicture'])->name('getPicture');
 Route::put('/Updatestatus/{id}',[PictureController::class,'Updatestatus'])->name('Updatestatus');
 Route::put('DeletePicture/{id}',[PictureController::class,'DeletePicture'])->name('DeletePicture');
+Route::post('/AddOrigin',[OriginController::class,'AddOrigin'])->name('AddOrigin');
