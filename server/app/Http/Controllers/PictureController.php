@@ -10,46 +10,41 @@ use Illuminate\Http\Request;
 
 class PictureController extends Controller
 {
-    public function updateImage(Request $request, $id)
-{
-    try {
-        // Update existing image
-        $picture = Picture::find($id);
-
-        if (!$picture) {
-            return response()->json(['error' => 'Image not found'], 404);
+   
+    public function deletePicture(Request $request, $ID)
+    {
+        try {
+            // Find the picture by ID
+            $picture = Picture::find($ID);
+    
+            // Check if the picture exists
+            if (!$picture) {
+                return response()->json(['error' => 'Picture not found'], 404);
+            }
+    
+            // Get the image link
+            $oldImagePath = $picture->link;
+    
+            // Delete the picture from the database
+            $deletedRows = $picture->delete();
+            Picture::where("ID",$ID)->delete();
+         
+            if ($deletedRows > 0) {
+                // Check if the file exists before attempting to delete it
+                $fullImagePath = public_path($oldImagePath);
+                if (file_exists($fullImagePath)) {
+                    unlink($fullImagePath);
+                }
+    
+                return response()->json(['message' => 'Delete successful']);
+            } else {
+                return response()->json(['error' => 'Failed to delete picture'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete picture', 'message' => $e->getMessage()], 500);
         }
-
-        // Delete existing image from ImgBB
-        Http::delete("https://api.imgbb.com/1/image/{$picture->imgbb_id}?key=038e074d800e0c50669473b3ab9f8849");
-
-        // Move and upload new image
-        $imageName = time() . '.' . $request->file('Image')->extension();
-        $request->file('Image')->move(public_path('images'), $imageName);
-
-        $response = Http::asForm()->post('https://api.imgbb.com/1/upload', [
-            'key' => '038e074d800e0c50669473b3ab9f8849',
-            'image' => base64_encode(file_get_contents(public_path('images/' . $imageName))),
-        ]);
-
-        $data = $response->json();
-
-        if (!$response->successful() || !isset($data['data']['url'])) {
-            return response()->json(['error' => 'Failed to upload image to ImgBB'], 500);
-        }
-
-        // Update Picture model
-        $picture->link = $data['data']['url'];
-        $picture->status = $request->input('status');
-        $picture->save();
-
-        return response()->json(['message' => 'Image updated and URL saved successfully']);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Failed to update image'], 500);
     }
-}
-
-
+    
     public function Updatestatus(Request $request,$ID){
         try{
             $picture=Picture::where("ID",$ID)->where("status",2)->first();
@@ -76,27 +71,34 @@ class PictureController extends Controller
         }
        
     }
-     
-    public function uploadImage(PictureRequest $request)
+    public function uploadImage(Request $request)
     {
         try {
-            $imageName = time() . '.' . $request->file('Image')->extension();
-            $localPath = 'images/' . $imageName;
+            $uploadedImages = [];
     
-            // Move the uploaded image to the local path on the server
-            $request->file('Image')->move(public_path('images'), $imageName);
+            foreach ($request->file('Image') as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $localPath = 'images/' . $imageName;
     
-            // Save the local path in the database
-            $picture = new Picture();
-         
-            $picture->link = $localPath;
-            $picture->status = $request->input('status');
-            $picture->save();
+                // Move the uploaded image to the local path on the server
+                $image->move(public_path('images'), $imageName);
     
-            return response()->json(['message' => 'Image uploaded and URL saved successfully']);
+                // Save the local path in the database
+                $picture = new Picture();
+                $picture->link = $localPath;
+                $picture->status = $request->input('status');
+                $picture->save();
+    
+                $uploadedImages[] = $localPath;
+            }
+    
+            return response()->json(['message' => 'Images uploaded and URLs saved successfully']);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to upload image'], 500);
+            return response()->json(['error' => 'Failed to upload images'], 500);
         }
     }
+    
+
+
     
 }
