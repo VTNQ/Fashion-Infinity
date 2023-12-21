@@ -7,15 +7,119 @@ import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
 import '../components/admin.css'
-function Origin() {
+function Provider() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [searchTerm, setSearchtem] = useState('');
+    const [searchCountry, setsearchCountry] = useState('');
+    const [perPage, setperPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [Provider, setprovider] = useState([]);
+    const [errors, setErrors] = useState({});
     const username = location.state?.username || 'Default Username';
     const [SelectedCountry, setSelectedCountry] = useState('');
+    const [IsClosingPopup, setIsClosingPopup] = useState(false);
+    const [isPopupVisible, setPopupVisibility] = useState(false);
+    const validateInput = (fieldname, value) => {
+        const newErors = { ...errors };
+        if (fieldname === 'NameOrigin') {
+            newErors[fieldname] = value.trim() === '' ? 'Name Provider is required' : '';
+        } else if (fieldname === 'UpdateNameOrigin') {
+            newErors[fieldname] = value.trim() === '' ? 'Name Provider is required' : '';
+        }
+        setErrors(newErors);
+    }
+    const popupContentStyle = {
+        background: 'white',
+        padding: '20px',
+        maxWidth: '400px',
+        textAlign: 'center',
+        borderRadius: '8px',
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+        animation: 'flipleft 0.5s', // Default animation
+    };
+
+    const closingAnimation = {
+        animation: 'flipright 0.5s',
+    };
+    const handleClosepopup = () => {
+
+        setIsClosingPopup(true);
+        setTimeout(() => {
+            setFormData({
+                UpdateNameOrigin: '',
+                ID: '',
+                UpdateNameAddress: '',
+            })
+            setPopupVisibility(false);
+            setIsClosingPopup(false);
+        }, 500);
+
+    }
+    const handleEditClick = (categoryId) => {
+        const selectedCategory = Provider.find(category => category.ID == categoryId)
+        if (selectedCategory) {
+            setFormData({
+                UpdateNameOrigin: selectedCategory.Name,
+                ID: selectedCategory.ID,
+                UpdateNameAddress: selectedCategory.Address,
+            })
+        }
+        // Here you can perform any logic before showing the popup
+        setPopupVisibility(true);
+    }
     const [formData, setFormData] = useState({
         NameOrigin: '',
-        Address: ''
+        Address: '',
+        UpdateNameOrigin: '',
+        UpdateNameAddress: '',
+        ID: '',
     });
+    const handlePageclick = (data) => {
+        setCurrentPage(data.selected);
+    };
+    const filteredCategories = Provider.filter(Provider =>
+
+        Provider.Name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (searchCountry === '' || Provider.Address.toLowerCase().includes(searchCountry.toLowerCase()))
+    );
+    useEffect(() => {
+        const fetchdata = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/getprovider');
+                setprovider(response.data);
+            } catch (error) {
+                console.error('error fetchinh Origin:', error)
+            }
+        }
+        fetchdata();
+    }, []);
+    const deleteSubmit = async (idProvider) => {
+        const confirmation = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+        });
+        if (confirmation.isConfirmed) {
+            const response = await axios.put(`http://127.0.0.1:8000/api/deleteProvider/${idProvider}`, {
+
+            });
+            if (response.data.message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Deletion successful',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                const response = await axios.get('http://127.0.0.1:8000/api/getprovider');
+                setprovider(response.data);
+            }
+        }
+    }
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -30,11 +134,11 @@ function Origin() {
             });
             setFormData({
                 NameOrigin: '',
-                Address:''
-              });
+                Address: ''
+            });
         } else {
             try {
-                const response = await fetch('http://127.0.0.1:8000/api/AddOrigin', {
+                const response = await fetch('http://127.0.0.1:8000/api/AddProvider', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -49,21 +153,23 @@ function Origin() {
                         showConfirmButton: false,
                         timer: 1500
                     });
+                    const response = await axios.get('http://127.0.0.1:8000/api/getprovider');
+                    setprovider(response.data);
                     setFormData({
                         NameOrigin: '',
-                        Address:''
-                      });
-                }else{
+                        Address: ''
+                    });
+                } else {
                     Swal.fire({
                         icon: "error",
                         title: responseData.errorcategory,
                         showConfirmButton: false,
                         timer: 1500
-                      });
-                      setFormData({
+                    });
+                    setFormData({
                         NameOrigin: '',
-                        Address:''
-                      });
+                        Address: ''
+                    });
                 }
             } catch (error) {
                 console.error('Add error:' + error);
@@ -94,6 +200,47 @@ function Origin() {
     const handleSelectChange = (e) => {
         setSelectedCountry(e.target.value);
     }
+    const handleUpdateSubmit = async (e) => {
+        e.preventDefault();
+        if (formData.UpdateNameOrigin == '' || formData.UpdateNameAddress == '') {
+            Swal.fire({
+                icon: "error",
+                title: "Name Address or Name Provider is required",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } else {
+            try {
+                const response = await axios.put(`http://127.0.0.1:8000/api/UpdateProvider/${formData.ID}`, {
+                    UpdateNameAddress: formData.UpdateNameAddress,
+                    UpdateNameOrigin: formData.UpdateNameOrigin
+                });
+                if (response.data.exists) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Category is exists",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                } else if (response.data.message) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "update category successfully",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    setPopupVisibility(false);
+                    const response = await axios.get('http://127.0.0.1:8000/api/getprovider');
+                    setprovider(response.data);
+                }
+            } catch (error) {
+                console.error('Error message:', error.message);
+            }
+        }
+    }
+    const indexOflastCategory = (currentPage + 1) * perPage;
+    const indexOfFirtCategory = indexOflastCategory - perPage;
+    const currentCategories = filteredCategories.slice(indexOfFirtCategory, indexOflastCategory)
     return (
         <div className="wrapper">
 
@@ -156,8 +303,8 @@ function Origin() {
                             </a>
                         </li>
                         <li className='active treeview text-white'>
-                            <a className='cursor-pointer' onClick={() => navigate('/Origin', { state: { username: username } })}>
-                                <i className="fa fa-th"></i> <span>Origin</span>
+                            <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username } })}>
+                                <i className="fa fa-th"></i> <span>Provider</span>
                             </a>
                         </li>
                         <li className="treeview">
@@ -251,7 +398,7 @@ function Origin() {
                     </h1>
                     <ol className="breadcrumb">
                         <li><a href="#"><i className="fa fa-dashboard"></i> Home</a></li>
-                        <li><a href="#">Category</a></li>
+                        <li><a href="#">Provider</a></li>
                     </ol>
                 </section>
                 <section className="content">
@@ -265,8 +412,10 @@ function Origin() {
 
                                     <div className="form-group">
                                         <label >Name Origin</label>
-                                        <input name='NameOrigin' value={formData.NameOrigin} onChange={handleInputChange} placeholder='Enter Name Origin' className="form-control" />
-
+                                        <input name='NameOrigin' value={formData.NameOrigin} onChange={handleInputChange} placeholder='Enter Name Origin' className="form-control" onBlur={() => validateInput('NameOrigin', formData.NameOrigin)} />
+                                        {errors.NameOrigin && (
+                                            <p className="text-red-500 text-sm italic">{errors.NameOrigin}</p>
+                                        )}
                                     </div>
                                     <div className="form-group" value={SelectedCountry} onChange={handleSelectChange}>
                                         <label >Name</label>
@@ -296,7 +445,18 @@ function Origin() {
                             </div>
                             <div className="flex items-center space-x-4 float-left flex-1 mb-2 ml-2">
                                 <label for="search" className="text-gray-600">Search</label>
-                                <input type="text" id="search" name="search" placeholder="Enter your search term" className="border border-gray-300 px-3 py-1 rounded-md focus:outline-none focus:border-blue-500" />
+                                <input type="text" id="search" name="search" value={searchTerm} onChange={(e) => setSearchtem(e.target.value)} placeholder="Enter your search term" className="border border-gray-300 px-3 py-1 rounded-md focus:outline-none focus:border-blue-500" />
+                            </div>
+                            <div className="flex items-center space-x-4 float-right flex-1 mb-2 ml-2">
+                                <label for="search" className="text-gray-600">Search</label>
+                                <select name='Address' className="form-control" value={searchCountry} onChange={(e) => setsearchCountry(e.target.value)} >
+                                    <option value="">Select Country</option>
+                                    {countries.map((coutry, index) => (
+                                        <option key={index} value={coutry}>
+                                            {coutry}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
 
                             <div className="box-body">
@@ -305,17 +465,45 @@ function Origin() {
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
+                                            <th>Address</th>
                                             <th>Update</th>
                                             <th>Delete</th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
-
+                                        {currentCategories.map((origin, index) => (
+                                            <tr key={origin.ID}>
+                                                <td>{index + 1}</td>
+                                                <td>{origin.Name}</td>
+                                                <td>{origin.Address}</td>
+                                                <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEditClick(origin.ID)} >Edit</button></td>
+                                                <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => deleteSubmit(origin.ID)}>Remove</button></td>
+                                            </tr>
+                                        ))}
                                     </tbody>
 
                                 </table>
+                                <Pagination
+                                    previousLabel={'previous'}
+                                    nextLabel={'next'}
+                                    breakLabel={'...'}
+                                    pageCount={Math.ceil(filteredCategories.length / perPage)}
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={5}
+                                    onPageChange={handlePageclick}
+                                    containerClassName={'pagination'}
+                                    activeClassName={'active'}
+                                    previousClassName={'page-item'}
+                                    previousLinkClassName={'page-link'}
+                                    nextClassName={'page-item'}
+                                    nextLinkClassName={'page-link'}
+                                    breakClassName={'page-item'}
+                                    breakLinkClassName={'page-link'}
+                                    pageClassName={'page-item'}
+                                    pageLinkClassName={'page-link'}
 
+                                />
                             </div>
                         </div>
                     </div>
@@ -328,9 +516,56 @@ function Origin() {
                 </div>
                 <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
             </footer>
+            {isPopupVisible && (
+                <div className="popup-container">
 
+                    <div className="popup-content" style={IsClosingPopup ? { ...popupContentStyle, ...closingAnimation } : popupContentStyle}>
+                        <div className='flex justify-end'>
+                            <button onClick={handleClosepopup} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded float-right "><i className="fas fa-times"></i></button>
+                        </div>
+
+                        <div >
+
+                            <h3 className="box-title">Edit Provider</h3>
+                        </div>
+                        <form role="form" onSubmit={handleUpdateSubmit}>
+                            <div className="box-body">
+                                {/* Form fields go here */}
+                                <div className="form-group">
+                                    <label className='float-left'>Name Provider</label>
+                                    <input name='UpdateNameOrigin' className="form-control" id="exampleInputEmail1" placeholder="Enter Name Origin" value={formData.UpdateNameOrigin} onChange={handleInputChange} onBlur={() => validateInput('UpdateNameOrigin', formData.UpdateNameOrigin)} />
+                                    {errors.UpdateNameOrigin && (
+                                        <p className="text-red-500 text-sm italic">{errors.UpdateNameOrigin}</p>
+                                    )}
+                                </div>
+                                <div className="form-group" value={SelectedCountry} onChange={handleSelectChange}>
+                                    <label className='float-left' >Name</label>
+                                    <select name='UpdateNameAddress' className="form-control" value={formData.UpdateNameAddress} onChange={handleInputChange}  >
+                                        <option value="">Select Country</option>
+                                        {countries.map((coutry, index) => (
+                                            <option key={index} value={coutry}>
+                                                {coutry}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                            </div>
+
+
+                            <div className="box-footer">
+                                <button type="submit" className="btn btn-primary">
+                                    Update
+                                </button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            )}
         </div>
 
     )
 }
-export default Origin;
+export default Provider;

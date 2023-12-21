@@ -65,8 +65,8 @@ function AdminPage(){
               </a>
             </li>
             <li className="treeview text-white">
-              <a className='cursor-pointer' onClick={() => navigate('/Origin', { state: { username: username } })}>
-                <i className="fa fa-th"></i> <span>Origin</span> 
+              <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username } })}>
+                <i className="fa fa-th"></i> <span>Provider</span> 
               </a>
             </li>
             <li className="treeview">
