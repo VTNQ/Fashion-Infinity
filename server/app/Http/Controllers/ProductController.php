@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Picture;
 use App\Models\Product;
+use App\Models\category;
+use App\Models\Category_Product;
 use Illuminate\Http\Request;
 use App\Models\providermodel as ModelsProvider;
 
 class ProductController extends Controller
 {
     //
+
     public function getProvider(){
         $Provider=ModelsProvider::all();
        
@@ -34,13 +37,22 @@ class ProductController extends Controller
 
             $uploadedImages[] = $imagePath;
             $ids[] = $picture->ID;
-
         }
-        $product=new Product();
-        $product->Name=$request->input('NameProduct');
-        $product->content=$request->input('content');
-        $product->id_provider=$request->input('Provider');
+
+        $product = new Product();
+        $product->Name = $request->input('NameProduct');
+        $product->content = $request->input('content');
+        $product->id_provider = $request->input('Provider');
         $product->save();
+
+        foreach ($ids as $idpic) {
+            $categoryProduct = new Category_Product(); // Create a new instance for each association
+            $categoryProduct->id_Picture = $idpic;
+            $categoryProduct->id_Product = $product->ID;
+            $categoryProduct->id_Category = $request->input('Category');
+            $categoryProduct->save();
+        }
+
         return response()->json(['message' => 'Images uploaded and IDs saved successfully', 'ids' => $ids]);
     } catch (\Exception $e) {
         return response()->json(['error' => 'Failed to upload images', 'ids' => []], 500);
