@@ -9,6 +9,7 @@ import Category from './components/CategoryFrom';
 import ResetPassword123 from './components/resetPassword'; 
 import Picture from './components/Picture';
 import Provider from './components/Provider';
+import Product from './components/Product';
 import { gapi } from 'gapi-script';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path='/category' element={<Category/>}/>
         <Route path='/Picture' element={<Picture/>}/>
         <Route path='/Provider' element={<Provider/>}/>
+        <Route path='/Product' element={<Product/>}/>
       </Routes>
     </Router>
   );

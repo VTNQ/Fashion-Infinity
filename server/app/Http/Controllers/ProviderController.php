@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\provider as ModelsProvider;
+use App\Models\providermodel as ModelsProvider;
 use Illuminate\Http\Request;
 
 

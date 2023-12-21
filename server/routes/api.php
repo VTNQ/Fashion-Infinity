@@ -5,6 +5,7 @@ use App\Http\Controllers\Forgotpassword;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OriginController;
 use App\Http\Controllers\PictureController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProviderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,9 @@ Route::post('/AddProvider',[ProviderController::class,'AddProvider'])->name('Add
 Route::get('/getprovider',[ProviderController::class,'getprovider'])->name('getprovider');
 Route::put('/UpdateProvider/{id}',[ProviderController::class,'UpdateProvider'])->name('UpdateProvider');
 Route::put('/deleteProvider/{id}',[ProviderController::class,'deleteProvider'])->name('deleteProvider');
+Route::post('/Addproduct',[ProductController::class,'Addproduct'])->name('Addproduct');
+Route::get('/getProvider',[ProductController::class,'getProvider'])->name('getProvider');
+
 
 
 
