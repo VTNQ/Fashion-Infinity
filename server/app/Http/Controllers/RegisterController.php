@@ -12,7 +12,7 @@ use Psy\Util\Str;
 class RegisterController extends Controller
 {
     public function registerGoogle(Request $request)
-{
+    {
     $min = 1;
     $max = 100;
 

@@ -16,7 +16,7 @@ function Register() {
     });
 
     function RegisterGoogle({ onSuccess, onFailure }) {
-        const clientId = '459264668372-o7aqna11uh89jqtbuc05o285tsphoopc.apps.googleusercontent.com'; // Replace with your actual client ID
+        const clientId = '936520204131-vvv8rcfu690omca54mt6atf1mlliuvem.apps.googleusercontent.com'; // Replace with your actual client ID
 
         const handleGoogleSuccess = async (response) => {
             setloading(true);
