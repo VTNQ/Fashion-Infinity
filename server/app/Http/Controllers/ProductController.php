@@ -7,12 +7,107 @@ use App\Models\Product;
 use App\Models\category;
 use App\Models\Category_Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\providermodel as ModelsProvider;
 
 class ProductController extends Controller
 {
     //
+    public function getDetailProduct($ID){
+        $products = DB::table('product')
+        ->join('category_product', 'product.ID', '=', 'category_product.id_Product')
+        ->join('category', 'category_product.id_Category', '=', 'category.ID')
+        ->join('picture', 'category_product.id_Picture', '=', 'picture.ID')
+        ->join('provider', 'product.id_provider', '=', 'provider.ID')
+        ->select([
+            'picture.link',
+            'product.Name as ProductName',
+            'product.content',
+            'provider.Name as ProviderName',
+            'category.Name as NameCategory',
+            'category_product.size',
+            'category_product.Color',
+            'product.ID as IDproduct'
+        ])
+        ->where("product.ID",$ID)
+        ->get();
+        return response()->json($products, 200);
+    }
+    public function getProduct()
+    {$products = DB::table('product')
+        ->join('category_product', 'product.ID', '=', 'category_product.id_Product')
+        ->join('category', 'category_product.id_Category', '=', 'category.ID')
+        ->join('provider', 'product.id_provider', '=', 'provider.ID')
+        ->select([
+          
+            'product.Name as ProductName',
+            'product.content',
+            'provider.Name as ProviderName',
+            'category.Name as NameCategory',
 
+            'product.ID as IDproduct',
+            'category_product.id_Product',
+            'category_product.id_Category',
+        ])
+        ->groupBy([
+
+            'product.Name',
+            'product.content',
+            'provider.Name',
+            'category.Name',
+            
+            'product.ID',
+            'category_product.id_Product',
+            'category_product.id_Category'
+        ])
+        ->get();
+    
+        return response()->json($products, 200);
+    }
+    public function deleteProduct(Request $request, $ID)
+    {
+        try {
+            // Get the IDs of associated pictures
+            $id_Pictures = Category_Product::where('id_Product', $ID)->pluck('id_Picture')->toArray();
+    
+            // Delete the category_product records
+            Category_Product::where('id_Product', $ID)->delete();
+    
+            // Delete the product record
+            $deletedProductCount = Product::where('ID', $ID)->delete();
+    
+            // Delete the associated pictures and get their paths
+            $pictures = Picture::whereIn('ID', $id_Pictures)->get();
+            Picture::whereIn('ID', $id_Pictures)->delete();
+    
+            // If the product and associated records are deleted successfully
+            if ($deletedProductCount > 0) {
+                // Delete the actual image files
+                foreach ($pictures as $picture) {
+                    $fullImagePath = public_path($picture->link);
+                    if (file_exists($fullImagePath)) {
+                        unlink($fullImagePath);
+                    }
+                }
+    
+                return response()->json(['message' => 'Delete successful']);
+            }
+        } catch (\Exception $error) {
+            return response()->json(['error' => 'Failed to delete Product'], 500);
+        }
+    }
+    
+    public function updateProduct(Request $request,$ID){
+        try{
+            $updateProductCategory=Category_Product::where('id_Product',$ID)->update(['id_Category'=>$request->input('UpdateCategory')]);
+            $deleteRows=Product::where("ID",$ID)->update(['Name'=>$request->input('UpdateNameProduct'),'content'=>$request->input('UpdateContent'),'id_provider'=>$request->input('UpdateProvider')]);
+            if($deleteRows>0 && $updateProductCategory>0){
+                return response()->json(['message' => 'Delete successful']);
+            }
+        }catch(\Exception $error){
+            return response()->json(['error' => 'Failed to delete Provider'], 500);
+        }
+    }
     public function getProvider(){
         $Provider=ModelsProvider::all();
        
@@ -24,18 +119,36 @@ class ProductController extends Controller
     try {
         $uploadedImages = [];
         $ids = [];
+        foreach($request->file('Extra') as $image){
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $localPath = 'images/' . $imageName;
 
-        foreach ($request->file('Image') as $image) {
-            // Use the store method to move the file to the specified location
-            $imagePath = $image->store('images', 'public');
+            // Move the uploaded image to the local path on the server
+            $image->move(public_path('images'), $imageName);
 
             // Save the image path in the database
             $picture = new Picture();
-            $picture->link = $imagePath;
+            $picture->link = $localPath;
             $picture->status = 1;
             $picture->save();
 
-            $uploadedImages[] = $imagePath;
+            $uploadedImages[] = $localPath;
+            $ids[] = $picture->ID;
+        }
+        foreach ($request->file('Image') as $image) {
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $localPath = 'images/' . $imageName;
+
+            // Move the uploaded image to the local path on the server
+            $image->move(public_path('images'), $imageName);
+
+            // Save the image path in the database
+            $picture = new Picture();
+            $picture->link = $localPath;
+            $picture->status = 1;
+            $picture->save();
+
+            $uploadedImages[] = $localPath;
             $ids[] = $picture->ID;
         }
 
@@ -50,12 +163,14 @@ class ProductController extends Controller
             $categoryProduct->id_Picture = $idpic;
             $categoryProduct->id_Product = $product->ID;
             $categoryProduct->id_Category = $request->input('Category');
+            $categoryProduct->size=$request->input('size');
+            $categoryProduct->Color=$request->input('Color');
             $categoryProduct->save();
         }
 
         return response()->json(['message' => 'Images uploaded and IDs saved successfully', 'ids' => $ids]);
     } catch (\Exception $e) {
         return response()->json(['error' => 'Failed to upload images', 'ids' => []], 500);
-    }
+    } 
 }
 }

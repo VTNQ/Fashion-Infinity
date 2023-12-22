@@ -323,6 +323,11 @@ function Picture() {
                 <i className="fa fa-th"></i> <span>Provider</span> 
               </a>
             </li>
+              <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username } })}>
+                <i className="fa fa-th"></i> <span>Product</span> 
+              </a>
+            </li>
               <li className="treeview">
                 <a href="#">
                   <i className="fa fa-pie-chart"></i>

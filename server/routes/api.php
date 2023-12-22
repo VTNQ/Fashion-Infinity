@@ -46,9 +46,10 @@ Route::put('/UpdateProvider/{id}',[ProviderController::class,'UpdateProvider'])-
 Route::put('/deleteProvider/{id}',[ProviderController::class,'deleteProvider'])->name('deleteProvider');
 Route::post('/Addproduct',[ProductController::class,'Addproduct'])->name('Addproduct');
 Route::get('/getProvider',[ProductController::class,'getProvider'])->name('getProvider');
-
-
-
+Route::get('/getProduct',[ProductController::class,'getProduct'])->name('getProduct');
+Route::put('/updateProduct/{id}',[ProductController::class,'updateProduct'])->name('updateProduct');
+Route::get('/getDetailProduct/{id}', [ProductController::class, 'getDetailProduct'])->name('getDetailProduct');
+Route::put('/deleteProduct/{id}',[ProductController::class,'deleteProduct'])->name('deleteProduct');
 
 
 
