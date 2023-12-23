@@ -93,12 +93,6 @@ left:88%!important;
 }
 
 /********************************/
-/*          Custom Buttons      */
-/********************************/
-
-/********************************/
-/*       Slides backgrounds     */
-/********************************/
 .fade-carousel .slides .slide-1, 
 .fade-carousel .slides .slide-2,
 .fade-carousel .slides .slide-3 {
@@ -108,15 +102,15 @@ left:88%!important;
   background-repeat: no-repeat;
 }
 .fade-carousel .slides .slide-1 {
-      background-image: url(./img/3.jpg);
+   
 	  background-position:center;
 }
 .fade-carousel .slides .slide-2 {
-    background-image: url(./img/4.jpg);
+  
 	background-position:center;
 }
 .fade-carousel .slides .slide-3 {
-      background-image: url(./img/5.jpg);
+ 
 	  background-position:center;
 }
 #center .carousel-indicators{
@@ -228,8 +222,7 @@ padding-top:50px;
 
 /*********************explore****************/
 #explore {
-      background-image: url(./img/5.jpg);
-     
+  
 }
 .explore_m{
 padding-top:130px;

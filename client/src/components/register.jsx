@@ -216,8 +216,8 @@ function Register() {
                 >
                     <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
                     <div className="w-full px-24 z-10">
-                        <h1 className="text-5xl font-bold text-left tracking-wide">Keep it special</h1>
-                        <p className="text-3xl my-4">Since people will stare, satisfy them</p>
+                    <h1 className="text-5xl font-bold text-left tracking-wide text-white">Keep it special</h1>
+                        <p className="text-3xl my-4 text-white">Since people will stare, satisfy them</p>
                     </div>
                     <div className="bottom-0 absolute p-4 text-center right-0 left-0 flex justify-center space-x-4">
                         <span>
