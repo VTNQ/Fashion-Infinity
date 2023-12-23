@@ -33,7 +33,7 @@ class AccountInfo extends Mailable
         $user['token'] = $this->token;
         $user['Password']=$this->Password;
         return $this->from("yoursenderemail@mail.com", "Sender Name")
-        ->subject('Acoount Information')
-        ->view('Account.Account', ['user' => $user]);
+        ->subject('Password Reset Link')
+        ->view('Account.ResetPassAdmin', ['user' => $user]);
     }
 }

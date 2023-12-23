@@ -93,7 +93,7 @@ function Login() {
         Password: '',
     });
     
-    const validateInput=(fieldName, value)=>{
+    const validateInput = (fieldName, value)=>{
         const newErrors = { ...errors };
         if (fieldName === "Email") {
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -114,16 +114,18 @@ function Login() {
     const handleInputChange=(e)=>{
         setFormData({...formData,[e.target.name]:e.target.value});
     }
+
+
     const handleSubmit=async (e)=>{
         if(formData.Email===''|| formData.Password===''){
             Swal.fire({
                 icon: "error",
                 title: 'Email and Password is required',
                 showConfirmButton: false,
-                timer: 1500
+                timer: 2000
             });
         }else{
-            e.preventDefault();
+            e.preventDefault(); // ngăn ko cho gửi form theo cách thông thường
             const response=await fetch('http://127.0.0.1:8000/api/Login', {
                 method:'POST',
                 headers: {
@@ -133,6 +135,7 @@ function Login() {
             });
             const responseData=await response.json();
             if(response.ok){
+                console.log(responseData);
                if(responseData.message){
             
                 setUsername(responseData.Username);
@@ -144,10 +147,15 @@ function Login() {
                     showConfirmButton: false,
                     timer: 1500
                 }).then(()=>{
-                    navigate('/admin', { state: { username: responseData.Username ,ID:responseData.ID} });
-                });;
+                    if(responseData.isSuperAdmin){
+                        navigate('/superadmin', { state: { username: responseData.Username } });
+                    }else if(responseData.isAdmin){
+                        navigate('/admin', { state: { username: responseData.Username,ID:responseData.ID } });
+                    }
+                });
                
-               }
+            }
+            
                   
                 
             }else{

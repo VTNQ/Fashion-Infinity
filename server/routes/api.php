@@ -8,6 +8,8 @@ use App\Http\Controllers\PictureController;
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\Account;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +32,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post("/register", [\App\Http\Controllers\RegisterController::class, 'register'])->name('register');
 Route::post('/register/google', [\App\Http\Controllers\RegisterController::class, 'registerGoogle'])->name('registerGoogle');
+Route::post('/register/registerAdmin',[\App\Http\Controllers\RegisterController::class, 'registerAdmin'])->name('registerAdmin');
 Route::post('/Login',[LoginController::class,'Login'])->name('Login');
+
 Route::post('/login/google',[LoginController::class,'LoginGoogle'])->name('LoginGoogle');
 Route::post('/reset',[Forgotpassword::class,'CheckEmail'])->name('CheckEmail');
 Route::post('/otp',[Forgotpassword::class,'otp'])->name('otp');
@@ -46,6 +50,9 @@ Route::post('/AddProvider',[ProviderController::class,'AddProvider'])->name('Add
 Route::get('/getprovider',[ProviderController::class,'getprovider'])->name('getprovider');
 Route::put('/UpdateProvider/{id}',[ProviderController::class,'UpdateProvider'])->name('UpdateProvider');
 Route::put('/deleteProvider/{id}',[ProviderController::class,'deleteProvider'])->name('deleteProvider');
+Route::get('/getCustomers',[Account::class,'getCustomer'])->name('getCustomer');
+Route::get('/getAdmins',[Account::class,'getAdmin'])->name('getAdmins');
+Route::put("/admins/{id}",[Account::class,'UpdateUsernameAdmin'])->name('UpdateUsernameAdmin');
 Route::post('/Addproduct',[ProductController::class,'Addproduct'])->name('Addproduct');
 Route::get('/getProvider',[ProductController::class,'getProvider'])->name('getProvider');
 Route::get('/getProduct',[ProductController::class,'getProduct'])->name('getProduct');

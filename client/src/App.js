@@ -12,6 +12,12 @@ import Provider from './components/Provider';
 import Product from './components/Product';
 import EditProfile from './components/EditProfile';
 import { gapi } from 'gapi-script';
+import Superadmin from './components/Superadmin';
+import CreateAdmin from './components/superadmin/CreateAdminPage';
+import DefaultDashboard from './components/superadmin/DefaultDashboard';
+import ShowCustomer from './components/superadmin/ShowCustomer';
+import ShowAdmin  from './components/superadmin/ShowAdmin';
+import Layout from './components/Layout';
 
 function App() {
   useEffect(() => {
@@ -26,7 +32,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Register />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path='/forgot' element={<Forgot_Password/>}/>
         <Route path='/reset' element={<ResetPassword123/>}/>
@@ -34,6 +40,14 @@ function App() {
         <Route path='/category' element={<Category/>}/>
         <Route path='/Picture' element={<Picture/>}/>
         <Route path='/Provider' element={<Provider/>}/>
+        
+        <Route path='/superadmin/' element={<Superadmin/>}>
+            <Route index element={<DefaultDashboard />} />
+            <Route path='CreateAdmin' element={<CreateAdmin/>}/>
+            <Route path='ShowCustomer' element={<ShowCustomer/>}/>
+            <Route path='ShowAdmin' element={<ShowAdmin/>}/>
+        </Route>
+        <Route path='/homepage' element={<Layout/>}/>
         <Route path='/Product' element={<Product/>}/>
         <Route path='/Edit' element={<EditProfile/>}/>
       </Routes>
