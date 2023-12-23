@@ -48,6 +48,9 @@ class ProductController extends Controller
             'product.ID as IDproduct',
             'category_product.id_Product',
             'category_product.id_Category',
+            'category.ID as ID_category',
+            'provider.ID as ID_provider',
+            'category_product.size'
         ])
         ->groupBy([
 
@@ -58,7 +61,10 @@ class ProductController extends Controller
             
             'product.ID',
             'category_product.id_Product',
-            'category_product.id_Category'
+            'category_product.id_Category',
+            'category.ID',
+            'provider.ID',
+            'category_product.size'
         ])
         ->get();
     
@@ -100,8 +106,9 @@ class ProductController extends Controller
     public function updateProduct(Request $request,$ID){
         try{
             $updateProductCategory=Category_Product::where('id_Product',$ID)->update(['id_Category'=>$request->input('UpdateCategory')]);
+            
             $deleteRows=Product::where("ID",$ID)->update(['Name'=>$request->input('UpdateNameProduct'),'content'=>$request->input('UpdateContent'),'id_provider'=>$request->input('UpdateProvider')]);
-            if($deleteRows>0 && $updateProductCategory>0){
+            if($deleteRows>0 || $updateProductCategory>0){
                 return response()->json(['message' => 'Delete successful']);
             }
         }catch(\Exception $error){
@@ -129,7 +136,7 @@ class ProductController extends Controller
             // Save the image path in the database
             $picture = new Picture();
             $picture->link = $localPath;
-            $picture->status = 1;
+            $picture->status = 2;
             $picture->save();
 
             $uploadedImages[] = $localPath;

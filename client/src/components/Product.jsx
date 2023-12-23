@@ -34,6 +34,7 @@ function Product() {
         setCurrentPage(data.selected);
       };
     const username = location.state?.username || 'Default Username';
+    const ID=location.state?.ID||'';
     const popupContentStyle = {
         background: 'white',
         padding: '20px',
@@ -110,44 +111,51 @@ function Product() {
         UpdateSize: '',
         Color: '',
         ID: '',
+        IDcategory:'',
     });
     const updatesubmit = async (e) => {
         e.preventDefault();
-        if(formData.UpdateCategory==''||formData.UpdateProvider==''||formData.UpdateCategory||formData.content){
-            Swal.fire({
-                icon: "error",
-                title: "Please Enter full Information Product",
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        }else{
-            try {
-                const response = await axios.put(`http://127.0.0.1:8000/api/updateProduct/${formData.ID}`, {
-                    UpdateCategory: formData.UpdateCategory,
-                    UpdateNameProduct: formData.UpdateNameProduct,
-                    UpdateContent: formData.UpdateContent,
-                    UpdateProvider: formData.UpdateProvider,
-    
+        try{
+            if(formData.UpdateCategory==''||formData.UpdateProvider==''||formData.UpdateContent==''){
+                Swal.fire({
+                    icon: "error",
+                    title: "Please Enter full Information Product",
+                    showConfirmButton: false,
+                    timer: 1500,
                 });
-                if (response.data.message) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "update product successfully",
-                        showConfirmButton: false,
-                        timer: 1500,
+            }else{
+                try {
+                    const response = await axios.put(`http://127.0.0.1:8000/api/updateProduct/${formData.ID}`, {
+                        UpdateCategory: formData.UpdateCategory,
+                        UpdateNameProduct: formData.UpdateNameProduct,
+                        UpdateContent: formData.UpdateContent,
+                        UpdateProvider: formData.UpdateProvider,
+        
                     });
-                    setPopupVisibility(false);
-                    const responseData = await axios.get('http://127.0.0.1:8000/api/getProduct');
-                    setProduct(responseData.data);
+                    if (response.data.message) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "update product successfully",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                        setPopupVisibility(false);
+                        const responseData = await axios.get('http://127.0.0.1:8000/api/getProduct');
+                        setProduct(responseData.data);
+                    }
+                } catch (error) {
+                    console.error('Update error:', error);
                 }
-            } catch (error) {
-                console.error('Update error:', error);
             }
+           
+        }catch(error) {
+            console.error('Update error:', error);
         }
-       
+      
         
     }
     const deletesubmit = async (idProduct) => {
+        
         const confirmation = await Swal.fire({
             title: 'Are you sure you want to delete?',
             text: 'You won\'t be able to revert this!',
@@ -198,9 +206,9 @@ function Product() {
             formData.UpdateImage = selectedProduct.link;
             formData.UpdateNameProduct = selectedProduct.ProductName;
             formData.UpdateContent = selectedProduct.content;
-            formData.UpdateProvider = selectedProduct.ProviderName;
-            formData.UpdateCategory = selectedProduct.NameCategory;
-
+            formData.UpdateProvider = selectedProduct.ID_provider;
+            formData.UpdateCategory = selectedProduct.ID_category;
+            formData.IDcategory=selectedProduct.ID_category;
         }
 
 
@@ -425,23 +433,29 @@ function Product() {
                                 </ul>
                             </li>
                             <li className='active treeview text-white'>
-                                <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username } })}>
+                                <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username,ID:ID  } })}>
                                     <i className="fa fa-th"></i> <span>category</span>
                                 </a>
                             </li>
                             <li className='active treeview text-white'>
-                                <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username } })}>
+                                <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username,ID:ID  } })}>
                                     <i className="fa fa-th"></i> <span>Picture</span>
                                 </a>
                             </li>
-                            <li className="treeview text-white">
-                                <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username } })}>
-                                    <i className="fa fa-th"></i> <span>Provider</span>
+                            <li className='active treeview text-white'>
+                                <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username,ID:ID  } })}>
+                                    <i className="fa fa-th"></i> <span>Product</span>
                                 </a>
                             </li>
                             <li className="treeview text-white">
-                                <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username } })}>
+                                <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username,ID:ID  } })}>
                                     <i className="fa fa-th"></i> <span>Provider</span>
+                                </a>
+                            </li>
+                           
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username,ID:ID  } })}>
+                                    <i className="fa fa-th"></i> <span>Edit</span>
                                 </a>
                             </li>
                             <li className="treeview">
@@ -749,14 +763,14 @@ function Product() {
   value={formData.UpdateCategory}
   onChange={(e) => setFormData({ ...formData, UpdateCategory: e.target.value })}
 >
-  {/* Find the selected category and render it first */}
-  <option value="">Select categories</option>
+  {/* Map through the categories */}
   {categories.map((category) => (
     <option key={category.ID} value={category.ID}>
       {category.Name}
     </option>
   ))}
 </select>
+
                                 </div>
 
 
@@ -793,7 +807,7 @@ function Product() {
                             </div>
                             <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
 
-                                <label className='float-left' >Content</label>
+                                <label className='float-left' >Picture</label>
                                 {ProductDetails.map((Product, index) => (
                                     <div><img src={`http://127.0.0.1:8000/${Product.link}`} width="100" height="100" style={{ objectFit: 'cover' }} alt="" /></div>
                                 ))}

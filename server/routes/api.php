@@ -5,8 +5,10 @@ use App\Http\Controllers\Forgotpassword;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OriginController;
 use App\Http\Controllers\PictureController;
-use App\Http\Controllers\ProductController;
+
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -50,8 +52,8 @@ Route::get('/getProduct',[ProductController::class,'getProduct'])->name('getProd
 Route::put('/updateProduct/{id}',[ProductController::class,'updateProduct'])->name('updateProduct');
 Route::get('/getDetailProduct/{id}', [ProductController::class, 'getDetailProduct'])->name('getDetailProduct');
 Route::put('/deleteProduct/{id}',[ProductController::class,'deleteProduct'])->name('deleteProduct');
-
-
+Route::get('/ProfileInformation/{id}',[ProfileController::class,'ProfileInformation'])->name('ProfileInformation');
+Route::post('/Updateprofile/{id}',[ProfileController::class,'Updateprofile'])->name('Updateprofile');
 
 
 
