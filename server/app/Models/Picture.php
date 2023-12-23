@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Picture extends Model
 {
     protected $table='picture';
-    protected $fillable=['ID','link',"status"];
+    protected $primaryKey = 'ID';
+    protected $fillable = ['link', 'status'];
     public $timestamps=false;
 }

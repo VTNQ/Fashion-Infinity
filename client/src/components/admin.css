@@ -1972,6 +1972,43 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(20px);
 }
+.profile-container {
+  width: 100%;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.profile-header {
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.profile-username {
+  margin-top: 10px;
+  font-size: 1.5em;
+}
+
+.profile-details {
+  margin-top: 20px;
+}
+
+.profile-section {
+  margin-bottom: 20px;
+}
+
+.profile-section h3 {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
 .popup-content {
   background: white;
   padding: 20px;

@@ -5,7 +5,7 @@ function AdminPage(){
   const location = useLocation();
   const navigate=useNavigate();
   const username = location.state?.username || 'Default Username';
-
+  const ID=location.state?.ID||'';
     return(
       <div className="wrapper">
       
@@ -48,25 +48,35 @@ function AdminPage(){
           <ul className="sidebar-menu">
             <li className="header">MAIN NAVIGATION</li>
             <li className="active treeview">
-              <a href="" onClick={() => navigate('/admin', { state: { username: username } })}>
+              <a href="" onClick={() => navigate('/admin', { state: { username: username ,ID:ID} })}>
                 <i className="fa fa-dashboard" ></i> <span>Dashboard</span> 
               </a>
               
             </li>
            
             <li className="treeview text-white">
-              <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username } })}>
+              <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username,ID:ID } })}>
                 <i className="fa fa-th"></i> <span>category</span> 
               </a>
             </li>
             <li className="treeview text-white">
-              <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username } })}>
+              <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username,ID:ID } })}>
                 <i className="fa fa-th"></i> <span>Picture</span> 
               </a>
             </li>
             <li className="treeview text-white">
-              <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username } })}>
+              <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username,ID:ID } })}>
                 <i className="fa fa-th"></i> <span>Provider</span> 
+              </a>
+            </li>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username,ID:ID } })}>
+                <i className="fa fa-th"></i> <span>Product</span> 
+              </a>
+            </li>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username,ID:ID } })}>
+                <i className="fa fa-th"></i> <span>Edit</span> 
               </a>
             </li>
             <li className="treeview">

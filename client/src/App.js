@@ -9,6 +9,8 @@ import Category from './components/CategoryFrom';
 import ResetPassword123 from './components/resetPassword'; 
 import Picture from './components/Picture';
 import Provider from './components/Provider';
+import Product from './components/Product';
+import EditProfile from './components/EditProfile';
 import { gapi } from 'gapi-script';
 import Superadmin from './components/Superadmin';
 import CreateAdmin from './components/superadmin/CreateAdminPage';
@@ -46,6 +48,8 @@ function App() {
             <Route path='ShowAdmin' element={<ShowAdmin/>}/>
         </Route>
         <Route path='/homepage' element={<Layout/>}/>
+        <Route path='/Product' element={<Product/>}/>
+        <Route path='/Edit' element={<EditProfile/>}/>
       </Routes>
     </Router>
   );

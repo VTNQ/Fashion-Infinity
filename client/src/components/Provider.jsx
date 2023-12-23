@@ -17,6 +17,7 @@ function Provider() {
     const [Provider, setprovider] = useState([]);
     const [errors, setErrors] = useState({});
     const username = location.state?.username || 'Default Username';
+    const ID=location.state?.ID||'';
     const [SelectedCountry, setSelectedCountry] = useState('');
     const [IsClosingPopup, setIsClosingPopup] = useState(false);
     const [isPopupVisible, setPopupVisibility] = useState(false);
@@ -283,7 +284,7 @@ function Provider() {
                     <ul className="sidebar-menu">
                         <li className="header">MAIN NAVIGATION</li>
                         <li className="active treeview text-white">
-                            <a className='cursor-pointer' onClick={() => navigate('/admin', { state: { username: username } })}>
+                            <a className='cursor-pointer' onClick={() => navigate('/admin', { state: { username: username,ID:ID } })}>
                                 <i className="fa fa-dashboard"></i> <span>Dashboard</span>
                             </a>
 
@@ -293,18 +294,28 @@ function Provider() {
 
                         </li>
                         <li className="active treeview text-white">
-                            <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username } })}>
+                            <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username,ID:ID } })}>
                                 <i className="fa fa-th"></i> <span>category</span>
                             </a>
                         </li>
                         <li className='active treeview text-white'>
-                            <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username } })}>
+                            <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username,ID:ID } })}>
                                 <i className="fa fa-th"></i> <span>Picture</span>
                             </a>
                         </li>
                         <li className='active treeview text-white'>
-                            <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username } })}>
+                            <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username,ID:ID } })}>
+                                <i className="fa fa-th"></i> <span>Product</span>
+                            </a>
+                        </li>
+                        <li className='active treeview text-white'>
+                            <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username,ID:ID } })}>
                                 <i className="fa fa-th"></i> <span>Provider</span>
+                            </a>
+                        </li>
+                        <li className='active treeview text-white'>
+                            <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username,ID:ID } })}>
+                                <i className="fa fa-th"></i> <span>Edit</span>
                             </a>
                         </li>
                         <li className="treeview">

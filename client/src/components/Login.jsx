@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 
 function Login() {
     const [username, setUsername] = useState('');
+    const [ID,SetID]=useState('');
     const [loading, setloading] = useState(false);
     function Logingoogle({ onSuccess, onFailure }) {
         const clientId = '459264668372-o7aqna11uh89jqtbuc05o285tsphoopc.apps.googleusercontent.com'; // Replace with your actual client ID
@@ -136,7 +137,10 @@ function Login() {
             if(response.ok){
                 console.log(responseData);
                if(responseData.message){
+            
                 setUsername(responseData.Username);
+                SetID(responseData.ID);
+                console.log(username);
                 Swal.fire({
                     icon: "success",
                     title: responseData.message,
@@ -146,7 +150,7 @@ function Login() {
                     if(responseData.isSuperAdmin){
                         navigate('/superadmin', { state: { username: responseData.Username } });
                     }else if(responseData.isAdmin){
-                        navigate('/admin', { state: { username: responseData.Username } });
+                        navigate('/admin', { state: { username: responseData.Username,ID:responseData.ID } });
                     }
                 });
                

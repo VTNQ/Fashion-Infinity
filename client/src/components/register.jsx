@@ -78,6 +78,7 @@ function Register() {
                 onSuccess={handleGoogleSuccess}
                 onFailure={handleGoogleFailure}
                 cookiePolicy={'single_host_origin'}
+                 prompt="select_account" 
                 render={(renderProps) => (
                     <button
                         onClick={renderProps.onClick}

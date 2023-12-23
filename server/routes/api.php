@@ -5,9 +5,12 @@ use App\Http\Controllers\Forgotpassword;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OriginController;
 use App\Http\Controllers\PictureController;
+
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Account;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -50,12 +53,14 @@ Route::put('/deleteProvider/{id}',[ProviderController::class,'deleteProvider'])-
 Route::get('/getCustomers',[Account::class,'getCustomer'])->name('getCustomer');
 Route::get('/getAdmins',[Account::class,'getAdmin'])->name('getAdmins');
 Route::put("/admins/{id}",[Account::class,'UpdateUsernameAdmin'])->name('UpdateUsernameAdmin');
-
-
-
-
-
-
+Route::post('/Addproduct',[ProductController::class,'Addproduct'])->name('Addproduct');
+Route::get('/getProvider',[ProductController::class,'getProvider'])->name('getProvider');
+Route::get('/getProduct',[ProductController::class,'getProduct'])->name('getProduct');
+Route::put('/updateProduct/{id}',[ProductController::class,'updateProduct'])->name('updateProduct');
+Route::get('/getDetailProduct/{id}', [ProductController::class, 'getDetailProduct'])->name('getDetailProduct');
+Route::put('/deleteProduct/{id}',[ProductController::class,'deleteProduct'])->name('deleteProduct');
+Route::get('/ProfileInformation/{id}',[ProfileController::class,'ProfileInformation'])->name('ProfileInformation');
+Route::post('/Updateprofile/{id}',[ProfileController::class,'Updateprofile'])->name('Updateprofile');
 
 
 
