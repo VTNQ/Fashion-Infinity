@@ -26,7 +26,6 @@ class ProductController extends Controller
             'provider.Name as ProviderName',
             'category.Name as NameCategory',
             'category_product.size',
-            'category_product.Color',
             'product.ID as IDproduct'
         ])
         ->where("product.ID",$ID)
@@ -171,7 +170,6 @@ class ProductController extends Controller
             $categoryProduct->id_Product = $product->ID;
             $categoryProduct->id_Category = $request->input('Category');
             $categoryProduct->size=$request->input('size');
-            $categoryProduct->Color=$request->input('Color');
             $categoryProduct->save();
         }
 
