@@ -151,6 +151,7 @@ function Register() {
                         body: JSON.stringify(formData),
                     });
 
+                    
                     const responseData = await response.json();
 
                     if (response.ok) {

@@ -9,11 +9,13 @@ import 'react-paginate/theme/basic/react-paginate.css';
 import '../components/admin.css'
 function CategoryFrom() {
 
+  
   const location = useLocation();
   const username = location.state?.username || 'Default Username';
   const [perPage,setperPage]=useState(5);
   const navigate=useNavigate();
   const [currentPage,setCurrentPage]=useState(0);
+
   const [formData, setFormData] = useState({
     NameCategory: '',
     UpdateNameCategory:'',
@@ -21,9 +23,11 @@ function CategoryFrom() {
   const [searchTerm,setSearchtem]=useState('');
   const [categories, setCategories] = useState([]);
   const [IsClosingPopup,setIsClosingPopup]=useState(false);
+
   useEffect(()=>{
     const fetchdata=async()=>{
       try{
+        //gửi yêu cầu http để lấy dữ liệu từ api 
         const response=await axios.get('http://127.0.0.1:8000/api/getcategories');
         setCategories(response.data);
       }catch(error){
@@ -221,6 +225,8 @@ function CategoryFrom() {
     }
     
   };
+  
+
   
   const handleEditClick = (categoryId) => {
     const selectedCategory=categories.find(category=>category.ID==categoryId)

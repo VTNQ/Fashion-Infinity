@@ -73,6 +73,41 @@ class RegisterController extends Controller
             return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
         }
 
+
+    }
+    public function registerAdmin(Request $request)
+    {
+
+        $min = 1;
+        $max = 100;
+
+        // Generate a random integer
+        $randomNumber = random_int($min, $max);
+
+        try {
+            $existingAccount = Account::where('Username', $request->input('Username'))->orWhere('Email', $request->input('Email'))->first();
+
+            if ($existingAccount) {
+                return response()->json(['errorAll' => 'Username or Email already exists'], 422);
+            }
+
+            $user = Account::create([
+                'Username' => $request->input("Username"),
+                'Email' => $request->input("Email"),
+                // 'Password' => md5($request->input("Password")),
+                'Password' => $request->input("Password"),
+                'Accounttype' => 0,
+        
+
+            ]);
+            $token='';
+            Mail::to($request->input("Email"))->send(new AccountInfo($request->input("Username"), $token,$request->input("Password")));
+            return response()->json(['message' => 'Register successful', 'Account' => $user]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
+        }
+
+        
     }
 }
 
