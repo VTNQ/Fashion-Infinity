@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Account;
+use App\Http\Controllers\HomeProduct;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +62,7 @@ Route::get('/getDetailProduct/{id}', [ProductController::class, 'getDetailProduc
 Route::put('/deleteProduct/{id}',[ProductController::class,'deleteProduct'])->name('deleteProduct');
 Route::get('/ProfileInformation/{id}',[ProfileController::class,'ProfileInformation'])->name('ProfileInformation');
 Route::post('/Updateprofile/{id}',[ProfileController::class,'Updateprofile'])->name('Updateprofile');
+Route::get('/getHomeProduct',[HomeProduct::class,'DisplayProduct'])->name('DisplayProduct');
 
 
 

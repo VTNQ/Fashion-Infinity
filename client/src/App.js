@@ -17,7 +17,8 @@ import CreateAdmin from './components/superadmin/CreateAdminPage';
 import DefaultDashboard from './components/superadmin/DefaultDashboard';
 import ShowCustomer from './components/superadmin/ShowCustomer';
 import ShowAdmin  from './components/superadmin/ShowAdmin';
-import Layout from './components/Layout';
+import Layout from './components/User/Layout';
+import ProductUser from './components/User/ProductUser';
 
 function App() {
   useEffect(() => {
@@ -50,6 +51,7 @@ function App() {
         <Route path='/homepage' element={<Layout/>}/>
         <Route path='/Product' element={<Product/>}/>
         <Route path='/Edit' element={<EditProfile/>}/>
+        <Route path='/HomeProduct' element={<ProductUser/>}/>
       </Routes>
     </Router>
   );
