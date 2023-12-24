@@ -11,7 +11,7 @@ function Product() {
     const fileInputRef = useRef(null);
     const [searchTerm, setSearchtem] = useState('');
     const [loading, setloading] = useState(false);
-    
+
     const [currentPage, setCurrentPage] = useState(0);
     const [perPage, setperPage] = useState(5);
     const [Provider, setprviders] = useState([]);
@@ -23,18 +23,12 @@ function Product() {
     const [isPopupVisible, setPopupVisibility] = useState(false);
     const [isDetail, setDetail] = useState(false);
     const location = useLocation();
-    const colorOptions = [
-        { name: 'Red', color: 'red' },
-        { name: 'Green', color: 'green' },
-        { name: 'Blue', color: 'blue' },
-        { name: 'Yellow', color: 'yellow' },
-        { name: 'Purple', color: 'purple' },
-    ]
-    const handlePageclick=(data)=>{
+
+    const handlePageclick = (data) => {
         setCurrentPage(data.selected);
-      };
+    };
     const username = location.state?.username || 'Default Username';
-    const ID=location.state?.ID||'';
+    const ID = location.state?.ID || '';
     const popupContentStyle = {
         background: 'white',
         padding: '20px',
@@ -109,28 +103,27 @@ function Product() {
         UpdateProvider: '',
         UpdateCategory: '',
         UpdateSize: '',
-        Color: '',
         ID: '',
-        IDcategory:'',
+        IDcategory: '',
     });
     const updatesubmit = async (e) => {
         e.preventDefault();
-        try{
-            if(formData.UpdateCategory==''||formData.UpdateProvider==''||formData.UpdateContent==''){
+        try {
+            if (formData.UpdateCategory == '' || formData.UpdateProvider == '' || formData.UpdateContent == '') {
                 Swal.fire({
                     icon: "error",
                     title: "Please Enter full Information Product",
                     showConfirmButton: false,
                     timer: 1500,
                 });
-            }else{
+            } else {
                 try {
                     const response = await axios.put(`http://127.0.0.1:8000/api/updateProduct/${formData.ID}`, {
                         UpdateCategory: formData.UpdateCategory,
                         UpdateNameProduct: formData.UpdateNameProduct,
                         UpdateContent: formData.UpdateContent,
                         UpdateProvider: formData.UpdateProvider,
-        
+
                     });
                     if (response.data.message) {
                         Swal.fire({
@@ -147,15 +140,15 @@ function Product() {
                     console.error('Update error:', error);
                 }
             }
-           
-        }catch(error) {
+
+        } catch (error) {
             console.error('Update error:', error);
         }
-      
-        
+
+
     }
     const deletesubmit = async (idProduct) => {
-        
+
         const confirmation = await Swal.fire({
             title: 'Are you sure you want to delete?',
             text: 'You won\'t be able to revert this!',
@@ -196,7 +189,7 @@ function Product() {
             console.error('Error fetching product details:', error);
         }
     };
-    const handleEditClick = (Productid, color) => {
+    const handleEditClick = (Productid) => {
         const selectedProduct = Product.find(Product => Product.IDproduct == Productid)
 
         if (selectedProduct) {
@@ -208,7 +201,7 @@ function Product() {
             formData.UpdateContent = selectedProduct.content;
             formData.UpdateProvider = selectedProduct.ID_provider;
             formData.UpdateCategory = selectedProduct.ID_category;
-            formData.IDcategory=selectedProduct.ID_category;
+            formData.IDcategory = selectedProduct.ID_category;
         }
 
 
@@ -327,7 +320,7 @@ function Product() {
             formDataApi.append('Provider', formData.Provider);
             formDataApi.append('Category', formData.Category);
             formDataApi.append('size', formData.size);
-            formDataApi.append('Color', formData.Color);
+
 
             const response = await axios.post('http://127.0.0.1:8000/api/Addproduct', formDataApi);
 
@@ -344,7 +337,6 @@ function Product() {
                     NameProduct: '',
                     content: '',
                     Provider: '',
-                    Color: '',
                     Category: '',
                     size: ''
                 })
@@ -368,12 +360,12 @@ function Product() {
         }
     };
     const filteredCategories = Product.filter(category =>
-    
+
         category.ProductName.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    const indexOflastCategory=(currentPage+1)*perPage;
-    const indexOfFirtCategory=indexOflastCategory-perPage;
-    const currentCategories=filteredCategories.slice(indexOfFirtCategory,indexOflastCategory)
+    );
+    const indexOflastCategory = (currentPage + 1) * perPage;
+    const indexOfFirtCategory = indexOflastCategory - perPage;
+    const currentCategories = filteredCategories.slice(indexOfFirtCategory, indexOflastCategory)
 
     return (
         <div>
@@ -433,28 +425,28 @@ function Product() {
                                 </ul>
                             </li>
                             <li className='active treeview text-white'>
-                                <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username,ID:ID  } })}>
+                                <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>category</span>
                                 </a>
                             </li>
                             <li className='active treeview text-white'>
-                                <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username,ID:ID  } })}>
+                                <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Picture</span>
                                 </a>
                             </li>
                             <li className='active treeview text-white'>
-                                <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username,ID:ID  } })}>
+                                <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Product</span>
                                 </a>
                             </li>
                             <li className="treeview text-white">
-                                <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username,ID:ID  } })}>
+                                <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Provider</span>
                                 </a>
                             </li>
-                           
+
                             <li className="treeview text-white">
-                                <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username,ID:ID  } })}>
+                                <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Edit</span>
                                 </a>
                             </li>
@@ -595,18 +587,7 @@ function Product() {
                                             </select>
 
                                         </div>
-                                        <div className="form-group">
-                                            <label >color</label>
-                                            <select name="Color" value={formData.Color} onChange={(e) => setFormData({ ...formData, Color: e.target.value })} className="form-control" >
-                                                <option value="">Select color</option>
-                                                {colorOptions.map((color) => (
-                                                    <option key={color.name} value={color.name} className="color-option">
-                                                        {color.name}
-                                                    </option>
-                                                ))}
-                                            </select>
 
-                                        </div>
                                         <div className="form-group">
                                             <label >Name category</label>
                                             <select value={formData.Category} onChange={(e) => setFormData({ ...formData, Category: e.target.value })} name="Category" className="form-control" >
@@ -619,7 +600,12 @@ function Product() {
                                         </div>
                                         <div className="form-group">
                                             <label >Size</label>
-                                            <input type='number' name='size' value={formData.size} onChange={(e) => setFormData({ ...formData, size: e.target.value })} className="form-control" id="exampleInputEmail1" placeholder="Enter Name Product" />
+                                            <input type='number' name='size' value={formData.size} onChange={(e) => {
+                                                const newSize = parseInt(e.target.value, 10);
+                                                if (!isNaN(newSize) && newSize > 0) {
+                                                    setFormData({ ...formData, size: newSize });
+                                                }
+                                            }} className="form-control" id="exampleInputEmail1" placeholder="Enter Name Product" />
 
                                         </div>
 
@@ -639,7 +625,7 @@ function Product() {
                                 </div>
                                 <div className="flex items-center space-x-4 float-left flex-1 mb-2 ml-2">
                                     <label for="search" className="text-gray-600">Search</label>
-                                    <input type="text" id="search" name="search" placeholder="Enter your search term" value={searchTerm} onChange={(e)=>setSearchtem(e.target.value)} className="border border-gray-300 px-3 py-1 rounded-md focus:outline-none focus:border-blue-500"/>
+                                    <input type="text" id="search" name="search" placeholder="Enter your search term" value={searchTerm} onChange={(e) => setSearchtem(e.target.value)} className="border border-gray-300 px-3 py-1 rounded-md focus:outline-none focus:border-blue-500" />
 
                                 </div>
 
@@ -666,7 +652,7 @@ function Product() {
 
                                                     <td>{Product.ProviderName}</td>
                                                     <td>{Product.NameCategory}</td>
-                                                    <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEditClick(Product.IDproduct, Product.Color)}>Edit</button></td>
+                                                    <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEditClick(Product.IDproduct)}>Edit</button></td>
                                                     <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => deletesubmit(Product.IDproduct)}>Remove</button></td>
                                                     <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded " onClick={() => handleDetail(Product.IDproduct, Product.ProductName, Product.size)}  >Detail</button></td>
                                                 </tr>
@@ -677,25 +663,25 @@ function Product() {
 
                                     </table>
                                     <Pagination
-         previousLabel={'previous'}
-         nextLabel={'next'}
-         breakLabel={'...'}
-         pageCount={Math.ceil(filteredCategories.length / perPage)}
-         marginPagesDisplayed={2}
-         pageRangeDisplayed={5}
-         onPageChange={handlePageclick}
-         containerClassName={'pagination'}
-         activeClassName={'active'}
-         previousClassName={'page-item'}
-         previousLinkClassName={'page-link'}
-         nextClassName={'page-item'}
-         nextLinkClassName={'page-link'}
-         breakClassName={'page-item'}
-         breakLinkClassName={'page-link'}
-         pageClassName={'page-item'}
-         pageLinkClassName={'page-link'}
+                                        previousLabel={'previous'}
+                                        nextLabel={'next'}
+                                        breakLabel={'...'}
+                                        pageCount={Math.ceil(filteredCategories.length / perPage)}
+                                        marginPagesDisplayed={2}
+                                        pageRangeDisplayed={5}
+                                        onPageChange={handlePageclick}
+                                        containerClassName={'pagination'}
+                                        activeClassName={'active'}
+                                        previousClassName={'page-item'}
+                                        previousLinkClassName={'page-link'}
+                                        nextClassName={'page-item'}
+                                        nextLinkClassName={'page-link'}
+                                        breakClassName={'page-item'}
+                                        breakLinkClassName={'page-link'}
+                                        pageClassName={'page-item'}
+                                        pageLinkClassName={'page-link'}
 
-        />
+                                    />
                                 </div>
                             </div>
 
@@ -746,30 +732,30 @@ function Product() {
                                         onChange={(e) => setFormData({ ...formData, UpdateProvider: e.target.value })}
                                     >
                                         {/* Map through the Provider array */}
-                                    <option value="">Select providers</option>
+                                        <option value="">Select providers</option>
                                         {Provider.map((Provider) => (
-    <option key={Provider.ID} value={Provider.ID}>
-      {Provider.Name}
-    </option>
-  ))}
+                                            <option key={Provider.ID} value={Provider.ID}>
+                                                {Provider.Name}
+                                            </option>
+                                        ))}
                                     </select>
 
                                 </div>
                                 <div className="form-group">
                                     <label className="float-left">Name Categories</label>
                                     <select
-  name="UpdateCategory"
-  className="form-control"
-  value={formData.UpdateCategory}
-  onChange={(e) => setFormData({ ...formData, UpdateCategory: e.target.value })}
->
-  {/* Map through the categories */}
-  {categories.map((category) => (
-    <option key={category.ID} value={category.ID}>
-      {category.Name}
-    </option>
-  ))}
-</select>
+                                        name="UpdateCategory"
+                                        className="form-control"
+                                        value={formData.UpdateCategory}
+                                        onChange={(e) => setFormData({ ...formData, UpdateCategory: e.target.value })}
+                                    >
+                                        {/* Map through the categories */}
+                                        {categories.map((category) => (
+                                            <option key={category.ID} value={category.ID}>
+                                                {category.Name}
+                                            </option>
+                                        ))}
+                                    </select>
 
                                 </div>
 
@@ -817,14 +803,7 @@ function Product() {
                                 <label className='float-left' style={{ marginRight: '10px' }}>Size:</label>
                                 <div>{formData.UpdateSize}</div>
                             </div>
-                            <div className="form-group" style={{ display: 'flex', alignItems: 'center', backgroundColor: '#f0f0f0', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
-                                <label className='float-left'>Color:</label>
-                                {[...new Set(ProductDetails.map((product) => product.Color))].map((color, index) => (
-                                    <div key={index} style={{ backgroundColor: color, padding: '14px', margin: '0 5px', borderRadius: '28px' }}>
 
-                                    </div>
-                                ))}
-                            </div>
 
                             {/* Add more details as needed */}
                         </div>
