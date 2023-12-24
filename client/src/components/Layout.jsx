@@ -6,7 +6,7 @@ import CreateAdmin from "./superadmin/CreateAdminPage";
 
 import TreeviewMenu from "./superadmin/TreeViewMenu";
 import global from "../layoutFolder/global.css";
-import index from "../layoutFolder/index.css"
+import "../layoutFolder/index.css";
 
 
 
@@ -241,7 +241,9 @@ function Layout(){
 	</section>
 	
 
-
+<section>
+	<h1>hello</h1>
+</section>
 
 
 <section id="footer">
