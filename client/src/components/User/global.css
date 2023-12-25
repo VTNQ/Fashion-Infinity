@@ -115,6 +115,47 @@ body{
   .border_none{
     border:none!important;
     }
+    .mgt{
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+   
+    }
+    .filter-container {
+      display: flex;
+      flex-direction: column;
+  }
+  
+  .filter-price-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+  }
+  
+  .filter-price-container label {
+      margin-right: 5px;
+  }
+  
+  .filter-price-container input {
+      margin-right: 10px;
+      width: 80px;
+  }
+  
+  .filter-price-container button {
+      padding: 5px 10px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+  }
+    .mgt a{
+      color: #333;
+      font-size: 18px;
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+      font-weight: bold;
+    }
+    .mgt a:hover{
+      text-decoration: none;
+      color: #d93d3d;
+    }
   .mgt{
     margin-top:0!important;
     }
@@ -827,7 +868,35 @@ body{
     align-items: center;
     
   }
-  
+  .center_shop_1li {
+    padding: 20px 10px;
+    box-shadow: 0 0 10px #f4573752;
+}
+.center_shop_1li h5 {
+  background: #d93d3d;
+  color: #fff;
+  padding: 10px 10px 10px 10px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: bold;
+}
+.ziehharmonika h3 {
+  cursor: pointer;
+  padding-right: 40px;
+  transition: 0.25s all;
+  position: relative;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.active a{
+  color: #000;
+}
+  .center_product_1r2 {
+    box-shadow: 0 0 10px #f4573752;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
   .page-item {
     margin: 0 5px;
   }

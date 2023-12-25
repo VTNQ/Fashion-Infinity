@@ -63,8 +63,8 @@ Route::put('/deleteProduct/{id}',[ProductController::class,'deleteProduct'])->na
 Route::get('/ProfileInformation/{id}',[ProfileController::class,'ProfileInformation'])->name('ProfileInformation');
 Route::post('/Updateprofile/{id}',[ProfileController::class,'Updateprofile'])->name('Updateprofile');
 Route::get('/getHomeProduct',[HomeProduct::class,'DisplayProduct'])->name('DisplayProduct');
-
-
+Route::get('/getTopcategory',[HomeProduct::class,'getTopcategory'])->name('getTopcategory');
+Route::get('/latestProduct',[HomeProduct::class,'latestProduct'])->name('latestProduct');
 
 
 

@@ -1,0 +1,297 @@
+/*
+Template Name: Rd Jewellers
+File: Layout CSS
+Author: TemplatesOnWeb
+Author URI: https://www.templateonweb.com/
+Licence: <a href="https://www.templateonweb.com/license">Website Template Licence</a>
+*/
+/*********************product****************/
+#product{
+    padding-top:40px;
+    padding-bottom:40px; 
+     }
+    .center_shop_1li h5{
+    background:#d93d3d;
+    color:#fff; 
+    padding:10px 10px 10px 10px;
+     }
+    .center_shop_1li{
+    padding:20px 10px;
+    box-shadow: 0 0 10px #f4573752; 
+     }
+    .ziehharmonika h3 {
+        cursor: pointer;
+        padding-right: 40px;
+        transition: 0.25s all;
+        position: relative;
+        font-size:18px;
+        font-weight:bold;
+    }
+    .ziehharmonika ul{
+     list-style:disc; 
+     margin-left:30px;
+      }
+    .ziehharmonika ul li{
+    margin-top:3px;
+    margin-bottom:3px;
+    font-size:16px; 
+     }
+    .ziehharmonika h3.alignLeft {
+        padding-left: 35px;
+    }
+    .ziehharmonika > div {
+        display: none;
+    }
+    
+    .ziehharmonika .collapseIcon {
+        position: absolute;
+        right: 20px;
+        top: 45%;
+        font-size: 24px;
+        font-weight: 300;
+        -ms-transform: translate(0, -50%);
+            transform: translate(0, -50%);
+    }
+    .ziehharmonika .collapseIcon.alignLeft {
+        right: initial;
+        left: 20px;
+    }
+     .ziehharmonika h3.active {
+    color:#d93d3d;
+    }
+    .product_1i h5{
+    background:#d93d3d;
+    color:#fff; 
+    padding:10px 10px 10px 10px;
+     }
+    .product_1i{
+    padding:20px 10px;
+    box-shadow: 0 0 10px #f4573752;
+    margin-top:20px; 
+     }
+    .product_1i h6{
+    border-bottom:1px solid #f4573729;
+    padding-bottom:15px; 
+     }
+    .product_1i .form-control {
+        height: 48px;
+        font-size: 16px;
+        border-color: #f4573729 !important;
+        box-shadow: none;
+        border-radius: 0;
+    }
+   /* ProductUser.css */
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+input[type="checkbox"] {
+  display: none; /* Hide the default checkbox */
+}
+.checkbox-item {
+    flex-basis: calc(50% - 10px); /* Adjust the percentage and subtract any gap */
+    box-sizing: border-box;
+    margin-right: 8px; /* Adjust the margin between items */
+  }
+.custom-checkbox-label {
+  margin-left: 8px;
+  cursor: pointer;
+  position: relative;
+  padding-left: 25px; /* Space for the custom checkbox */
+  user-select: none;
+  font-size: 13px;
+    color: #333;
+    font-family: 'Roboto',sans-serif;
+    font-weight: 500;
+}
+
+.custom-checkbox-label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px; /* Size of the custom checkbox */
+  height: 18px;
+  border: 2px solid rgb(0,0,0,0.2); /* Border color */
+  background-color: white; /* Background color */
+  border-radius: 4px; /* Optional: Rounded corners */
+}
+
+input[type="checkbox"]:checked + .custom-checkbox-label:before {
+    background-color: rgb(255, 255, 255); /* Background color when checked */
+    border-color: rgb(0,0,0,0); /* Border color when checked */
+    content: '✔'; 
+    background-color: #1435C3;/* Add a checkmark symbol */
+    color: white; /* Color of the checkmark symbol */
+    font-size: 14px; /* Adjust the font size of the checkmark symbol */
+    line-height: 18px; /* Match the line height with the checkbox height */
+    text-align: center; /* Center the checkmark symbol */
+  }
+.badge{
+  background-color: white !important;
+  border: 0.125rem solid #ee4d2d;
+  border-radius: 2.75rem !important;
+  color: #ee4d2d !important;
+}
+
+/* Add more styling as needed */
+
+    .product_1i .input-group .btn {
+        background: #d93d3d;
+        margin-left: 0!important;
+        padding: 10.5px 20px;
+        font-size: 18px;
+        border-radius: 0;
+        border-color: #d93d3d;
+    }
+    .product_1i .input-group{
+    margin-top:15px; 
+     }
+     .dropdown-menu-large > li {
+      display: inline-block;
+      vertical-align: top; /* Align items to the top */
+      margin-right: 15px; /* Adjust as needed */
+  }
+  
+  .dropdown-menu-large > li > ul > li {
+      display: block; /* Reset display for inner list items */
+  }
+  .Product {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+  }
+  
+     .maxprice{
+      opacity: 1;
+    display: inline-block;
+    color: inherit;
+    font-weight: inherit;
+    width: 75px;
+    padding: 0.25rem;
+    font-family: 'Roboto',sans-serif;
+    border: 1px solid rgb(228, 229, 240);
+    font-size: 16px;
+    border-radius: 0.25rem;
+    background-color: rgb(255, 255, 255);
+    z-index: 0;
+    text-align: center;
+     }
+     .minprice{
+      opacity: 1;
+    display: inline-block;
+    color: inherit;
+    font-weight: inherit;
+    width: 75px;
+    padding: 0.25rem;
+    font-family: 'Roboto',sans-serif;
+    border: 1px solid rgb(228, 229, 240);
+    font-size: 16px;
+    border-radius: 0.25rem;
+    background-color: rgb(255, 255, 255);
+    z-index: 0;
+    text-align: center;
+     }
+    .blog_1li1{
+    padding:20px 10px;
+    box-shadow: 0 0 10px #f4573752; 
+    margin-top:20px; 
+     }
+     .price-label {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px; /* Adjust the font size as needed */
+      /* Add any additional styling for your labels */
+  }
+    .blog_1li1 .heading{
+    background:#d93d3d;
+    color:#fff; 
+    padding:10px 10px 10px 10px;
+     }
+    .blog_1li1i {
+        margin-top: 15px;
+        border-bottom: 1px solid #f4573729;
+        padding-bottom: 15px;
+    }
+    .blog_1li1i h4 {
+        margin-top: 5px;
+    }
+    .blog_1li1i h6 {
+        margin-top: 5px;
+    }
+    
+    .center_product_1r2r h5{
+    display:inline-block;
+    margin-right:10px; 
+     }
+    .center_product_1r2r .form-control{
+    display:inline-block;
+    width:50%; 
+    border-radius:0;
+    border-color: #f4573729;
+    box-shadow:none;
+     }
+    .center_product_1r2{
+    box-shadow: 0 0 10px #f4573752; 
+    padding-top:10px;
+    padding-bottom:10px;
+     }
+    .center_product_1r2l{
+     padding-top:7px;
+     }
+    .list_2i{
+    border:1px solid #f4573729;
+    padding:20px; 
+     }
+    .list_2{
+    margin-top:30px; 
+     }
+    .product_1r1{
+    margin-top:30px; 
+     }
+    /*********************product_end****************/
+    
+    
+    @media screen and (max-width : 767px){
+    #product{
+    text-align:center; 
+     }
+    .ziehharmonika{
+    text-align:left; 
+     }
+    .product_1i h6{
+    text-align:left;  
+     }
+    .blog_1li1i img{
+    margin-bottom:10px; 
+     }
+    .center_product_1r2 {
+    margin-top:15px; 
+     }
+    .center_product_1r2r {
+    text-align:center;
+    margin-top:10px; 
+     }
+    }
+    
+    @media (min-width:768px) and (max-width:991px) {
+    .product_1r1 .col-sm-4{
+    padding-left:5px;
+    padding-right:5px; 
+     }
+     }
+    @media (min-width:992px) and (max-width:1200px) {
+    
+     }
+    @media (min-width:1201px) and (max-width:1220px) {
+    
+     }
+    
+    
+    
+    
+    
