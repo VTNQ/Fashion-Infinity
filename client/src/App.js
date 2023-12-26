@@ -18,6 +18,7 @@ import DefaultDashboard from './components/superadmin/DefaultDashboard';
 import ShowCustomer from './components/superadmin/ShowCustomer';
 import ShowAdmin  from './components/superadmin/ShowAdmin';
 import Layout from './components/Layout';
+import Homepage from './components/layout/homepage/Homepage';
 
 function App() {
   useEffect(() => {
@@ -47,7 +48,9 @@ function App() {
             <Route path='ShowCustomer' element={<ShowCustomer/>}/>
             <Route path='ShowAdmin' element={<ShowAdmin/>}/>
         </Route>
-        <Route path='/homepage' element={<Layout/>}/>
+        <Route path='/layout' element={<Layout/>}>
+            <Route index element={<Homepage/>}/>
+        </Route>
         <Route path='/Product' element={<Product/>}/>
         <Route path='/Edit' element={<EditProfile/>}/>
       </Routes>

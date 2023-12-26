@@ -21,19 +21,9 @@ Licence: <a href="https://www.templateonweb.com/license">Website Template Licenc
   opacity: 1;
 }
 
-.hero hr{
-width:10%;
-border-color:#fff;
-border-color:#d93d3d;
-margin-left:0;
- }
-.hero h1{
-font-size:60px;
-color:#d93d3d;
- }
-.hero p{
-color:#fff;
- }
+
+
+
 .hero h4{
 display:inline-block;
 margin-left:4px;
@@ -48,11 +38,12 @@ font-weight:normal;
 	width:50%;
     top: 50%;
     left:30%;
-	padding:20px 15px;
+	padding:20px 20px;
     z-index: 2;
-    color: #fff;
+    
+    
     text-transform:capitalize;
-    text-shadow: 1px 1px 0 rgba(0,0,0,.75);
+    /* text-shadow: 1px 1px 0 rgba(0,0,0,.75); */
 	-webkit-transform: translate3d(-50%,-50%,0);
 	-moz-transform: translate3d(-50%,-50%,0);
 	-ms-transform: translate3d(-50%,-50%,0);
@@ -366,6 +357,64 @@ left:75%!important;
 
  }
 
-
-
-
+ .tag-container {
+    position: absolute;
+    top: 7%; /* Aligns the container to the top of the parent */
+    left: 9%;  /* Adjust height as needed */
+  }
+  
+  .tag {
+    background-color: #CDA557; /* Your color */
+    color: white; /* Text color */
+    padding: 0.3em 0.7em; /* Spacing inside the tag */
+    /* To position the pseudo-element */
+    font-weight: bold; /* Bold text */
+    font-family: sans-serif; /* Font choice */
+    font-size: 1.3rem;
+  }
+  
+  .tag::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -9px; /* Adjust this value as needed */
+    border-width: 10px 10px 0; /* Creates a triangle */
+    border-style: solid;
+    border-color: #CDA557 transparent transparent transparent; /* Match the tag background color */
+    transform: translateX(-50%); /* Centers the triangle */
+  }
+  @keyframes focusIn {
+    0% {
+      filter: blur(8px);
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    100% {
+      filter: blur(0);
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .focus-in-text {
+    animation: focusIn 1s ease forwards;
+  }
+  .product-card {
+    transition: transform 0.3s ease;
+  }
+  
+  .product-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .product-links {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    /* ... */
+  }
+  
+  .product-card:hover .product-links {
+    opacity: 1;
+  }
+  
+  
