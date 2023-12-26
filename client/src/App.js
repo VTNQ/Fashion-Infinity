@@ -21,7 +21,7 @@ import Layout from './components/Layout';
 import Homepage from './components/layout/homepage/Homepage';
 
 import ProductUser from './components/User/ProductUser';
-
+import Menu from './components/menu/menu.jsx';
 function App() {
   useEffect(() => {
     // Load the Google API client library
@@ -56,6 +56,7 @@ function App() {
         <Route path='/Product' element={<Product/>}/>
         <Route path='/Edit' element={<EditProfile/>}/>
         <Route path='/HomeProduct' element={<ProductUser/>}/>
+        <Route path='/menu' element={<Menu/>}/>
       </Routes>
     </Router>
   );
