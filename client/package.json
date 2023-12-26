@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -10,6 +11,7 @@
     "bootstrap": "^5.3.2",
     "ckeditor4-react": "^5.0.0",
     "gapi-script": "^1.2.0",
+    "rc-slider": "^10.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-facebook-login": "^4.1.1",
@@ -17,8 +19,13 @@
     "react-paginate": "^8.2.0",
     "react-router-dom": "^6.21.0",
     "react-scripts": "5.0.1",
+<<<<<<< HEAD
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
+=======
+    "react-slider": "^2.0.6",
+    "react-toastify": "^9.1.3",
+>>>>>>> 820915887b3e78412b255ecf20f5e8b6218529ab
     "sweetalert2": "^11.10.1",
     "web-vitals": "^2.1.4"
   },

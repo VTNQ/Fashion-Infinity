@@ -356,6 +356,7 @@ left:75%!important;
 @media (min-width:1201px) and (max-width:1220px) {
 
  }
+<<<<<<< HEAD:client/src/layoutFolder/index.css
 
  .tag-container {
     position: absolute;
@@ -417,4 +418,17 @@ left:75%!important;
     opacity: 1;
   }
   
+=======
+ .product_1r1 {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .product_1r1:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+>>>>>>> 820915887b3e78412b255ecf20f5e8b6218529ab:client/src/components/User/index.css
   

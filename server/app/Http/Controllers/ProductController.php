@@ -26,7 +26,8 @@ class ProductController extends Controller
             'provider.Name as ProviderName',
             'category.Name as NameCategory',
             'category_product.size',
-            'product.ID as IDproduct'
+            'product.ID as IDproduct',
+            'product.Price'
         ])
         ->where("product.ID",$ID)
         ->get();
@@ -49,7 +50,8 @@ class ProductController extends Controller
             'category_product.id_Category',
             'category.ID as ID_category',
             'provider.ID as ID_provider',
-            'category_product.size'
+            'category_product.size',
+            'product.Price'
         ])
         ->groupBy([
 
@@ -63,7 +65,8 @@ class ProductController extends Controller
             'category_product.id_Category',
             'category.ID',
             'provider.ID',
-            'category_product.size'
+            'category_product.size',
+            'product.Price'
         ])
         ->get();
     
@@ -162,6 +165,7 @@ class ProductController extends Controller
         $product->Name = $request->input('NameProduct');
         $product->content = $request->input('content');
         $product->id_provider = $request->input('Provider');
+        $product->Price=$request->input('Price');
         $product->save();
 
         foreach ($ids as $idpic) {

@@ -1,8 +1,9 @@
 import image from '../images/user2-160x160.jpg';
-import { useEffect, useState, useRef } from 'react';
+import React,{ useEffect, useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
@@ -96,7 +97,7 @@ function Product() {
         Provider: '',
         Category: '',
         size: '',
-
+        Price:'',
         Extra: [],
         UpdateNameProduct: '',
         UpdateContent: '',
@@ -176,12 +177,13 @@ function Product() {
             }
         }
     }
-    const handleDetail = async (Productid, NameProduct, size) => {
+    const handleDetail = async (Productid, NameProduct, size,Price) => {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/getDetailProduct/${Productid}`);
             const selectedProduct = response.data;
             formData.UpdateNameProduct = NameProduct;
             formData.UpdateSize = size;
+            formData.Price=Price;
             // Now you can use the selectedProduct in your state or perform other actions
             setDetail(true);
             setProductDetails(selectedProduct);
@@ -320,7 +322,7 @@ function Product() {
             formDataApi.append('Provider', formData.Provider);
             formDataApi.append('Category', formData.Category);
             formDataApi.append('size', formData.size);
-
+            formDataApi.append('Price',formData.Price);
 
             const response = await axios.post('http://127.0.0.1:8000/api/Addproduct', formDataApi);
 
@@ -338,7 +340,8 @@ function Product() {
                     content: '',
                     Provider: '',
                     Category: '',
-                    size: ''
+                    size: '',
+                    Price:''
                 })
                 const responseData = await axios.get('http://127.0.0.1:8000/api/getProduct');
                 setProduct(responseData.data);
@@ -608,6 +611,16 @@ function Product() {
                                             }} className="form-control" id="exampleInputEmail1" placeholder="Enter Name Product" />
 
                                         </div>
+                                        <div className="form-group">
+                                            <label >Price</label>
+                                            <input type='number' name='Price' value={formData.Price} onChange={(e) => {
+                                                const newSize = parseInt(e.target.value, 10);
+                                                if (!isNaN(newSize) && newSize > 0) {
+                                                    setFormData({ ...formData, Price: newSize });
+                                                }
+                                            }} className="form-control" id="exampleInputEmail1" placeholder="Enter Name Product" />
+
+                                        </div>
 
 
                                     </div>
@@ -654,7 +667,7 @@ function Product() {
                                                     <td>{Product.NameCategory}</td>
                                                     <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEditClick(Product.IDproduct)}>Edit</button></td>
                                                     <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => deletesubmit(Product.IDproduct)}>Remove</button></td>
-                                                    <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded " onClick={() => handleDetail(Product.IDproduct, Product.ProductName, Product.size)}  >Detail</button></td>
+                                                    <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded " onClick={() => handleDetail(Product.IDproduct, Product.ProductName, Product.size,Product.Price)}  >Detail</button></td>
                                                 </tr>
                                             ))}
 
@@ -802,6 +815,10 @@ function Product() {
                             <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
                                 <label className='float-left' style={{ marginRight: '10px' }}>Size:</label>
                                 <div>{formData.UpdateSize}</div>
+                            </div>
+                            <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
+                                <label className='float-left' style={{ marginRight: '10px' }}>Price:</label>
+                                <div>{formData.Price}</div>
                             </div>
 
 
