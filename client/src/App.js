@@ -17,13 +17,11 @@ import CreateAdmin from './components/superadmin/CreateAdminPage';
 import DefaultDashboard from './components/superadmin/DefaultDashboard';
 import ShowCustomer from './components/superadmin/ShowCustomer';
 import ShowAdmin  from './components/superadmin/ShowAdmin';
-<<<<<<< HEAD
+
 import Layout from './components/Layout';
 import Homepage from './components/layout/homepage/Homepage';
-=======
-import Layout from './components/User/Layout';
+
 import ProductUser from './components/User/ProductUser';
->>>>>>> 820915887b3e78412b255ecf20f5e8b6218529ab
 
 function App() {
   useEffect(() => {

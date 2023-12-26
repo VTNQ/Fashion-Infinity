@@ -205,7 +205,7 @@ function Homepage() {
     sliderRef.current.slickNext();
   };
 
-  // Go to the previous slide
+
   const previous = () => {
     sliderRef.current.slickPrev();
   };
@@ -232,7 +232,7 @@ function Homepage() {
     useEffect(() => {
       const interval = setInterval(() => {
         nextSlide();
-      }, 10000); // Chuyển slide sau mỗi 100000ms
+      }, 10000); 
       return () => clearInterval(interval);
     }, [slideIndex]);
   
@@ -271,7 +271,7 @@ function Homepage() {
       
         const filterProducts = (category) => {
             if (category === 'all') {
-                setProducts(productNew); // Assuming productNew contains all products
+                setProducts(productNew);
             } else {
                 const filteredProducts = productNew.filter(product => product.category === category);
                 setProducts(filteredProducts);
@@ -280,7 +280,7 @@ function Homepage() {
         
         const filterProducts1 = (category) => {
             if (category === 'all') {
-                setProducts1(productTrend); // Assuming productNew contains all products
+                setProducts1(productTrend); 
             } else {
                 const filteredProductsTrend = productTrend.filter(product => product.category === category);
                 setProducts1(filteredProductsTrend);
@@ -301,15 +301,14 @@ function Homepage() {
             // Reset animation
             const timer = setTimeout(() => {
               setAnimateText(false);
-            }, 2000); // Reset sau 2 giây
+            }, 2000); 
         
             return () => clearTimeout(timer);
-          }, [slideIndex]); // Depend on slideIndex
-
+          }, [slideIndex]); 
         //hover image
         const [hoveredItem, setHoveredItem] = useState(null);
 
-  // ... existing functions and effects
+  
 
   // Hover effect handlers
   const handleMouseEnter = (id) => {
