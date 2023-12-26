@@ -18,7 +18,7 @@ import ring1 from "../../../images/ring1.webp";
 import anklet1 from "../../../images/homepage/anklet1.webp";
 import earring1 from "../../../images/homepage/earring1.webp";
 import bracelet1 from "../../../images/homepage/bracelet1.webp";
-import Slider from "react-slick";
+import Slider from "rc-slider";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 
