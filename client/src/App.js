@@ -21,7 +21,7 @@ import Layout from './components/Layout';
 import Homepage from './components/layout/homepage/Homepage';
 
 import ProductUser from './components/User/ProductUser';
-import Menu from './components/menu/menu.jsx';
+import Menu from './components/menu/MenuHomepage';
 function App() {
   useEffect(() => {
     // Load the Google API client library

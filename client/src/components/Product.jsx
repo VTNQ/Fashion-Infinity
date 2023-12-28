@@ -90,7 +90,7 @@ function Product() {
         };
         fetchProviders();
     }, [])
-    const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
         Image: [],
         NameProduct: '',
         content: '',
@@ -830,6 +830,7 @@ function Product() {
                     </div>
                 </div>
             )}
+     
         </div>
 
     )
