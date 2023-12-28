@@ -6,6 +6,7 @@ import Slider from 'rc-slider';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'rc-slider/assets/index.css'
 import 'react-toastify/dist/ReactToastify.css';
+import MenuHomepage from '../menu/MenuHomepage';
 import { useNavigate } from "react-router-dom";
 import jewry from './images/jewry.png';
 import jw from './images/jw.png';
@@ -341,240 +342,9 @@ function ProductUser() {
 
 		<div style={{ fontFamily: "'Bree Serif', serif" }} >
 			<ToastContainer />
-			<section id="header">
-				<div className="container">
-					<div className="row">
-						<div className="header_1 clearfix">
-							<div className="col-sm-2">
-								<div className="header_1l text-center clearfix">
-									<h2 className="mgt"><a className="col_1" href="index.html">RD <span className="span_1">JEWELLERS</span>  <span className="span_2">JEWELRY WORLD</span></a></h2>
-								</div>
-							</div>
-							<div className="col-sm-10">
-								<div className="header_1r clearfix">
-									<div className="header_1ri border_none clearfix">
-										<div className="input-group">
-											<input type="text" className="form-control" placeholder="Search" />
-											<span className="input-group-btn">
-												<button className="btn btn-primary" type="button">
-													<i className="fa fa-search"></i></button>
-											</span>
-										</div>
-									</div>
-									<div className="header_1ri clearfix">
-										<span className="span_1"><a className="col_1" href="#"><i className="fa fa-map-marker"></i></a></span>
-										<h5 className="mgt"><a href="#">Store <br /> Locator</a></h5>
-									</div>
-									<div className="header_1ri clearfix">
-										<span className="span_1"><a className="col_1" href="login.html"><i className="fa fa-user"></i></a></span>
-										<h5 className="mgt"><a href="login.html">Account <br /> Login / Sign Up</a></h5>
-									</div>
+		
 
-									<div className="header_1ri border_none clearfix">
-										<span className="span_1"><a className="col_1" href="#"><i className="fa fa-heart-o"></i></a></span>
-										<h5 className="mgt"><a href="#">My <br /> Wishlist (0)</a></h5>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<section id="menu" className="clearfix cd-secondary-nav">
-				<nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top justify-content-center">
-					<div className="container">
-						<div className="navbar-header page-scroll">
-
-							<button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-								<span className="sr-only">Toggle navigation</span>
-								<span className="icon-bar"></span>
-								<span className="icon-bar"></span>
-								<span className="icon-bar"></span>
-							</button>
-							<a className="col_1 navbar-brand" href="index.html">RD <span className="span_1">JEWELLERS</span>  <span className="span_2">JEWELRY WORLD</span></a>
-						</div>
-
-						<div className="navbar-collapse  " id="bs-example-navbar-collapse-1">
-							<ul className="nav navbar-nav inline-block m" style={{ whiteSpace: 'nowrap' }}>
-
-								<li><a className="m_tag active_tab" href="index.html">Home</a></li>
-								<li className="dropdown">
-									<a className="m_tag" href="#" data-toggle="dropdown" role="button" aria-expanded="false">Product<span className="caret"></span></a>
-									<ul className="dropdown-menu drop_3" role="menu">
-										<li><a href="product.html">Product</a></li>
-										<li><a className="border_none" href="detail.html">Product Detail</a></li>
-									</ul>
-								</li>
-								<li className="dropdown">
-									<a className="m_tag" href="#" data-toggle="dropdown" role="button" aria-expanded="false">Blog<span className="caret"></span></a>
-									<ul className="dropdown-menu drop_3" role="menu">
-										<li><a href="blog.html">Blog</a></li>
-										<li><a className="border_none" href="blog_detail.html">Blog Detail</a></li>
-									</ul>
-								</li>
-
-								<li><a className="m_tag" href="about.html">About Us</a></li>
-								<li><a className="m_tag" href="contact.html">Contact</a></li>
-								<li className="dropdown">
-									<a className="m_tag" href="#" data-toggle="dropdown" role="button" aria-expanded="false">Pages<span className="caret"></span> </a>
-									<ul className="dropdown-menu drop_3" role="menu">
-										<li><a href="login.html">My Account</a></li>
-										<li><a href="cart.html">Shopping Cart</a></li>
-										<li><a className="border_none" href="checkout.html">Checkout</a></li>
-									</ul>
-								</li>
-								<li className="dropdown dropdown-large">
-									<a href="#" className="dropdown-toggle m_tag" data-toggle="dropdown">Dropdown<b className="caret"></b></a>
-
-									<ul className="dropdown-menu dropdown-menu-large row">
-										<li className="col-sm-2">
-											<ul>
-												<li className="dropdown-header">BRACELETS</li>
-												<li><a href="#">Available</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-												<li><a href="#">Aligninment</a></li>
-												<li><a href="#">Headers</a></li>
-											</ul><br />
-											<ul>
-												<li className="dropdown-header">BY METAL</li>
-												<li><a href="#">Available</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-											</ul>
-										</li>
-										<li className="col-sm-2">
-											<ul>
-												<li className="dropdown-header">EARRINGS</li>
-												<li><a href="#">Available</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-												<li><a href="#">Aligninment</a></li>
-												<li><a href="#">Headers</a></li>
-											</ul><br />
-											<ul>
-												<li className="dropdown-header">BY METAL</li>
-												<li><a href="#"> Glyphs</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-											</ul>
-										</li>
-										<li className="col-sm-2">
-											<ul>
-												<li className="dropdown-header">PENDANTS</li>
-												<li><a href="#">Available</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-												<li><a href="#">Aligninment</a></li>
-												<li><a href="#">Headers</a></li>
-											</ul><br />
-											<ul>
-												<li className="dropdown-header">BY METAL</li>
-												<li><a href="#"> Glyphs</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-											</ul>
-										</li>
-										<li className="col-sm-2">
-											<ul>
-												<li className="dropdown-header">PENDANTS</li>
-												<li><a href="#">Available</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-												<li><a href="#">Aligninment</a></li>
-												<li><a href="#">Headers</a></li>
-											</ul><br />
-											<ul>
-												<li className="dropdown-header">BY METAL</li>
-												<li><a href="#"> Glyphs</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-											</ul>
-										</li>
-										<li className="col-sm-4">
-											<ul>
-												<li><a href="#"><img src="img/1.jpg" alt="abc" className="iw" /></a></li>
-											</ul><br />
-											<ul>
-												<li><a href="#"><img src="img/2.png" alt="abc" className="iw" /></a></li>
-											</ul>
-										</li>
-									</ul>
-
-								</li>
-								<li className="dropdown drop_cart" style={{ whiteSpace: 'nowrap' }}>
-									<a className="m_tag" href="#" data-toggle="dropdown" role="button" aria-expanded="false">
-										<i className="glyphicon glyphicon-shopping-cart">
-											{cardItemCount >= 0 && (
-												<span className="badge badge-pill badge-danger position-absolute top-0 start-100 translate-middle p-2">{cardItemCount}</span>
-											)}
-										</i>
-									</a>
-									<ul class=" absolute dropdown-menu drop_1" role="menu" >
-										<li>
-											<div class="drop_1i clearfix">
-												<div class="col-sm-6">
-													<div class="drop_1il clearfix"><h5 class="mgt">{cardItemCount} ITEMS</h5></div>
-												</div>
-												<div class="col-sm-6">
-													<div class="drop_1il text-right clearfix"><h5 class="mgt"><a href="#">VIEW CART</a></h5></div>
-												</div>
-											</div>
-											{newItem && newItem.map((item, index) => (
-												<div key={index} className="drop_1i1 clearfix">
-													<div className="col-sm-6">
-														<div className="drop_1i1l clearfix">
-															<h6 className="mgt bold Product"><a href="#">{item.NameProduct}</a>
-																<br /><span className="normal col_2">{item.quality}x - ${item.price}</span></h6>
-														</div>
-													</div>
-													<div className="col-sm-4">
-														<div className="drop_1i1r clearfix"><a href="#"><img src={`http://127.0.0.1:8000/${item.picture}`} className="iw" alt={item.NameProduct} /></a></div>
-													</div>
-													<div className="col-sm-2">
-														<div className="drop_1i1l text-right clearfix"><h6 className="mgt bold">
-															{item.quality > 1 ? (
-																<span onClick={() => handleRemoveOne(item)}><i className="fa fa-remove"></i></span>
-															) : (
-																<span onClick={() => handleRemoveItem(item)}><i className="fa fa-remove"></i></span>
-															)}
-
-														</h6></div>
-													</div>
-
-												</div>
-											))}
-
-											<div class="drop_1i2 clearfix">
-												<div class="col-sm-6">
-													<div class="drop_1il clearfix"><h5 class="mgt">TOTAL</h5></div>
-												</div>
-												<div class="col-sm-6">
-													<div class="drop_1il text-right clearfix"><h5 class="mgt">$ {caculatetotal()}</h5></div>
-												</div>
-											</div>
-											<div class="drop_1i3 text-center clearfix">
-												<div class="col-sm-12">
-													<h5><a class="button_1 block" href="#">CHECKOUT</a></h5>
-													<h5><a class="button block" href="#">VIEW CART</a></h5>
-												</div>
-											</div>
-										</li>
-									</ul>
-
-								</li>
-
-							</ul>
-
-
-						</div>
-
-					</div>
-
-				</nav>
-
-			</section>
+			<MenuHomepage/>
 			<section id="product">
 				<div className="container">
 					<div className="row">
@@ -739,7 +509,7 @@ function ProductUser() {
 										<div className="col-sm-12">
 											<ul>
 												<li><a className='cursor-pointer' onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}><i className="fa fa-chevron-left"></i></a></li>
-												{Array.from({ length: Math.ceil(Product.length / perPage) }, (_, index) => (
+												{Array.from({ length: Math.ceil(filteredProducts.length / perPage) }, (_, index) => (
 													<li key={index} className={currentPage === index ? 'act' : ''}>
 														<a className='cursor-pointer' onClick={() => setCurrentPage(index)}>
 															{index + 1}

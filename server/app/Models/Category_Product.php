@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Category_Product extends Model
 {
     protected $table='category_product';
-    protected $fillable=['id_Category','id_Product','size','Color','id_Picture'];
+    protected $fillable=['id_Category','id_Product','Created','idAccount','id_Picture'];
     public $timestamps=false;
 }

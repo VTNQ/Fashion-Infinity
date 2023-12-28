@@ -36,6 +36,7 @@ class LoginController extends Controller
                 $response = [
                     'message' => 'Login successful',
                     'Username' => $existingAccount->Username,
+                    'ID'=>$existingAccount->ID,
                     'Account' => $existingAccount,
                     'isSuperAdmin' => $isSuperAdmin,
                     'isAdmin' => $isAdmin,

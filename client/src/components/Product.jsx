@@ -106,6 +106,7 @@ const [formData, setFormData] = useState({
         UpdateSize: '',
         ID: '',
         IDcategory: '',
+        idAccount:''
     });
     const updatesubmit = async (e) => {
         e.preventDefault();
@@ -323,7 +324,8 @@ const [formData, setFormData] = useState({
             formDataApi.append('Category', formData.Category);
             formDataApi.append('size', formData.size);
             formDataApi.append('Price',formData.Price);
-
+            formDataApi.append("idAccount",ID);
+            console.log(ID);
             const response = await axios.post('http://127.0.0.1:8000/api/Addproduct', formDataApi);
 
             if (response.data.message) {
