@@ -248,7 +248,7 @@ function Layout(){
 
 	<Outlet/>
 
-	<section id="footer">
+	<section id="footer" className="mt-[8%]">
  <div class="container">
   <div class="row">
    <div class="footer_1 mgt clearfix">

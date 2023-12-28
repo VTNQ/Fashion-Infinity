@@ -445,6 +445,7 @@ function CategoryFrom() {
     <input type="text" id="search" name="search" placeholder="Enter your search term" value={searchTerm} onChange={(e)=>setSearchtem(e.target.value)} className="border border-gray-300 px-3 py-1 rounded-md focus:outline-none focus:border-blue-500"/>
 </div>
 
+
               <div className="box-body">
                 <table id="example1" className="table table-bordered table-striped">
                   <thead>

@@ -32,6 +32,8 @@ class category extends Controller
                 return response()->json(['message' => 'Category updated successfully']);
             }
             }
+
+        
             
           
             
@@ -59,6 +61,25 @@ class category extends Controller
             return response()->json($categories,200);
         }catch(\Exception $e){
             return response()->json(['error'=>'Internal Server Error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function getCategoriesToHomePage(){
+        try {
+            $categories=ModelsCategory::take(4)->get();
+            return response()->json($categories,200);
+
+        } catch (\Exception $e) {
+            return response()->json(['error'=>'Internal Server Error', 'message' => $e->getMessage()]);
+        }
+    }
+    public function getCategoriesToHomePage1(){
+        try {
+            $categories = ModelsCategory::skip(4)->take(4)->get();
+            return response()->json($categories,200);
+            
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()]);
         }
     }
    

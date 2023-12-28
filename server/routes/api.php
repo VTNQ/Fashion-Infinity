@@ -63,9 +63,19 @@ Route::put('/deleteProduct/{id}',[ProductController::class,'deleteProduct'])->na
 Route::get('/ProfileInformation/{id}',[ProfileController::class,'ProfileInformation'])->name('ProfileInformation');
 Route::post('/Updateprofile/{id}',[ProfileController::class,'Updateprofile'])->name('Updateprofile');
 Route::get('/getHomeProduct',[HomeProduct::class,'DisplayProduct'])->name('DisplayProduct');
+Route::get('/getProductToHomePage',[HomeProduct::class,'DisplayProductToHomePage'])->name('getProductToHomePage');
+Route::get('/getHomeProductToHomepage',[ProductController::class,'DisplayProductToHomepage'])->name('getHomeProductToHomepage');
 Route::get('/getTopcategory',[HomeProduct::class,'getTopcategory'])->name('getTopcategory');
 Route::get('/latestProduct',[HomeProduct::class,'latestProduct'])->name('latestProduct');
 Route::get('/detailProduct/{id}',[HomeProduct::class,'detailProduct'])->name('detailProduct');
+
+Route::get('/getcategoriestohomepage',[category::class,'getCategoriesToHomePage'])->name('getcategoriestohomepage'); //cong
+Route::get('/getcategoriestohomepage1',[category::class,'getCategoriesToHomePage1'])->name('getcategoriestohomepage1'); //cong
+
+
+
+
+
 
 
 
