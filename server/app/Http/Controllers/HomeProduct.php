@@ -8,26 +8,6 @@ use Illuminate\Support\Facades\DB;
 class HomeProduct extends Controller
 {
     //
-    public function detailProduct($ID){
-        $latestProducts = DB::table('product')
-        ->join('category_product', 'product.ID', '=', 'category_product.id_Product')
-        ->join('category', 'category_product.id_Category', '=', 'category.ID')
-        ->join('provider', 'product.id_provider', '=', 'provider.ID')
-        ->join('picture', 'category_product.id_Picture', '=', 'picture.ID')
-        ->select([
-            'product.Name as ProductName',
-            'product.content',
-            'provider.Name as ProviderName',
-    
-            'product.ID as IDproduct',
-            'category_product.id_Product',
-            'category_product.id_Category',
-            'picture.link'
-    
-        ])
-       ->where("product.ID",$ID)->get();
-        return response()->json($latestProducts,200);
-    }
     public function latestProduct(){
         $latestProducts = DB::table('product')
         ->join('category_product', 'product.ID', '=', 'category_product.id_Product')
@@ -68,12 +48,14 @@ class HomeProduct extends Controller
         ->join('category_product', 'product.ID', '=', 'category_product.id_Product')
         ->join('category', 'category_product.id_Category', '=', 'category.ID')
         ->join('provider', 'product.id_provider', '=', 'provider.ID')
-        ->join('picture', 'category_product.id_Picture', '=', 'picture.ID')
+        ->join('picture','category_product.id_Picture','=','picture.ID')
         ->select([
+          
             'product.Name as ProductName',
             'product.content',
             'provider.Name as ProviderName',
-    
+            'category.Name as NameCategory',
+
             'product.ID as IDproduct',
             'category_product.id_Product',
             'category_product.id_Category',
@@ -82,26 +64,70 @@ class HomeProduct extends Controller
             
             'picture.link',
             'product.Price',
-            'picture.status as Picture_status',
-    
-            DB::raw('MAX(picture.link) as link'), // Use MAX function for non-grouped column
-            'product.Price'
+            'picture.status as Picture_status'
         ])
         ->groupBy([
+
             'product.Name',
             'product.content',
             'provider.Name',
-    
+            'category.Name',
+            
             'product.ID',
-    
+            'category_product.id_Product',
+            'category_product.id_Category',
             'category.ID',
             'provider.ID',
-            'product.Price',
+          
             'picture.link',
             'product.Price',
             'Picture_status'
-        ]) // Check if the distinct product count is less than 5
-        ->where('picture.status', 1)
+        ])
+        ->get();
+    
+        return response()->json($products, 200);
+    }
+
+    public function DisplayProductToHomePage(){
+        $products = DB::table('product')
+        ->join('category_product', 'product.ID', '=', 'category_product.id_Product')
+        ->join('category', 'category_product.id_Category', '=', 'category.ID')
+        ->join('provider', 'product.id_provider', '=', 'provider.ID')
+        ->join('picture','category_product.id_Picture','=','picture.ID')
+        ->select([
+          
+            'product.Name as ProductName',
+            'product.content',
+            'provider.Name as ProviderName',
+            'category.Name as NameCategory',
+
+            'product.ID as IDproduct',
+            'category_product.id_Product',
+            'category_product.id_Category',
+            'category.ID as ID_category',
+            'provider.ID as ID_provider',
+            
+            'picture.link',
+            'product.Price',
+            'picture.status as Picture_status'
+        ])
+        ->groupBy([
+
+            'product.Name',
+            'product.content',
+            'provider.Name',
+            'category.Name',
+            
+            'product.ID',
+            'category_product.id_Product',
+            'category_product.id_Category',
+            'category.ID',
+            'provider.ID',
+          
+            'picture.link',
+            'product.Price',
+            'Picture_status'
+        ])
         ->get();
     
         return response()->json($products, 200);

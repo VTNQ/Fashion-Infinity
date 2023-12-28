@@ -329,7 +329,7 @@ const [activeCategory, setActiveCategory] = useState();
 useEffect(() => {
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/getHomeProduct');
+      const response = await axios.get('http://127.0.0.1:8000/api/getProductToHomePage');
       const activeProducts = response.data.filter(product => product.Picture_status === 1);
       setProducts(activeProducts);
       
@@ -381,7 +381,7 @@ const [activeCategory1, setActiveCategory1] = useState();
 useEffect(() => {
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/getHomeProduct');
+      const response = await axios.get('http://127.0.0.1:8000/api/getProductToHomePage');
       const activeProducts = response.data.filter(product => product.Picture_status === 1);
       setProducts1(activeProducts);
       
@@ -497,7 +497,7 @@ const handleCategorySelection1 = (categoryName) => {
       <div className="border-[1px] mt-16 border-[#E5E5E5] mx-[5%]" ></div>
       
 
-      <div className="mt-14 w-full ">
+          <div className="mt-14 w-full ">
                 <div className="flex justify-between px-[5%]">
                     <h1>NEW ARRIVAL</h1>
                     <div className="flex">
