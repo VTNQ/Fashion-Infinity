@@ -1,4 +1,7 @@
 import React from "react";
+
+import axios  from 'axios';
+
 import image1 from "../../../images/homepage1.webp";
 import image2 from "../../../images/homepage2.jpg";
 import image3 from "../../../images/homepage3.jpg";
@@ -62,33 +65,33 @@ function Homepage() {
         {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",},
         
     ]);
-    const [productNew, setproductNew] = useState([
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
-        {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
-        {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
-        {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
-        {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
-        {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
-        {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
-        {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
-        {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
-        {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
-        {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
-        {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
-        {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
-        {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
-        {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
-        {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
-        {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
-        {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
-        {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
+    // const [productNew, setproductNew] = useState([
+    //     {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
+    //     {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
+    //     {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
+    //     {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
+    //     {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
+    //     {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
+    //     {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
+    //     {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
+    //     {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
+    //     {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
+    //     {img: earring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'EARRINGS'},
+    //     {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
+    //     {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
+    //     {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
+    //     {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
+    //     {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
+    //     {img: anklet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'ANKLET'},
+    //     {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
+    //     {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
+    //     {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
+    //     {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
+    //     {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
+    //     {img: bracelet1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'BRACELET'},
         
         
-    ]);
+    // ]);
     const [productTrend, setproductTrend] = useState([
         {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
         {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
@@ -131,7 +134,7 @@ function Homepage() {
     const [slideIndex, setSlideIndex] = useState(0);
   
     const settings = {
-        dots: true,
+        
         lazyLoad: true,
         infinite: true,
         speed: 500,
@@ -145,7 +148,7 @@ function Homepage() {
                 slidesToShow: 4,
                 slidesToScroll: 3,
                 infinite: true,
-                dots: true
+                
               }
             },
             {
@@ -168,7 +171,7 @@ function Homepage() {
     };
 
     const settings1 = {
-        dots: true,
+        
         lazyLoad: true,
         infinite: true,
         speed: 500,
@@ -205,7 +208,7 @@ function Homepage() {
     sliderRef.current.slickNext();
   };
 
-
+  // Go to the previous slide
   const previous = () => {
     sliderRef.current.slickPrev();
   };
@@ -232,7 +235,7 @@ function Homepage() {
     useEffect(() => {
       const interval = setInterval(() => {
         nextSlide();
-      }, 10000); 
+      }, 10000); // Chuyển slide sau mỗi 100000ms
       return () => clearInterval(interval);
     }, [slideIndex]);
   
@@ -260,55 +263,38 @@ function Homepage() {
 
     //filter product
     
-      const categories = ['NECKLACES', 'EARRINGS', 'BRACELET', 'ANKLET'];
-      const categories1 = ['NECKLACES', 'EARRINGS', 'BRACELET', 'ANKLET'];
+      // const categories = ['NECKLACES', 'EARRINGS', 'BRACELET', 'ANKLET'];
+      // const categories1 = ['NECKLACES', 'EARRINGS', 'BRACELET', 'ANKLET'];
 
     
-        const [activeCategory, setActiveCategory] = useState('NECKLACES');
-        const [activeCategory1, setActiveCategory1] = useState('EARRINGS');
-        const [products, setProducts] = useState(productNew);
-        const [products1, setProducts1] = useState(productTrend);
+        
+        // const [activeCategory1, setActiveCategory1] = useState('EARRINGS');
+        // const [products, setProducts] = useState(productNew);
+        // const [products1, setProducts1] = useState(productTrend);
       
-        const filterProducts = (category) => {
-            if (category === 'all') {
-                setProducts(productNew);
-            } else {
-                const filteredProducts = productNew.filter(product => product.category === category);
-                setProducts(filteredProducts);
-            }
-        };
         
-        const filterProducts1 = (category) => {
-            if (category === 'all') {
-                setProducts1(productTrend); 
-            } else {
-                const filteredProductsTrend = productTrend.filter(product => product.category === category);
-                setProducts1(filteredProductsTrend);
-            }
-        };
+        
+        // const filterProducts1 = (category) => {
+        //     if (category === 'all') {
+        //         setProducts1(productTrend);
+        //     } else {
+        //         const filteredProductsTrend = productTrend.filter(product => product.category === category);
+        //         setProducts1(filteredProductsTrend);
+        //     }
+        // };
           
-        useEffect(() => {
-            filterProducts(activeCategory);
-        }, [activeCategory]);
         
-        useEffect(() => {
-            filterProducts1(activeCategory1);
-        }, [activeCategory1]);
-        const [animateText, setAnimateText] = useState(false);
+        // useEffect(() => {
+        //     filterProducts1(activeCategory1);
+        // }, [activeCategory1]);
+        
 
-        useEffect(() => {
-            setAnimateText(true);
-            // Reset animation
-            const timer = setTimeout(() => {
-              setAnimateText(false);
-            }, 2000); 
         
-            return () => clearTimeout(timer);
-          }, [slideIndex]); 
+
         //hover image
         const [hoveredItem, setHoveredItem] = useState(null);
 
-  
+  // ... existing functions and effects
 
   // Hover effect handlers
   const handleMouseEnter = (id) => {
@@ -318,7 +304,108 @@ function Homepage() {
   const handleMouseLeave = () => {
     setHoveredItem(null);
   };
-        
+
+  const [products, setProducts] = useState([]);
+
+const [activeCategory, setActiveCategory] = useState();
+
+
+  const [categoriesFirst,setCategoriesFirst] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/getcategoriestohomepage');
+        console.log(response.data);
+        setCategoriesFirst(response.data);
+      } catch (error) {
+        console.error('Error fetching categoriesFirst:', error);
+      }
+    };
+    fetchData();
+  }, []);
+  
+  
+  
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/getHomeProduct');
+      const activeProducts = response.data.filter(product => product.Picture_status === 1);
+      setProducts(activeProducts);
+      
+      const filtered = activeProducts.filter(product => product.NameCategory === "Necklace");
+      setFilterProducts(filtered);
+      setActiveCategory('Necklace');
+    } catch (error) {
+      // Handle errors here
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  fetchProducts();
+}, []);
+  
+const [filterProducts, setFilterProducts] = useState([]);
+
+const handleCategorySelection = (categoryName) => {
+  setActiveCategory(categoryName); 
+  const filtered = products.filter((product) => product.NameCategory === categoryName);
+  setFilterProducts(filtered); // Update the state with filtered products
+};
+
+  
+
+//categories 4 cai con lai
+
+const [products1, setProducts1] = useState([]);
+
+const [activeCategory1, setActiveCategory1] = useState();
+
+
+  const [categoriesFirst1,setCategoriesFirst1] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/getcategoriestohomepage1');
+        console.log(response.data);
+        setCategoriesFirst1(response.data);
+      } catch (error) {
+        console.error('Error fetching categoriesFirst:', error);
+      }
+    };
+    fetchData();
+  }, []);
+  
+  
+  
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/getHomeProduct');
+      const activeProducts = response.data.filter(product => product.Picture_status === 1);
+      setProducts1(activeProducts);
+      
+      const filtered = activeProducts.filter(product => product.NameCategory === "Shake");
+      setFilterProducts1(filtered);
+      setActiveCategory1('Shake');
+    } catch (error) {
+      // Handle errors here
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  fetchProducts();
+}, []);
+  
+const [filterProducts1, setFilterProducts1] = useState([]);
+
+const handleCategorySelection1 = (categoryName) => {
+  setActiveCategory1(categoryName); 
+  const filtered = products.filter((product) => product.NameCategory === categoryName);
+  setFilterProducts1(filtered); // Update the state with filtered products
+};
+  
+
     //===============================================================================================================================
     return (
       <div>
@@ -408,6 +495,8 @@ function Homepage() {
             
       </div>
       <div className="border-[1px] mt-16 border-[#E5E5E5] mx-[5%]" ></div>
+      
+
       <div className="mt-14 w-full ">
                 <div className="flex justify-between px-[5%]">
                     <h1>NEW ARRIVAL</h1>
@@ -487,13 +576,13 @@ function Homepage() {
                     <h1>NEW PRODUCTS</h1>
 
                     <div className="flex items-center gap-16 xs-max:gap-6 xs-max:mt-4">
-                    {categories.map((category) => (
+                    {categoriesFirst.map((category) => (
   <button
-    className={`font-semibold xs-max:text-[1.5rem] ${activeCategory === category ? 'active-class-or-style' : ''}`}
-    key={category}
-    onClick={() => filterProducts(category)}
+    className={`font-semibold xs-max:text-[1.5rem] ${activeCategory === category.Name && category.Name === 'Necklace' ? 'active-class-or-style' : 'inactive-class-or-style'}`}
+    key={category.ID} style={{fontFamily: 'lato'}}
+    onClick={() => handleCategorySelection(category.Name)}
   >
-    {category.toUpperCase()}
+    {category.Name}
   </button>
 ))}
 
@@ -514,24 +603,22 @@ function Homepage() {
                 <div>
                 <Slider ref={productSliderRef} {...settings1}>
           
-          {products.map((product, index) => (
-            <div>
+          {filterProducts.length > 0 && filterProducts.map((product) => (
+            <div key={product.IDproduct}>
             <div className="relative border-[#E5E5E5] border-[1px] w-[87%]  ">
-                    <img className="w-full  object-cover" src={product.img} alt="" />
+                    <img className="w-full h-[250px] object-cover lg-max:h-[200px] md-max:h-[150px]" src={`http://127.0.0.1:8000/${product.link}`} alt="" />
                     
                     <div class="tag-container absolute  left-0">
                      <div class="tag">
                              <span style={{fontFamily: 'lato'}} class="tag-text">NEW</span>
                                     </div>
-
-                    
                     </div>
-                    <div className="px-[8%]">
-                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold">{product.name}</h1>
+                    <div className="px-[8%] ">
+                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold">{product.ProductName}</h1>
                     
 
                     <div className="flex justify-between items-center">
-                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${product.price}</h1>
+                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${product.Price}</h1>
                     <i class='bx bx-heart'  ></i>
                     </div>
 
@@ -557,6 +644,8 @@ function Homepage() {
                 </div>
                 </div>
         </div>
+        
+       
         <div className="bg-none w-full mt-[8%] px-[5%] flex gap-14 lg-max:flex-col">
                 <div className="relative w-full min-h-[220px] sm-max:min-h-[190px] flex gap-[10%] bg-[#F3F5F7] justify-center items-center">
                     <img className="w-auto h-[220px] sm-max:h-[160px]" src={homepage_banner2} alt="" />
@@ -581,14 +670,14 @@ function Homepage() {
                     <h1>TRENDING PRODUCTS</h1>
 
                     <div className="flex items-center gap-16 xs-max:gap-6 xs-max:mt-4">
-                    {categories1.map((category) => (
+                    {categoriesFirst1.map((category) => (
   <button
-    className={`font-semibold xs-max:text-[1.5rem] ${activeCategory1 === category ? 'active-class-or-style' : ''}`}
-    key={category}
-    onClick={() => filterProducts1(category)}
-  >
-    {category.toUpperCase()}
-  </button>
+  className={`font-semibold xs-max:text-[1.5rem] ${activeCategory1 === category.Name && category.Name === 'Shake' ? 'active-class-or-style' : 'inactive-class-or-style'}`}
+  key={category.ID} style={{fontFamily: 'lato'}}
+  onClick={() => handleCategorySelection1(category.Name)}
+>
+  {category.Name}
+</button>
 ))}
 
       </div>
@@ -608,10 +697,10 @@ function Homepage() {
                 <div>
                 <Slider ref={productSlider1Ref} {...settings1}>
           
-          {products1.map((product, index) => (
-            <div>
+          {filterProducts1.length > 0 && filterProducts1.map((product) => (
+            <div key={products1.IDproduct}>
             <div className="relative border-[#E5E5E5] border-[1px] w-[87%]  ">
-                    <img className="w-full  object-cover" src={product.img} alt="" />
+                    <img className="w-full  object-cover" src={`http://127.0.0.1:8000/${product.link}`} alt="" />
                     
                     <div class="tag-container absolute  left-0">
                      <div class="tag">
@@ -621,11 +710,11 @@ function Homepage() {
                     
                     </div>
                     <div className="px-[8%]">
-                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold">{product.name}</h1>
+                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold">{product.ProductName}</h1>
                     
 
                     <div className="flex justify-between items-center">
-                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${product.price}</h1>
+                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${product.Price}</h1>
                     <i class='bx bx-heart'  ></i>
                     </div>
 
@@ -676,7 +765,8 @@ function Homepage() {
                 </div>
                 
         </div>
-       
+            
+
       </div>
       
     );

@@ -63,7 +63,8 @@ class HomeProduct extends Controller
             'provider.ID as ID_provider',
             
             'picture.link',
-            'product.Price'
+            'product.Price',
+            'picture.status as Picture_status'
         ])
         ->groupBy([
 
@@ -79,7 +80,8 @@ class HomeProduct extends Controller
             'provider.ID',
           
             'picture.link',
-            'product.Price'
+            'product.Price',
+            'Picture_status'
         ])
         ->get();
     

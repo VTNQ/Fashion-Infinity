@@ -186,6 +186,7 @@ function CreateAdmin(){
                     {errors.Password && (
                                     <p className="text-red-500 text-sm italic">{errors.Password}</p>
                                 )}
+                                
                     </div>
                     
                     <div class="checkbox">

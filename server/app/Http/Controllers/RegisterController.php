@@ -81,7 +81,7 @@ class RegisterController extends Controller
         $min = 1;
         $max = 100;
 
-        // Generate a random integer
+        
         $randomNumber = random_int($min, $max);
 
         try {
