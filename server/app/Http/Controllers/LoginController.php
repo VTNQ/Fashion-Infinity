@@ -32,13 +32,14 @@ class LoginController extends Controller
                 
                 $isSuperAdmin = $existingAccount->Accounttype == 2;
                 $isAdmin = $existingAccount->Accounttype == 0;
-    
+                $user=$existingAccount->Accounttype==1;
                 $response = [
                     'message' => 'Login successful',
                     'Username' => $existingAccount->Username,
                     'Account' => $existingAccount,
                     'isSuperAdmin' => $isSuperAdmin,
-                    'isAdmin' => $isAdmin
+                    'isAdmin' => $isAdmin,
+                    'user'=>$user
                 ];
     
                 return response()->json($response);

@@ -5,10 +5,14 @@ import { useNavigate } from "react-router-dom";
 import CreateAdmin from "./superadmin/CreateAdminPage";
 
 import TreeviewMenu from "./superadmin/TreeViewMenu";
-import  "../layoutFolder/global.css";
-import  "../layoutFolder/index.css";
-import '../layoutFolder/bootstrap.min.css';
-import '../layoutFolder/fontawesome.css';
+const featureEnabled = window.location.pathname.includes("/layout");
+if(featureEnabled){
+	require("../layoutFolder/global.css");
+	require('../layoutFolder/bootstrap.min.css');
+	require('../layoutFolder/index.css');
+	require('../layoutFolder/fontawesome.css');
+}
+
 
 
 function Layout(){

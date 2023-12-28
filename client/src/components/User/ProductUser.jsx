@@ -7,7 +7,9 @@ import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'rc-slider/assets/index.css'
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
-
+import jewry from './images/jewry.png';
+import jw from './images/jw.png';
+import jew2 from './images/jew2.png';
 import axios from 'axios';
 import TreeviewMenu from "../superadmin/TreeViewMenu";
 const featureEnabled = window.location.pathname.includes("/HomeProduct");
@@ -22,20 +24,46 @@ if (featureEnabled) {
 
 
 function ProductUser() {
-	const [items,setitems]=useState([]);
+	const [selectedImage, setselectedImage] = useState(0);
+	const [images, setImages] = useState([]);
+	const slickSliderRef = useRef(null);
+	const handleThumbnailClick = (selectedImage) => {
+		// Set formData.Main to the selected image when clicking on a thumbnail
+		setFormData({ ...formData, Main: selectedImage });
+		console.log(formData)
+		// Call any additional functions or logic if needed
+	  };
+	
+	const [items, setitems] = useState([]);
 	const [selectedCategories, setSelectedCategories] = useState([]);
 	const [newItem, setNewItem] = useState([]);
+	const [Quality, setQuality] = useState(1);
 	const [searchInput, setSearchInput] = useState('');
+	const [isPopupVisible, setPopupVisibility] = useState(false);
+	const [IsClosingPopup, setIsClosingPopup] = useState(false);
 	const [categories, setCategories] = useState([]);
 	const [Product, setProduct] = useState([]);
 	const [latestProduct, setlatestProduct] = useState([]);
 	const [cardItemCount, setCardItemCount] = useState(0);
 	const [cartItems, setcartItems] = useState([]);
 	const [minPrice, setMinPrice] = useState(0);
-	const caculatetotal=()=>{
-		const total=newItem.reduce((accumator,item)=>{
-			return accumator+item.quality*item.price;
-		},0);
+	const handleIncreaseQuality = () => {
+		setQuality(Quality + 1);
+	}
+	const [formData, setFormData] = useState({
+		NameProduct: '',
+		PriceProduct: '',
+		Main: ''
+	});
+	const handleDecreaseQuality = () => {
+		if (Quality > 1) {
+			setQuality(Quality - 1);
+		}
+	}
+	const caculatetotal = () => {
+		const total = newItem.reduce((accumator, item) => {
+			return accumator + item.quality * item.price;
+		}, 0);
 		return total;
 	}
 	const API_ENDPOINT = 'http://127.0.0.1:8000/api/getHomeProduct';
@@ -48,19 +76,72 @@ function ProductUser() {
 			throw error; // Propagate the error for handling in the calling code
 		}
 	};
-	
+	const popupContentStyle = {
+
+		animation: 'fadeIn 0.5s', // Default animation
+	};
+	const closingAnimation = {
+		animation: 'flipright 0.5s',
+	};
+	const handleDetailProduct = async (Productid) => {
+		try {
+			const selectedProduct = Product.find((product) => product.IDproduct === Productid);
+			if (!selectedProduct) {
+			  // Handle the case when the product is not found
+			  return;
+			}
+		
+			const response = await axios.get(`http://127.0.0.1:8000/api/detailProduct/${Productid}`);
+			// Assuming response.data is an array of items
+			const Images = [];
+		
+			response.data.forEach((item) => {
+			  const image = {
+				...item,
+				link: `http://127.0.0.1:8000/${item.link}`
+			  };
+			  Images.push(image.link);
+		
+			  // Access the 'link' property immediately after processing each item
+			 
+			});	
+		
+			// Update form data
+			formData.NameProduct = selectedProduct.ProductName;
+			formData.PriceProduct = selectedProduct.Price;
+			formData.Main = `http://127.0.0.1:8000/${selectedProduct.link}`;
+		
+			// Assuming 'images' is a state variable, set the state
+			setImages(Images);
+
+			// Access the 'link' property after processing all items
+			console.log(Images[Images.length - 1]?.link);
+		
+			setPopupVisibility(true);
+		  } catch (error) {
+			// Handle error
+			console.error('Error fetching product details:', error);
+		  }
+	  };
+	const handleCloseDetailProduct = () => {
+		setIsClosingPopup(true);
+		setTimeout(() => {
+			setPopupVisibility(false);
+			setIsClosingPopup(false);
+		}, 500);
+	};
 	const getInitialMaxPrice = async () => {
 		try {
 			// Assuming Product is fetched asynchronously
 			const products = await fetchProducts(); // Replace fetchProducts with your actual asynchronous data fetching function
-	
+
 			// Use reduce to find the maximum price
 			const maxPrice = products.reduce((max, product) => {
 				return product.Price > max ? product.Price : max;
 			}, 0);
-	
+
 			console.log(maxPrice);
-	
+
 			// Return a default value if the Product array is empty
 			return maxPrice;
 		} catch (error) {
@@ -68,7 +149,7 @@ function ProductUser() {
 			return 0; // Default value in case of an error
 		}
 	};
-	
+
 	// Use the getInitialMaxPrice function to set the initial state of maxPrice
 	const [maxPrice, setMaxPrice] = useState(0);
 	useEffect(() => {
@@ -82,38 +163,38 @@ function ProductUser() {
 
 	const handleSliderChange = (values) => {
 		setSliderValues(values);
-	
-		
+
+
 	}
-	const handleRemoveItem=(item)=>{
-		const updateItems=newItem.filter((cartItem)=>cartItem.IDproduct!==item.IDproduct);
+	const handleRemoveItem = (item) => {
+		const updateItems = newItem.filter((cartItem) => cartItem.IDproduct !== item.IDproduct);
 		const updatedCartItems = cartItems.filter((cartItem) => cartItem.IDproduct !== item.IDproduct);
 		setcartItems(updatedCartItems);
 		setNewItem(updateItems);
-		setCardItemCount((prevCount)=>prevCount-1);
-	
-	
+		setCardItemCount((prevCount) => prevCount - 1);
+
+
 	}
-	const handleRemoveOne=(item)=>{
-		
-		const updateItems=newItem.map((cartItem)=>
-			cartItem.IDproduct===item.IDproduct?{...cartItem,quality:cartItem.quality-1}:cartItem
+	const handleRemoveOne = (item) => {
+
+		const updateItems = newItem.map((cartItem) =>
+			cartItem.IDproduct === item.IDproduct ? { ...cartItem, quality: cartItem.quality - 1 } : cartItem
 		);
 
 		setNewItem(updateItems)
-		
+
 	}
 	const handleAddTocard = (itemsToAdd) => {
-        // Convert single item to an array
-		 let itemsarray = Array.isArray(itemsToAdd) ? itemsToAdd : [itemsToAdd];
-		
+		// Convert single item to an array
+		let itemsarray = Array.isArray(itemsToAdd) ? itemsToAdd : [itemsToAdd];
+
 		itemsarray.forEach((itemToAdd) => {
 			// Increase the quality by 1
 			const newQuality = 1;
-		
+
 			// Check if the item is already in the cart
 			const itemInCartIndex = cartItems.findIndex((item) => item.IDproduct === itemToAdd.IDproduct);
-			
+
 			if (itemInCartIndex === -1) {
 				// If the item is not in the cart, add it as a new item with the specified quality
 				const newItem = {
@@ -123,16 +204,16 @@ function ProductUser() {
 					quality: newQuality,
 					price: itemToAdd.Price,
 				};
-		
+
 				// Update the cartItems state with the new item
 				setcartItems((prevItems) => [...prevItems, newItem]);
-		
+
 				// Increment the card item count
 				setCardItemCount((prevCount) => prevCount + newQuality);
-		
+
 				// Add the new item to the array of added items
-				setNewItem((prevItems) => [...prevItems, { ...newItem}]);
-		
+				setNewItem((prevItems) => [...prevItems, { ...newItem }]);
+
 				// Display a success toast
 				toast.success("Item added to cart successfully", {
 					position: 'top-right',
@@ -140,21 +221,21 @@ function ProductUser() {
 				});
 			} else {
 				// If the item is already in the cart, update its quantity by the specified value
-			
-	
-			// Update the newItem array with the modified quantity for the specified IDproduct
-			setNewItem((prevItems) =>
-				prevItems.map((item) =>
-					item.IDproduct === itemToAdd.IDproduct
-						? { ...item, quality: item.quality + newQuality }
-						: item
-				)
-			);
+
+
+				// Update the newItem array with the modified quantity for the specified IDproduct
+				setNewItem((prevItems) =>
+					prevItems.map((item) =>
+						item.IDproduct === itemToAdd.IDproduct
+							? { ...item, quality: item.quality + newQuality }
+							: item
+					)
+				);
 				// Increment the card item count
-				
+
 			}
 		});
-    };
+	};
 	useEffect(() => {
 		// Fetch categories when the component mounts
 		axios.get('http://127.0.0.1:8000/api/getTopcategory')
@@ -245,9 +326,9 @@ function ProductUser() {
 	const filteredProducts = sortedProducts.filter((product) => {
 		const incluesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.ID_category);
 		const includesSearchTerm = product.ProductName.toLowerCase().includes(searchTerm.toLowerCase());
-		const includeFilterPrice=product.Price>=sliderValues[0] && product.Price<=sliderValues[1];
-		
-		return incluesCategory && includesSearchTerm && includeFilterPrice; 
+		const includeFilterPrice = product.Price >= sliderValues[0] && product.Price <= sliderValues[1];
+
+		return incluesCategory && includesSearchTerm && includeFilterPrice;
 	});
 	const handleApplyfilter = () => {
 		console.log("Filtering:", minPrice, maxPrice);
@@ -423,66 +504,66 @@ function ProductUser() {
 
 								</li>
 								<li className="dropdown drop_cart" style={{ whiteSpace: 'nowrap' }}>
-    <a className="m_tag" href="#" data-toggle="dropdown" role="button" aria-expanded="false">
-        <i className="glyphicon glyphicon-shopping-cart">
-            {cardItemCount >= 0 && (
-                <span className="badge badge-pill badge-danger position-absolute top-0 start-100 translate-middle p-2">{cardItemCount}</span>
-            )}
-        </i>
-    </a>
-	 <ul class=" absolute dropdown-menu drop_1" role="menu" >
-						<li>
-						 <div class="drop_1i clearfix">
-						  <div class="col-sm-6">
-						   <div class="drop_1il clearfix"><h5 class="mgt">{cardItemCount} ITEMS</h5></div>
-						  </div>
-						  <div class="col-sm-6">
-						   <div class="drop_1il text-right clearfix"><h5 class="mgt"><a href="#">VIEW CART</a></h5></div>
-						  </div>
-						 </div>
-						 {newItem && newItem.map((item, index) => (
-      <div key={index} className="drop_1i1 clearfix">
-        <div className="col-sm-6">
-          <div className="drop_1i1l clearfix">
-            <h6 className="mgt bold Product"><a href="#">{item.NameProduct}</a> 
-			<br /><span className="normal col_2">{item.quality}x - ${item.price}</span></h6>
-          </div>
-        </div>
-        <div className="col-sm-4">
-          <div className="drop_1i1r clearfix"><a href="#"><img src={`http://127.0.0.1:8000/${item.picture}`} className="iw" alt={item.NameProduct} /></a></div>
-        </div>
-        <div className="col-sm-2">
-          <div className="drop_1i1l text-right clearfix"><h6 className="mgt bold">
-			{item.quality>1?(
-				<span onClick={()=>handleRemoveOne(item)}><i className="fa fa-remove"></i></span>
-			):(
-				<span onClick={()=>handleRemoveItem(item)}><i className="fa fa-remove"></i></span>
-			)}
-			 
-			 </h6></div>
-        </div>
-		
-      </div>
-    ))}
-						 
-						 <div class="drop_1i2 clearfix">
-						  <div class="col-sm-6">
-						   <div class="drop_1il clearfix"><h5 class="mgt">TOTAL</h5></div>
-						  </div>
-						  <div class="col-sm-6">
-						   <div class="drop_1il text-right clearfix"><h5 class="mgt">$ {caculatetotal()}</h5></div>
-						  </div>
-						 </div>
-						 <div class="drop_1i3 text-center clearfix">
-						  <div class="col-sm-12">
-						   <h5><a class="button_1 block" href="#">CHECKOUT</a></h5>
-						   <h5><a class="button block" href="#">VIEW CART</a></h5>
-						  </div>
-						 </div>
-						</li>
-					  </ul>
+									<a className="m_tag" href="#" data-toggle="dropdown" role="button" aria-expanded="false">
+										<i className="glyphicon glyphicon-shopping-cart">
+											{cardItemCount >= 0 && (
+												<span className="badge badge-pill badge-danger position-absolute top-0 start-100 translate-middle p-2">{cardItemCount}</span>
+											)}
+										</i>
+									</a>
+									<ul class=" absolute dropdown-menu drop_1" role="menu" >
+										<li>
+											<div class="drop_1i clearfix">
+												<div class="col-sm-6">
+													<div class="drop_1il clearfix"><h5 class="mgt">{cardItemCount} ITEMS</h5></div>
+												</div>
+												<div class="col-sm-6">
+													<div class="drop_1il text-right clearfix"><h5 class="mgt"><a href="#">VIEW CART</a></h5></div>
+												</div>
+											</div>
+											{newItem && newItem.map((item, index) => (
+												<div key={index} className="drop_1i1 clearfix">
+													<div className="col-sm-6">
+														<div className="drop_1i1l clearfix">
+															<h6 className="mgt bold Product"><a href="#">{item.NameProduct}</a>
+																<br /><span className="normal col_2">{item.quality}x - ${item.price}</span></h6>
+														</div>
+													</div>
+													<div className="col-sm-4">
+														<div className="drop_1i1r clearfix"><a href="#"><img src={`http://127.0.0.1:8000/${item.picture}`} className="iw" alt={item.NameProduct} /></a></div>
+													</div>
+													<div className="col-sm-2">
+														<div className="drop_1i1l text-right clearfix"><h6 className="mgt bold">
+															{item.quality > 1 ? (
+																<span onClick={() => handleRemoveOne(item)}><i className="fa fa-remove"></i></span>
+															) : (
+																<span onClick={() => handleRemoveItem(item)}><i className="fa fa-remove"></i></span>
+															)}
 
-</li>
+														</h6></div>
+													</div>
+
+												</div>
+											))}
+
+											<div class="drop_1i2 clearfix">
+												<div class="col-sm-6">
+													<div class="drop_1il clearfix"><h5 class="mgt">TOTAL</h5></div>
+												</div>
+												<div class="col-sm-6">
+													<div class="drop_1il text-right clearfix"><h5 class="mgt">$ {caculatetotal()}</h5></div>
+												</div>
+											</div>
+											<div class="drop_1i3 text-center clearfix">
+												<div class="col-sm-12">
+													<h5><a class="button_1 block" href="#">CHECKOUT</a></h5>
+													<h5><a class="button block" href="#">VIEW CART</a></h5>
+												</div>
+											</div>
+										</li>
+									</ul>
+
+								</li>
 
 							</ul>
 
@@ -524,25 +605,25 @@ function ProductUser() {
 									<div className="center_shop_1li clearfix">
 										<h5 className="mgt">CATEGORY</h5>
 										<div >
-											
+
 											<div className='price-labels flex justify-between'>
-													<label className='minprice' htmlFor="minPrice">{sliderValues[0]}</label>
-													<label className='maxprice' htmlFor="maxPrice">{sliderValues[1]}</label>
-												</div>
+												<label className='minprice' htmlFor="minPrice">{sliderValues[0]}</label>
+												<label className='maxprice' htmlFor="maxPrice">{sliderValues[1]}</label>
+											</div>
 											<div className='filter-price-container'>
-												
-											<Slider
-        min={minPrice}
-        max={maxPrice}
-        value={sliderValues[0]}
-        onChange={(value) => handleSliderChange([value, sliderValues[1]])}
-      />
-												  <Slider
-        min={minPrice}
-        max={maxPrice}
-        value={sliderValues[1]}
-        onChange={(value) => handleSliderChange([sliderValues[0], value])}
-      />
+
+												<Slider
+													min={minPrice}
+													max={maxPrice}
+													value={sliderValues[0]}
+													onChange={(value) => handleSliderChange([value, sliderValues[1]])}
+												/>
+												<Slider
+													min={minPrice}
+													max={maxPrice}
+													value={sliderValues[1]}
+													onChange={(value) => handleSliderChange([sliderValues[0], value])}
+												/>
 											</div>
 											<button onClick={handleApplyfilter}>Apply</button>
 										</div>
@@ -630,7 +711,7 @@ function ProductUser() {
 																			</h4>
 																			<h6>Product Code: {productInRow.ProductCode}</h6>
 																			<div className="product-buttons">
-																				<a href="detail.html" className="btn btn-primary mr-2">
+																				<a className="btn btn-primary mr-2"  onClick={() => (handleDetailProduct(productInRow.IDproduct))}>
 																					Detail
 																				</a>
 																				<button className="btn btn-success" onClick={() => handleAddTocard(productInRow)} >
@@ -790,6 +871,220 @@ function ProductUser() {
 					</div>
 				</div>
 			</section>
+			{isPopupVisible && (
+				<div className="popup-container">
+
+					<div className="modal-content" style={IsClosingPopup ? { ...popupContentStyle, ...closingAnimation } : popupContentStyle} >
+
+						<div className="modal-body">
+							<button
+								type="button"
+								className="close"
+
+								onClick={handleCloseDetailProduct}
+							>
+								<span aria-hidden="true">x</span>
+							</button>
+							<div className='modal-inner-area sp-area row'>
+								<div className='col-lg-6 col-md-5'>
+									<div className='sp-img_area'>
+										<div className='sp-img_slider-nav slick-slider-nav hiraola-slick-slider arrow-type-two slick-carousel-1 slick-initialized slick-slider' style={{ border: '1px solid #e5e5e5' }} data-slick-options="{
+					&quot;slidesToShow&quot;: 1,
+					&quot;arrows&quot;: false,
+					&quot;fade&quot;: true,
+					&quot;draggable&quot;: false,
+					&quot;swipe&quot;: false,
+					&quot;asNavFor&quot;: &quot;.sp-img_slider-nav&quot;
+				}">
+											<div className='slick-list draggable' style={{ height: '486px' }}>
+												<div className='slick-track' style={{ opacity: '1', width: '2064px' }} >
+													<div className='red slick-slide slick-current slick-active first-active last-active' data-slick-index="0" aria-hidden="false" style={{ width: '486px', position: 'relative', left: '0px', top: '0px', zIndex: '999', opacity: '1' }} tabIndex="0">
+														<img src={formData.Main} className='block w-full object-contain' alt="" />
+													</div>
+
+												</div>
+											</div>
+										</div>
+										<div className='sp-img_slider-nav slick-slider-nav hiraola-slick-slider arrow-type-two slick-carousel-1 slick-initialized slick-slider' data-slick-options="{
+				   &quot;slidesToShow&quot;: 4,
+					&quot;asNavFor&quot;: &quot;.sp-img_slider-2&quot;,
+				   &quot;focusOnSelect&quot;: true
+				  }"data-slick-responsive="[
+					{&quot;breakpoint&quot;:1201, &quot;settings&quot;: {&quot;slidesToShow&quot;: 2}},
+					{&quot;breakpoint&quot;:768, &quot;settings&quot;: {&quot;slidesToShow&quot;: 3}},
+					{&quot;breakpoint&quot;:577, &quot;settings&quot;: {&quot;slidesToShow&quot;: 3}},
+					{&quot;breakpoint&quot;:481, &quot;settings&quot;: {&quot;slidesToShow&quot;: 2}},
+					{&quot;breakpoint&quot;:321, &quot;settings&quot;: {&quot;slidesToShow&quot;: 2}}
+				]">
+
+											<div className='slick-list draggable'>
+												<div className='slick-track' style={{ opacity: '1', width: '400px', transform: 'translate3d(0px, 0px, 0px)' }}>
+	
+													{images?.map((image, index) => (
+														<div 
+															aria-hidden="false"
+															onClick={() => handleThumbnailClick(image)} className='single-slide red slick-slide slick-current slick-active first-active mt-[7px]' style={{ width: '70px', marginTop: '18px' }} >
+															<img src={image} alt="" />
+
+														</div>
+													))}
+
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div className='col-xl-7 col-lg-6 col-md-6'>
+									<div className='sp-content'>
+										<div className='sp-heading'>
+											<h5 className='font-bold' style={{ marginBottom: '0', paddingBottom: '20px', fontFamily: '"Lato", sans-serif', color: '#333333', fontSize: '1.25rem' }}>
+												<a href="" style={{ color: '#595959', fontSize: '20px', fontFamily: '"Lato", sans-serif' }}>{formData.NameProduct}</a>
+											</h5>
+										</div>
+										<div className='rating-box pb-[15px]'>
+											<ul>
+												<li className='inline-block mr-[2px]'>
+													<i className='fa fa-star-of-david' style={{ color: '#cda557', fontWeight: '900' }}></i>
+												</li>
+												<li className='inline-block mr-[2px]'>
+													<i className='fa fa-star-of-david' style={{ color: '#cda557', fontWeight: '900' }}></i>
+												</li>
+												<li className='inline-block mr-[2px]'>
+													<i className='fa fa-star-of-david' style={{ color: '#cda557', fontWeight: '900' }}></i>
+												</li>
+												<li className='inline-block mr-[2px]'>
+													<i className='fa fa-star-of-david' style={{ color: '#cda557', fontWeight: '900' }}></i>
+												</li>
+												<li className='inline-block mr-[2px]'>
+													<i className='fa fa-star-of-david' style={{ color: '#cda557', fontWeight: '900' }}></i>
+												</li>
+											</ul>
+										</div>
+										<div className='price-box pb-[10px]'>
+											<span className='text-[24px]' style={{ fontFamily: '"Lato", sans-serif', color: '#595959', lineHeight: '24px' }}>${formData.PriceProduct}</span>
+											<span className='' style={{ color: '#bababa', textDecoration: 'line-through', fontSize: '14px', marginLeft: '10px', fontFamily: '"Lato", sans-serif' }}>£93.68</span>
+										</div>
+										<div className='essential_stuff' style={{ borderBottom: '1px solid #e5e5e5', paddingBottom: '20px' }}>
+											<ul>
+												<li style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>EX Tax: <span>£453.35</span></li>
+												<li style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Price in reward points: <span>400</span></li>
+											</ul>
+										</div>
+										<div className=" pt-[15px]">
+											<ul>
+												<li style={{ color: '#595959', fontSize: '16px', fontFamily: '"Lato", sans-serif' }}>10 or more £81.03</li>
+												<li style={{ color: '#595959', fontSize: '16px', fontFamily: '"Lato", sans-serif' }}>20 or more £71.09</li>
+												<li style={{ color: '#595959', fontSize: '16px', fontFamily: '"Lato", sans-serif' }}>30 or more £61.15</li>
+											</ul>
+										</div>
+										<div className="last-child" style={{ padding: '10px 0 20px' }}>
+											<ul>
+												<li style={{ color: '#595959', fontSize: '16px', fontFamily: '"Lato", sans-serif' }}>
+													Brand
+													<a href="" style={{ color: '#595959', fontSize: '16px', fontFamily: '"Lato", sans-serif', textDecoration: 'none' }}>Buxton</a>
+												</li>
+												<li style={{ color: '#595959', fontSize: '16px', fontFamily: '"Lato", sans-serif' }}>Product Code: Product 15</li>
+												<li style={{ color: '#595959', fontSize: '16px', fontFamily: '"Lato", sans-serif' }}>Reward Points: 100</li>
+												<li style={{ color: '#595959', fontSize: '16px', fontFamily: '"Lato", sans-serif' }}>Availability: In Stock</li>
+											</ul>
+										</div>
+										<div className='color-list_area' style={{ border: '1px solid #e5e5e5', padding: '25px' }}>
+											<div className='color-list_heading pb-[15px]'>
+												<h4 className='uppercase mb-0' style={{ fontFamily: '"Lato", sans-serif', color: '#333333', lineHeight: '1', fontWeight: '700' }}>Available Options</h4>
+											</div>
+											<span className='sub-title block pb-[20px]' style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>Color</span>
+											<div className='color-list'>
+												<a href="" style={{ borderColor: '#cda557', border: '1px solid #e5e5e5', display: 'inline-block', marginRight: '5px', padding: '2px', width: '25px', height: '25px' }} data-swatch-color="red">
+													<span className='bg-red_color' style={{ background: '#ff0000', display: 'block', width: '100%', height: '100%' }}></span>
+												</a>
+												<a href="" style={{ borderColor: '#cda557', border: '1px solid #e5e5e5', display: 'inline-block', marginRight: '5px', padding: '2px', width: '25px', height: '25px' }} data-swatch-color="orange">
+													<span className='bg-red_color' style={{ background: '#ff832b', display: 'block', width: '100%', height: '100%' }}></span>
+												</a>
+												<a href="" style={{ borderColor: '#cda557', border: '1px solid #e5e5e5', display: 'inline-block', marginRight: '5px', padding: '2px', width: '25px', height: '25px' }} data-swatch-color="brown">
+													<span className='bg-red_color' style={{ background: '#a6311f', display: 'block', width: '100%', height: '100%' }}></span>
+												</a>
+												<a href="" style={{ borderColor: '#cda557', border: '1px solid #e5e5e5', display: 'inline-block', marginRight: '5px', padding: '2px', width: '25px', height: '25px' }} data-swatch-color="umber">
+													<span className='bg-red_color' style={{ background: '#824900', display: 'block', width: '100%', height: '100%' }}></span>
+												</a>
+											</div>
+										</div>
+										<div className='quality pt-[15px]'>
+											<label htmlFor="" className='mb-[0.5rem]'>Quality</label>
+											<div className='cart-plus-minus relative' style={{ textAlign: 'left', width: '76px' }}>
+												<input type="text" value={Quality} style={{ border: '1px solid #e5e5e5', height: '46px', textAlign: 'center', width: '48px', background: '#fff' }} />
+												<div className='dec qtybutton absolute text-center font-bold' onClick={handleDecreaseQuality} style={{ borderBottom: '1px solid #e5e5e5', borderRight: '1px solid #e5e5e5', borderTop: '1px solid #e5e5e5', cursor: 'pointer', height: '23px', width: '28px', lineHeight: '21px', bottom: '0', right: '0' }}>
+													<i className='fa fa-angle-down font-bold' ></i>
+												</div>
+												<div className='dec qtybutton absolute text-center font-bold' style={{ borderBottom: '1px solid #e5e5e5', borderRight: '1px solid #e5e5e5', borderTop: '1px solid #e5e5e5', cursor: 'pointer', height: '23px', width: '28px', lineHeight: '21px', top: '0', right: '0', borderBottom: 'none' }} onClick={handleIncreaseQuality}>
+													<i className='fa fa-angle-up font-bold' ></i>
+												</div>
+											</div>
+										</div>
+										<div className='pt-[22px]'>
+											<ul>
+												<li className='ml-0 inline-block'>
+													<a href="" className='cart' style={{ backgroundColor: '#333333', border: '2px solid #333333', color: '#ffffff', width: '140px', height: '50px', lineHeight: '47px', display: 'block', textAlign: 'center', textDecoration: 'none' }}>Cart To Cart</a>
+												</li>
+												<li className='ml-[5px] inline-block '>
+													<a href="" className='	' style={{ border: '2px solid #e5e5e5', width: '50px', height: '50px', lineHeight: '47px', display: 'block', textAlign: 'center' }}>
+														<i class="fa-solid fa-heart" style={{ color: 'black', borderColor: 'black' }}></i>
+													</a>
+												</li>
+												<li className='ml-[5px] inline-block '>
+													<a href="" className='	' style={{ border: '2px solid #e5e5e5', width: '50px', height: '50px', lineHeight: '47px', display: 'block', textAlign: 'center' }}>
+														<i class="fa-solid fa-shuffle" style={{ color: 'black', borderColor: 'black' }}></i>
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div className='flex pt-[20px] items-center'>
+											<h6 className='mb-0 pr-[5px]' style={{ fontFamily: '"Lato", sans-serif', color: '#333333', fontWeight: 'bold', lineHeight: '1', fontSize: '16px' }}>Tags:</h6>
+											<a href="" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', textDecoration: 'none', marginTop: '11px', fontSize: '16px' }}>Ring,</a>
+
+											<a href="" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', textDecoration: 'none', marginTop: '11px', fontSize: '16px' }}>Necklaces,</a>
+
+											<a href="" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', textDecoration: 'none', marginTop: '11px', fontSize: '16px' }}>Braid</a>
+										</div>
+										<div className='pt-[25px]'>
+											<ul>
+												<li className='inline-block pr-[10px]'>
+													<a href="" data-bs-toggle="tooltip" style={{ border: '1px solid rgba(0, 0, 0, 0.07)', fontSize: '16px', display: 'block', width: '40px', height: '40px', lineHeight: '40px', textAlign: 'center' }} target="_blank" aria-label="Facebook">
+														<i className='fab fa-facebook' style={{ color: 'black' }}></i>
+													</a>
+												</li>
+												<li className='inline-block pr-[10px]'>
+													<a href="" data-bs-toggle="tooltip" style={{ border: '1px solid rgba(0, 0, 0, 0.07)', fontSize: '16px', display: 'block', width: '40px', height: '40px', lineHeight: '40px', textAlign: 'center' }} target="_blank" aria-label="Facebook">
+														<i className='fab fa-twitter-square' style={{ color: 'black' }}></i>
+													</a>
+												</li>
+												<li className='inline-block pr-[10px]'>
+													<a href="" data-bs-toggle="tooltip" style={{ border: '1px solid rgba(0, 0, 0, 0.07)', fontSize: '16px', display: 'block', width: '40px', height: '40px', lineHeight: '40px', textAlign: 'center' }} target="_blank" aria-label="Facebook">
+														<i className='fab fa-youtube' style={{ color: 'black' }}></i>
+													</a>
+												</li>
+												<li className='inline-block pr-[10px]'>
+													<a href="" data-bs-toggle="tooltip" style={{ border: '1px solid rgba(0, 0, 0, 0.07)', fontSize: '16px', display: 'block', width: '40px', height: '40px', lineHeight: '40px', textAlign: 'center' }} target="_blank" aria-label="Facebook">
+														<i className='fab fa-google-plus' style={{ color: 'black' }}></i>
+													</a>
+												</li>
+												<li className='inline-block pr-[10px]'>
+													<a href="" data-bs-toggle="tooltip" style={{ border: '1px solid rgba(0, 0, 0, 0.07)', fontSize: '16px', display: 'block', width: '40px', height: '40px', lineHeight: '40px', textAlign: 'center' }} target="_blank" aria-label="Facebook">
+														<i className='fab fa-instagram' style={{ color: 'black' }}></i>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			)}
+
 		</div>
 
 
