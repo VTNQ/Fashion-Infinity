@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { useLocation,useNavigate } from 'react-router-dom';
 import './menu.css';
 import us from './image/us.png';
 import France from './image/France.png';
@@ -14,22 +15,46 @@ function MenuHomepage() {
     const [isBlog, setisblod] = useState(false);
     const [cartPopup,setcartPopup]=useState(false);
     const [secondmenu, SetSecondmenu] = useState(false);
+    const location = useLocation();
+    const navigate=useNavigate();
+    const ID=location.state?.ID||'';
     const [singleproduct, setsingleproduct] = useState(false);
     const [Listview, setListView] = useState(false);
+
+    const username = location.state?.username || 'Default Username';
     const [Page, setPage] = useState(false);
     const [Blogdetail, setblogDetail] = useState(false);
     const [BlogFormat, setBlogFormat] = useState(false);
     const [Grid, setGrid] = useState(false);
     const [userSetting,setuserSetting]=useState(false);
+    
+    const [cartData,setCardData]=useState([]);
     const [currency,setcurrency]=useState(false);
     const[language,setlanguage]=useState(false);
     const[open,isopen]=useState(false);
+    useEffect(()=>{
+		const fetchCardData=async()=>{
+			try{
+				const response=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+				if(response.ok){
+					const data=await response.json();
+					setCardData(data);
+				}else{
+					console.error("Failed to fetch cart data");
+				}
+			}catch(error){
+				console.error('Error during fetch:', error);
+			}
+			
+		}
+		fetchCardData();
+	},[]);
     const popupopen={
         left: 'auto',
     right: '0',
     visibility: 'visible',
     opacity: '1',
-    padding: '105px 0 0',
+    padding: '105px 29px 0px',
    
     }
     const closepopup={
@@ -268,36 +293,16 @@ function MenuHomepage() {
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Home</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Shop</a>
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Product</a>
                                             <ul className="hm-dropdown">
-                                                <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Grid View</a>
-                                                    <ul className="hm-dropdown hm-sub_dropdown">
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Column Two</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Column Three</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Left Sidebar</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Right Sidebar</a></li>
-                                                    </ul>
+                                                <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }} onClick={() => navigate('/HomeProduct', { state: { username: username,ID:ID } })} >Product</a>
+                                                  
                                                 </li>
-                                                <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List View</a>
-                                                    <ul className="hm-dropdown hm-sub_dropdown">
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Fullwidth</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Left Sidebar</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Right Sidebar</a></li>
-                                                    </ul>
+                                                <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Detail Product</a>
+                                                    
                                                 </li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Blog Details</a>
-                                                    <ul className="hm-dropdown hm-sub_dropdown">
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Left Sidebar</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Right Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Blog Format</a>
-                                                    <ul className="hm-dropdown hm-sub_last">
-                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Gallery Format</a></li>
-                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Audio Format</a></li>
-                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Video Format</a></li>
-                                                    </ul>
-                                                </li>
+                                               
+                                               
 
                                             </ul>
                                         </li>
@@ -340,7 +345,7 @@ function MenuHomepage() {
 
                                             </a>
                                             <ul className="hm-dropdown">
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>MY Account</a></li>
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>{username}</a></li>
                                                 <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Login|Register</a></li>
                                                 <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Wishlist</a></li>
                                                 <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Cart</a></li>
@@ -676,53 +681,35 @@ function MenuHomepage() {
                             <h4 style={{marginBottom:'0',paddingBottom:'25px',fontFamily:'"Lato", sans-serif',color:'#333333',lineHeight:'1',fontWeight:'bold',fontSize:'24px'}}>Shopping Cart</h4>
                         </div>
                         <ul className="minicart-list" style={{maxHeight:'310px',position:'relative',overflow:'auto'}}>
-                            <li className="minicart-product flex pb-[30px]">
-                                <a href="" className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}}>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                </a>
-                                            <div className="product-item_img" style={{flexBasis:'65px',maxWidth:'65px'}}>
-                                            <img src={product} alt="" />
-                                            </div>
-                                            <div className="product-item_content">
-                                    <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}}>Magni dolorum vel</a>
-                                    <span className="product-item_quantity" style={{display:'block',paddingTop:'10px'}}>1 x $120.80</span>
-                                            </div>
-                            </li>
-                            <li className="minicart-product flex pb-[30px]">
-                            <a href="" className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}}>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                </a>
-                                            <div className="product-item_img" style={{flexBasis:'65px',maxWidth:'65px'}}>
-                                            <img src={product2} alt="" />
-                                            </div>
-                                            <div className="product-item_content">
-                                    <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}}>Eius accusantium omnis</a>
-                                    <span className="product-item_quantity" style={{display:'block',paddingTop:'10px'}}>1 x $120.80</span>
-                                            </div>
-                            </li>
-                            <li className="minicart-product flex pb-[30px]">
-                            <a href="" className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}}>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                </a>
-                                            <div className="product-item_img" style={{flexBasis:'65px',maxWidth:'65px'}}>
-                                            <img src={product3} alt="" />
-                                            </div>
-                                            <div className="product-item_content">
-                                    <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}}>Aperiam adipisci dolorem</a>
-                                    <span className="product-item_quantity" style={{display:'block',paddingTop:'10px'}}>1 x $120.80</span>
-                                            </div>
-                            </li>
+                        {cartData.map((card,index)=>(
+                                       <li className="minicart-product flex pb-[30px]">
+                                       <a href="" className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}}>
+                                          
+                                       <i class="fa fa-times" aria-hidden="true"></i>
+                                       </a>
+                                                   <div className="product-item_img" style={{flexBasis:'65px',maxWidth:'65px'}}>
+                                                   <img src={`http://127.0.0.1:8000/${card.link}`} alt="" />
+                                                   </div>
+                                                   <div className="product-item_content">
+                                           <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}}>{card.Name}</a>
+                                           <span className="product-item_quantity" style={{display:'block',paddingTop:'10px',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>{card.Quality} x {card.Price}</span>
+                                                   </div>
+                                   </li>
+                                   
+                                        ))}
+                           
+                          
                         </ul>
                     </div>
                     <div className="minicart-item_total">
                         <span style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Subtotal</span>
-                        <span style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}} className="ammount">$360.00</span>
+                        <span style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                     </div>
                     <div className="minicart-btn_area  pb-[15px]">
-                        <a href="" className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Minicart</a>
+                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Minicart</a>
                     </div>
                     <div className="minicart-btn_area pb-[15px]">
-                        <a href="" className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>
+                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>
                     </div>
                 </div>
             </div>

@@ -10,8 +10,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Account;
+use App\Http\Controllers\cardController;
 use App\Http\Controllers\HomeProduct;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\WareHouseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -71,9 +73,13 @@ Route::get('/detailProduct/{id}',[HomeProduct::class,'detailProduct'])->name('de
 
 Route::get('/getcategoriestohomepage',[category::class,'getCategoriesToHomePage'])->name('getcategoriestohomepage'); //cong
 Route::get('/getcategoriestohomepage1',[category::class,'getCategoriesToHomePage1'])->name('getcategoriestohomepage1'); //cong
-
-
-
+Route::post('/addCard/{id}',[cardController::class,'addCard'])->name('addCard');
+Route::get('/getcart/{id}',[cardController::class,'getcart'])->name('getcart');
+Route::post('/AddCardDetail/{id}',[cardController::class,'AddCardDetail'])->name('AddCardDetail');
+Route::get('/getProductWareHouse',[WareHouseController::class,'getProductWareHouse'])->name('getProductWareHouse');
+Route::post('/AddWareHouse/{id}',[WareHouseController::class,'AddWareHouse'])->name('AddWareHouse');
+Route::get('/getWareHouse/{id}',[WareHouseController::class,'getWareHouse'])->name('getWareHouse');
+Route::post("/EditWareHouse/{id}",[WareHouseController::class,"EditWareHouse"])->name("EditWareHouse");
 
 
 

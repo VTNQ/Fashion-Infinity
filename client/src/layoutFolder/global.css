@@ -227,9 +227,7 @@ body{
     /*********************header_end****************/
     
     /*********************menu****************/
-    #menu{
-    background:#fff; 
-     }
+  
     #menu .navbar-brand span{
     display:block; 
     color:#000;

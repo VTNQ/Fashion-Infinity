@@ -79,6 +79,11 @@ function AdminPage(){
                 <i className="fa fa-th"></i> <span>Edit</span> 
               </a>
             </li>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/WareHouse', { state: { username: username,ID:ID } })}>
+                <i className="fa fa-th"></i> <span>WareHouse</span> 
+              </a>
+            </li>
             <li className="treeview">
               <a href="#">
                 <i className="fa fa-pie-chart"></i>

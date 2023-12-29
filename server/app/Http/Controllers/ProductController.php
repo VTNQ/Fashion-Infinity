@@ -180,8 +180,7 @@ class ProductController extends Controller
             $categoryProduct->id_Product = $product->ID;
             $categoryProduct->id_Category = $request->input('Category');
             $categoryProduct->size=$request->input('size');
-            $categoryProduct->Created=now()->timezone('Asia/Ho_Chi_Minh');
-            $categoryProduct->idAccount = $request->input('idAccount');
+           
             $categoryProduct->save();
         }
 

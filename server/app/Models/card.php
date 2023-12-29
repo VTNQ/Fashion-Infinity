@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category_Product extends Model
+class card extends Model
 {
-    protected $table='category_product';
-    protected $fillable=['id_Category','id_Product','id_Picture'];
+    protected $table='card';
+    protected $fillable=['id_Account'];
     public $timestamps=false;
 }

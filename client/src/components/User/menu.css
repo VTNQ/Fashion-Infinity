@@ -311,7 +311,7 @@ li:hover .hm-megamenu1{
     padding-bottom: 15px;
 }
 .menu-item_img{
-    background-image: url(./image/s.png);
+    background-image: url(../menu/image/s.png);
     background-repeat: no-repeat;
     background-size: cover;
     margin: -30px;
@@ -348,7 +348,7 @@ li:hover .hm-megamenu1{
         justify-content: center;
       }
     
-      .navcon {
+      #navcon {
         display: inline-block;
       }
     
@@ -384,7 +384,7 @@ li:hover .hm-megamenu1{
       justify-content: center;
     }
   
-    .navcon {
+    #navcon {
       display: inline-block;
     }
   
@@ -404,8 +404,11 @@ li:hover .hm-megamenu1{
       display: block;
     }
   }
+  #navcon{
+    display: none;
+  }
 @media only screen and (min-width:575px) and (max-width:992px) {
-    .navcon{
+    #navcon{
         display: inline-block;
     }
     .col-lg-9{

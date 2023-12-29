@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect  } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Register from './components/register';
@@ -22,7 +22,9 @@ import Homepage from './components/layout/homepage/Homepage';
 
 import ProductUser from './components/User/ProductUser';
 import Menu from './components/menu/MenuHomepage';
+import WareHouse from './components/WareHouse';
 function App() {
+  const [cartData, setCartData] = useState([]);
   useEffect(() => {
     // Load the Google API client library
     gapi.load('auth2', () => {
@@ -56,7 +58,8 @@ function App() {
         <Route path='/Product' element={<Product/>}/>
         <Route path='/Edit' element={<EditProfile/>}/>
         <Route path='/HomeProduct' element={<ProductUser/>}/>
-        <Route path='/menu' element={<Menu/>}/>
+        <Route path='/menu' element={<Menu />}/>
+        <Route path='/WareHouse' element={<WareHouse/>}/>
       </Routes>
     </Router>
   );
