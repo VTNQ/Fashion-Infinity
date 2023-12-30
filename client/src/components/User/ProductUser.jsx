@@ -3,11 +3,16 @@ import image from './images/user2-160x160.jpg';
 import React, { useEffect, useState, useRef } from 'react';
 import Slider from 'rc-slider';
 
+import logo2 from '../menu/image/logorespon.png';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'rc-slider/assets/index.css'
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from "react-router-dom";
+import MenuHomepage from '../menu/MenuHomepage';
+import { useNavigate ,useLocation} from "react-router-dom";
 import jewry from './images/jewry.png';
+import us from '../menu/image/us.png';
+import France from '../menu/image/France.png';
+import logo from '../menu/image/logo.png';
 import jw from './images/jw.png';
 import jew2 from './images/jew2.png';
 import axios from 'axios';
@@ -20,10 +25,169 @@ if (featureEnabled) {
 	require('./bootstrap.min.css');
 	require('./index.css');
 	require('./fontawesome.css');
+	require('./menu.css');
 }
 
 
 function ProductUser() {
+	const [IsExpaned, setIsExpanded] = useState(false);
+    const [Issubmenu, setIsubmenu] = useState(false);
+    const [isBlog, setisblod] = useState(false);
+    const [cartPopup,setcartPopup]=useState(false);
+    const [secondmenu, SetSecondmenu] = useState(false);
+    const location = useLocation();
+    const navigate=useNavigate();
+    const ID=location.state?.ID||'';
+    const [singleproduct, setsingleproduct] = useState(false);
+    const [Listview, setListView] = useState(false);
+
+    const username = location.state?.username || 'Default Username';
+    const [Page, setPage] = useState(false);
+    const [Blogdetail, setblogDetail] = useState(false);
+    const [BlogFormat, setBlogFormat] = useState(false);
+    const [Grid, setGrid] = useState(false);
+    const [userSetting,setuserSetting]=useState(false);
+    
+    const [cartData,setCardData]=useState([]);
+    const [currency,setcurrency]=useState(false);
+    const[language,setlanguage]=useState(false);
+    const[open,isopen]=useState(false);
+    useEffect(()=>{
+		const fetchCardData=async()=>{
+			try{
+				const response=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+				if(response.ok){
+					const data=await response.json();
+					setCardData(data);
+				}else{
+					console.error("Failed to fetch cart data");
+				}
+			}catch(error){
+				console.error('Error during fetch:', error);
+			}
+			
+		}
+		fetchCardData();
+	},[]);
+    const popupopen={
+        left: 'auto',
+    right: '0',
+    visibility: 'visible',
+    opacity: '1',
+    padding: '105px 29px 0px',
+   
+    }
+    const closepopup={
+        left: 'auto',
+        right: '0',
+        visibility: 'hidden',
+        opacity: '0',
+        padding: '105px 0 0',
+        transition:'all ease 0.5s',
+       
+    }
+    const handleLanguage=()=>{
+        setlanguage(!language);
+    }
+    const handleCurrency=()=>{
+        setcurrency(!currency);
+    }
+    const handleBlogFormat = () => {
+        setBlogFormat(!BlogFormat);
+    }
+    const handleuserSetting=()=>{
+        setuserSetting(!userSetting)
+    }
+    const popupCurrency={
+        display:currency?'block':'none',
+        animation: 'cloudAnimation 0.5s'
+    }
+    const popuplanguage={
+        display:language?'block':'none',
+        animation:'cloudAnimation 0.5s'
+    }
+    const handlePage = () => {
+        setPage(!Page);
+    }
+    const popupUsersetting={
+        display:userSetting?'block':'none',
+        animation: 'cloudAnimation 0.5s'
+    }
+    const popupPage = {
+        display: Page ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s'
+    }
+    const handleBlogDetail = () => {
+        setblogDetail(!Blogdetail);
+    }
+    const popupBlogFormat = {
+        display: BlogFormat ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s'
+    }
+    const popupBlogDetail = {
+        display: Blogdetail ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s'
+    }
+    const handleListview = () => {
+        setListView(!Listview);
+    }
+    const poppupLisview = {
+        display: Listview ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s'
+    }
+    const handleGrid = () => {
+        setGrid(!Grid);
+    }
+
+    const popupgrid = {
+        display: Grid ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s'
+    }
+    const [singleproducttype, setsingleproducttype] = useState(false);
+    const handlesingleProducttype = () => {
+        setsingleproducttype(!singleproducttype)
+    }
+    const handleBlog = () => {
+        setisblod(!isBlog);
+    }
+    const popupblog = {
+        display: isBlog ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s'
+    }
+    const handlesingleProduct = () => {
+        setsingleproduct(!singleproduct);
+    }
+    const handleSecondMenu = () => {
+        SetSecondmenu(!secondmenu);
+    }
+    const handleSubmenu = () => {
+        setIsubmenu(!Issubmenu);
+    }
+    const popupsingleproducttype = {
+        display: singleproducttype ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s',
+    }
+    const singleproductstyle = {
+        display: singleproduct ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s',
+    }
+    const popupsecondMenu = {
+        display: secondmenu ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s',
+    }
+    const popupsubmenustyle = {
+        display: Issubmenu ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s',
+    }
+    const handleToggle = () => {
+        setIsExpanded(!IsExpaned);
+
+    }
+    const popupContentStyle1 = {
+
+        display: IsExpaned ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s',// Default animation
+    };
 	const [selectedImage, setselectedImage] = useState(0);
 	const [images, setImages] = useState([]);
 	const slickSliderRef = useRef(null);
@@ -39,33 +203,39 @@ function ProductUser() {
 	const [newItem, setNewItem] = useState([]);
 	const [Quality, setQuality] = useState(1);
 	const [searchInput, setSearchInput] = useState('');
+
 	const [isPopupVisible, setPopupVisibility] = useState(false);
 	const [IsClosingPopup, setIsClosingPopup] = useState(false);
 	const [categories, setCategories] = useState([]);
 	const [Product, setProduct] = useState([]);
 	const [latestProduct, setlatestProduct] = useState([]);
-	const [cardItemCount, setCardItemCount] = useState(0);
-	const [cartItems, setcartItems] = useState([]);
+
 	const [minPrice, setMinPrice] = useState(0);
-	const handleIncreaseQuality = () => {
-		setQuality(Quality + 1);
-	}
+	
+
 	const [formData, setFormData] = useState({
 		NameProduct: '',
 		PriceProduct: '',
-		Main: ''
+		Main: '',
+		IDProduct:'',
+		Quality:1,
+		
 	});
-	const handleDecreaseQuality = () => {
-		if (Quality > 1) {
-			setQuality(Quality - 1);
+	const handleIncreaseQuality = () => {
+		setFormData((prevData) => ({
+		  ...prevData,
+		  Quality: prevData.Quality + 1,
+		}));
+	  };
+	
+	  const handleDecreaseQuality = () => {
+		if (formData.Quality > 1) {
+		  setFormData((prevData) => ({
+			...prevData,
+			Quality: prevData.Quality - 1,
+		  }));
 		}
-	}
-	const caculatetotal = () => {
-		const total = newItem.reduce((accumator, item) => {
-			return accumator + item.quality * item.price;
-		}, 0);
-		return total;
-	}
+	  };
 	const API_ENDPOINT = 'http://127.0.0.1:8000/api/getHomeProduct';
 	const fetchProducts = async () => {
 		try {
@@ -83,6 +253,45 @@ function ProductUser() {
 	const closingAnimation = {
 		animation: 'flipright 0.5s',
 	};
+	const handleAddCardetail=async()=>{
+		try {
+			const response = await fetch(`http://127.0.0.1:8000/api/AddCardDetail/${formData.IDProduct}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					id_Account: ID,
+					Quality:formData.Quality
+				}),
+			});
+	
+			if (!response.ok) {
+				throw new Error('Failed to add card');
+			}
+	
+			const data = await response.json();
+			if (data.message) {
+				toast.success("Card added successfully", {
+					position: 'top-right',
+					autoClose: 3000,
+				});
+				const response=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+				if(response.ok){
+					const data=await response.json();
+					setCardData(data);
+				}
+			} else {
+				toast.success("Card added successfully", {
+					position: 'top-right',
+					autoClose: 3000,
+				});
+				
+			}
+		} catch (error) {
+			console.error('Error adding card:', error);
+		}
+	}
 	const handleDetailProduct = async (Productid) => {
 		try {
 			const selectedProduct = Product.find((product) => product.IDproduct === Productid);
@@ -109,6 +318,7 @@ function ProductUser() {
 			// Update form data
 			formData.NameProduct = selectedProduct.ProductName;
 			formData.PriceProduct = selectedProduct.Price;
+			formData.IDProduct=selectedProduct.IDproduct;
 			formData.Main = `http://127.0.0.1:8000/${selectedProduct.link}`;
 		
 			// Assuming 'images' is a state variable, set the state
@@ -128,6 +338,7 @@ function ProductUser() {
 		setTimeout(() => {
 			setPopupVisibility(false);
 			setIsClosingPopup(false);
+			formData.Quality=1;
 		}, 500);
 	};
 	const getInitialMaxPrice = async () => {
@@ -152,6 +363,7 @@ function ProductUser() {
 
 	// Use the getInitialMaxPrice function to set the initial state of maxPrice
 	const [maxPrice, setMaxPrice] = useState(0);
+	
 	useEffect(() => {
 		// Fetch and set maxPrice when the component mounts
 		getInitialMaxPrice().then((initialMaxPrice) => {
@@ -166,76 +378,8 @@ function ProductUser() {
 
 
 	}
-	const handleRemoveItem = (item) => {
-		const updateItems = newItem.filter((cartItem) => cartItem.IDproduct !== item.IDproduct);
-		const updatedCartItems = cartItems.filter((cartItem) => cartItem.IDproduct !== item.IDproduct);
-		setcartItems(updatedCartItems);
-		setNewItem(updateItems);
-		setCardItemCount((prevCount) => prevCount - 1);
-
-
-	}
-	const handleRemoveOne = (item) => {
-
-		const updateItems = newItem.map((cartItem) =>
-			cartItem.IDproduct === item.IDproduct ? { ...cartItem, quality: cartItem.quality - 1 } : cartItem
-		);
-
-		setNewItem(updateItems)
-
-	}
-	const handleAddTocard = (itemsToAdd) => {
-		// Convert single item to an array
-		let itemsarray = Array.isArray(itemsToAdd) ? itemsToAdd : [itemsToAdd];
-
-		itemsarray.forEach((itemToAdd) => {
-			// Increase the quality by 1
-			const newQuality = 1;
-
-			// Check if the item is already in the cart
-			const itemInCartIndex = cartItems.findIndex((item) => item.IDproduct === itemToAdd.IDproduct);
-
-			if (itemInCartIndex === -1) {
-				// If the item is not in the cart, add it as a new item with the specified quality
-				const newItem = {
-					IDproduct: itemToAdd.IDproduct,
-					NameProduct: itemToAdd.ProductName,
-					picture: itemToAdd.link,
-					quality: newQuality,
-					price: itemToAdd.Price,
-				};
-
-				// Update the cartItems state with the new item
-				setcartItems((prevItems) => [...prevItems, newItem]);
-
-				// Increment the card item count
-				setCardItemCount((prevCount) => prevCount + newQuality);
-
-				// Add the new item to the array of added items
-				setNewItem((prevItems) => [...prevItems, { ...newItem }]);
-
-				// Display a success toast
-				toast.success("Item added to cart successfully", {
-					position: 'top-right',
-					autoClose: 3000,
-				});
-			} else {
-				// If the item is already in the cart, update its quantity by the specified value
-
-
-				// Update the newItem array with the modified quantity for the specified IDproduct
-				setNewItem((prevItems) =>
-					prevItems.map((item) =>
-						item.IDproduct === itemToAdd.IDproduct
-							? { ...item, quality: item.quality + newQuality }
-							: item
-					)
-				);
-				// Increment the card item count
-
-			}
-		});
-	};
+	
+	
 	useEffect(() => {
 		// Fetch categories when the component mounts
 		axios.get('http://127.0.0.1:8000/api/getTopcategory')
@@ -336,245 +480,590 @@ function ProductUser() {
 	const indexOflastCategory = (currentPage + 1) * perPage;
 	const indexOfFirtCategory = indexOflastCategory - perPage;
 	const currentCategories = filteredProducts.slice(indexOfFirtCategory, indexOflastCategory)
+	const handleAddCard = async (IDproduct) => {
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/addCard/${IDproduct}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id_Account: ID,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to add card');
+        }
+
+        const data = await response.json();
+        if (data.message) {
+            toast.success("Card added successfully", {
+				position: 'top-right',
+				autoClose: 3000,
+			});
+        } else {
+			toast.success("Card added successfully", {
+				position: 'top-right',
+				autoClose: 3000,
+			});
+        
+        }
+    } catch (error) {
+        console.error('Error adding card:', error);
+    }
+};
 	return (
 
 
 		<div style={{ fontFamily: "'Bree Serif', serif" }} >
 			<ToastContainer />
-			<section id="header">
-				<div className="container">
-					<div className="row">
-						<div className="header_1 clearfix">
-							<div className="col-sm-2">
-								<div className="header_1l text-center clearfix">
-									<h2 className="mgt"><a className="col_1" href="index.html">RD <span className="span_1">JEWELLERS</span>  <span className="span_2">JEWELRY WORLD</span></a></h2>
-								</div>
-							</div>
-							<div className="col-sm-10">
-								<div className="header_1r clearfix">
-									<div className="header_1ri border_none clearfix">
-										<div className="input-group">
-											<input type="text" className="form-control" placeholder="Search" />
-											<span className="input-group-btn">
-												<button className="btn btn-primary" type="button">
-													<i className="fa fa-search"></i></button>
-											</span>
-										</div>
-									</div>
-									<div className="header_1ri clearfix">
-										<span className="span_1"><a className="col_1" href="#"><i className="fa fa-map-marker"></i></a></span>
-										<h5 className="mgt"><a href="#">Store <br /> Locator</a></h5>
-									</div>
-									<div className="header_1ri clearfix">
-										<span className="span_1"><a className="col_1" href="login.html"><i className="fa fa-user"></i></a></span>
-										<h5 className="mgt"><a href="login.html">Account <br /> Login / Sign Up</a></h5>
-									</div>
+		
+			<header className="block">
+            <div id="contact" style={{ border: '1px solid #e5e5e5' }}>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-5">
+                            <div className="ht-left-area">
+                                <div className="header-shipping_area">
+                                    <ul>
+                                        <li style={{ height: '40px', lineHeight: '35px' }}>
+                                            <span style={{ color: '#595959', fontFamily: 'Lato", sans-serif', fontSize: '16px' }}>Telephone Enquiry:</span>
+                                            <a href="" style={{ transition: 'all 0.3s ease-in', color: '#595959', textDecoration: 'none', fontFamily: 'Lato", sans-serif', fontSize: '16px' }}>(+123) 123 321 345</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-lg-7">
+                            <div className="flex justify-end" >
+                                <div className="ht-menu">
+                                    <ul className="flex justify-start">
+                                        <li className="inline-block relative" style={{ borderRight: '1px solid #e5e5e5', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                            <a href="" className="block uppercase text-[12px]" style={{ paddingTop: '0', padding: '8px 15px', color: '#666666' }}>Currency
+                                                <i className="fa fa-chevron-down" style={{ paddingLeft: '5px', fontSize: '11px' }}></i>
+                                            </a>
+                                            <ul className="ht-dropdown ht-currency">
+                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                    <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>€ EUR</a>
+                                                </li>
+                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                    <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>£ Pound Sterling</a>
+                                                </li>
+                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                    <a href="" className="pt-0 block" style={{ padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>$ Us Dollar</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li className="inline-block relative" style={{ borderRight: '1px solid #e5e5e5', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                            <a href="" className="block uppercase text-[12px]" style={{ padding: '8px 15px', color: '#666666' }}>LANGUAGE
+                                                <i className="fa fa-chevron-down" style={{ paddingLeft: '5px', fontSize: '11px' }}></i>
+                                            </a>
+                                            <ul className="ht-dropdown">
+                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                    <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', display: 'flex', alignItems: 'center', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                                                        <img src={us} alt="" style={{ marginRight: '5px' }} />
+                                                        English
 
-									<div className="header_1ri border_none clearfix">
-										<span className="span_1"><a className="col_1" href="#"><i className="fa fa-heart-o"></i></a></span>
-										<h5 className="mgt"><a href="#">My <br /> Wishlist (0)</a></h5>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
+                                                    </a>
+                                                </li>
+                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                    <a href="" className="pt-0 block" style={{ padding: '10px 5px', display: 'flex', alignItems: 'center', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none', whiteSpace: 'nowrap', overflow: 'hidden', marginTop: '7px' }}>
+                                                        <img src={France} alt="" style={{ marginRight: '5px' }} />
+                                                        Français
 
-			<section id="menu" className="clearfix cd-secondary-nav">
-				<nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top justify-content-center">
-					<div className="container">
-						<div className="navbar-header page-scroll">
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li className="inline-block relative" style={{ borderRight: '1px solid #e5e5e5', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                            <a href="" className="block uppercase text-[12px]" style={{ padding: '8px 15px', color: '#666666' }}>My Account
+                                                <i className="fa fa-chevron-down" style={{ paddingLeft: '5px', fontSize: '11px' }}></i>
+                                            </a>
+                                            <ul className="ht-dropdown ht-currency">
+                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                    <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>Login</a>
+                                                </li>
+                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                    <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>Register</a>
+                                                </li>
 
-							<button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-								<span className="sr-only">Toggle navigation</span>
-								<span className="icon-bar"></span>
-								<span className="icon-bar"></span>
-								<span className="icon-bar"></span>
-							</button>
-							<a className="col_1 navbar-brand" href="index.html">RD <span className="span_1">JEWELLERS</span>  <span className="span_2">JEWELRY WORLD</span></a>
-						</div>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-						<div className="navbar-collapse  " id="bs-example-navbar-collapse-1">
-							<ul className="nav navbar-nav inline-block m" style={{ whiteSpace: 'nowrap' }}>
+            <div className="block" id="logo" style={{ padding: '30px' }}>
+                <div className="container" id="container">
+                    <div className="row">
+                        <div className="col-lg-3">
+                            <div className="header-logo">
+                                <a href="">
+                                    <img src={logo} />
+                                </a>
+                            </div>
+                        </div>
+                        <div className="col-lg-9">
+                            <div className="flex justify-end" >
+                                <form action="" className="bg-white flex relative" style={{ border: '1px solid #e5e5e5', borderRadius: '5px', minWidth: '680px', height: '45px' }}>
+                                    <select name="" id="" className="relative nice-select " style={{ width: 'auto', lineHeight: '43px', height: '43px', margin: '0', border: '0', padding: '0 28px 0 25px', fontSize: '13px', borderRadius: '15px 0 0 15px', display: 'none' }}>
+                                        <option value="">All</option>
+                                    </select>
+                                    <div className="nice-select select-search-category">
+                                        <span className="current" style={{ color: '#595959', fontFamily: 'inherit', fontWeight: '400', fontSize: '13px' }}>
+                                            All
+                                        </span>
+                                        <ul className="list">
+                                            <li className="option selected">All</li>
+                                        </ul>
+                                    </div>
+                                    <input type="text" className="text-[13px] h-[45px] bg-transparent" style={{ border: 'none', width: '100%', padding: '0 60px 0 33px', outline: 'none' }} placeholder="Enter your search key ..." />
+                                    <button className="li-btn" type="submit">
+                                        <i className="fa fa-search"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style={{ backgroundColor: '#cda557', width: '102%' }}>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-9 block static">
+                            <div className="flex justify-start">
+                                <nav>
+                                    <ul id="menu"  >
+                                        <li className="inline-block pr-[30px]">
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Home</a>
+                                        </li>
+                                        <li className="inline-block pr-[30px]">
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Product</a>
+                                            <ul className="hm-dropdown">
+                                                <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }} onClick={() => navigate('/HomeProduct', { state: { username: username,ID:ID } })} >Product</a>
+                                                  
+                                                </li>
+                                                <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Detail Product</a>
+                                                    
+                                                </li>
+                                               
+                                               
 
-								<li><a className="m_tag active_tab" href="index.html">Home</a></li>
-								<li className="dropdown">
-									<a className="m_tag" href="#" data-toggle="dropdown" role="button" aria-expanded="false">Product<span className="caret"></span></a>
-									<ul className="dropdown-menu drop_3" role="menu">
-										<li><a href="product.html">Product</a></li>
-										<li><a className="border_none" href="detail.html">Product Detail</a></li>
-									</ul>
-								</li>
-								<li className="dropdown">
-									<a className="m_tag" href="#" data-toggle="dropdown" role="button" aria-expanded="false">Blog<span className="caret"></span></a>
-									<ul className="dropdown-menu drop_3" role="menu">
-										<li><a href="blog.html">Blog</a></li>
-										<li><a className="border_none" href="blog_detail.html">Blog Detail</a></li>
-									</ul>
-								</li>
+                                            </ul>
+                                        </li>
+                                        <li className="inline-block pr-[30px]">
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Blog</a>
+                                            <ul className="hm-dropdown">
+                                                <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Grid View</a>
+                                                    <ul className="hm-dropdown hm-sub_dropdown">
+                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Column Two</a></li>
+                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Column Three</a></li>
+                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Left Sidebar</a></li>
+                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Right Sidebar</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List View</a>
+                                                    <ul className="hm-dropdown hm-sub_dropdown">
+                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Fullwidth</a></li>
+                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Left Sidebar</a></li>
+                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Right Sidebar</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Blog Details</a>
+                                                    <ul className="hm-dropdown hm-sub_dropdown">
+                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Left Sidebar</a></li>
+                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Right Sidebar</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Blog Format</a>
+                                                    <ul className="hm-dropdown hm-sub_last">
+                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Gallery Format</a></li>
+                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Audio Format</a></li>
+                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Video Format</a></li>
+                                                    </ul>
+                                                </li>
 
-								<li><a className="m_tag" href="about.html">About Us</a></li>
-								<li><a className="m_tag" href="contact.html">Contact</a></li>
-								<li className="dropdown">
-									<a className="m_tag" href="#" data-toggle="dropdown" role="button" aria-expanded="false">Pages<span className="caret"></span> </a>
-									<ul className="dropdown-menu drop_3" role="menu">
-										<li><a href="login.html">My Account</a></li>
-										<li><a href="cart.html">Shopping Cart</a></li>
-										<li><a className="border_none" href="checkout.html">Checkout</a></li>
-									</ul>
-								</li>
-								<li className="dropdown dropdown-large">
-									<a href="#" className="dropdown-toggle m_tag" data-toggle="dropdown">Dropdown<b className="caret"></b></a>
+                                            </ul>
+                                        </li>
+                                        <li className="inline-block pr-[30px]">
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Pages
 
-									<ul className="dropdown-menu dropdown-menu-large row">
-										<li className="col-sm-2">
-											<ul>
-												<li className="dropdown-header">BRACELETS</li>
-												<li><a href="#">Available</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-												<li><a href="#">Aligninment</a></li>
-												<li><a href="#">Headers</a></li>
-											</ul><br />
-											<ul>
-												<li className="dropdown-header">BY METAL</li>
-												<li><a href="#">Available</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-											</ul>
-										</li>
-										<li className="col-sm-2">
-											<ul>
-												<li className="dropdown-header">EARRINGS</li>
-												<li><a href="#">Available</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-												<li><a href="#">Aligninment</a></li>
-												<li><a href="#">Headers</a></li>
-											</ul><br />
-											<ul>
-												<li className="dropdown-header">BY METAL</li>
-												<li><a href="#"> Glyphs</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-											</ul>
-										</li>
-										<li className="col-sm-2">
-											<ul>
-												<li className="dropdown-header">PENDANTS</li>
-												<li><a href="#">Available</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-												<li><a href="#">Aligninment</a></li>
-												<li><a href="#">Headers</a></li>
-											</ul><br />
-											<ul>
-												<li className="dropdown-header">BY METAL</li>
-												<li><a href="#"> Glyphs</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-											</ul>
-										</li>
-										<li className="col-sm-2">
-											<ul>
-												<li className="dropdown-header">PENDANTS</li>
-												<li><a href="#">Available</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-												<li><a href="#">Aligninment</a></li>
-												<li><a href="#">Headers</a></li>
-											</ul><br />
-											<ul>
-												<li className="dropdown-header">BY METAL</li>
-												<li><a href="#"> Glyphs</a></li>
-												<li><a href="#">Examples</a></li>
-												<li><a href="#">Jewelry</a></li>
-											</ul>
-										</li>
-										<li className="col-sm-4">
-											<ul>
-												<li><a href="#"><img src="img/1.jpg" alt="abc" className="iw" /></a></li>
-											</ul><br />
-											<ul>
-												<li><a href="#"><img src="img/2.png" alt="abc" className="iw" /></a></li>
-											</ul>
-										</li>
-									</ul>
+                                            </a>
+                                            <ul className="hm-dropdown">
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>{username}</a></li>
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Login|Register</a></li>
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Wishlist</a></li>
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Cart</a></li>
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Checkout</a></li>
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Compare</a></li>
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>FAQ</a></li>
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>404 Error</a></li>
+                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Comming soon</a></li>
+                                            </ul>
+                                        </li>
+                                        <li className="inline-block pr-[30px]">
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>About US
 
-								</li>
-								<li className="dropdown drop_cart" style={{ whiteSpace: 'nowrap' }}>
-									<a className="m_tag" href="#" data-toggle="dropdown" role="button" aria-expanded="false">
-										<i className="glyphicon glyphicon-shopping-cart">
-											{cardItemCount >= 0 && (
-												<span className="badge badge-pill badge-danger position-absolute top-0 start-100 translate-middle p-2">{cardItemCount}</span>
-											)}
-										</i>
-									</a>
-									<ul class=" absolute dropdown-menu drop_1" role="menu" >
-										<li>
-											<div class="drop_1i clearfix">
-												<div class="col-sm-6">
-													<div class="drop_1il clearfix"><h5 class="mgt">{cardItemCount} ITEMS</h5></div>
-												</div>
-												<div class="col-sm-6">
-													<div class="drop_1il text-right clearfix"><h5 class="mgt"><a href="#">VIEW CART</a></h5></div>
-												</div>
-											</div>
-											{newItem && newItem.map((item, index) => (
-												<div key={index} className="drop_1i1 clearfix">
-													<div className="col-sm-6">
-														<div className="drop_1i1l clearfix">
-															<h6 className="mgt bold Product"><a href="#">{item.NameProduct}</a>
-																<br /><span className="normal col_2">{item.quality}x - ${item.price}</span></h6>
-														</div>
-													</div>
-													<div className="col-sm-4">
-														<div className="drop_1i1r clearfix"><a href="#"><img src={`http://127.0.0.1:8000/${item.picture}`} className="iw" alt={item.NameProduct} /></a></div>
-													</div>
-													<div className="col-sm-2">
-														<div className="drop_1i1l text-right clearfix"><h6 className="mgt bold">
-															{item.quality > 1 ? (
-																<span onClick={() => handleRemoveOne(item)}><i className="fa fa-remove"></i></span>
-															) : (
-																<span onClick={() => handleRemoveItem(item)}><i className="fa fa-remove"></i></span>
-															)}
+                                            </a>
+                                        </li>
+                                        <li className="inline-block pr-[30px]">
 
-														</h6></div>
-													</div>
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Contact
 
-												</div>
-											))}
+                                            </a>
+                                        </li>
+                                        <li className="inline-block pr-[30px]">
 
-											<div class="drop_1i2 clearfix">
-												<div class="col-sm-6">
-													<div class="drop_1il clearfix"><h5 class="mgt">TOTAL</h5></div>
-												</div>
-												<div class="col-sm-6">
-													<div class="drop_1il text-right clearfix"><h5 class="mgt">$ {caculatetotal()}</h5></div>
-												</div>
-											</div>
-											<div class="drop_1i3 text-center clearfix">
-												<div class="col-sm-12">
-													<h5><a class="button_1 block" href="#">CHECKOUT</a></h5>
-													<h5><a class="button block" href="#">VIEW CART</a></h5>
-												</div>
-											</div>
-										</li>
-									</ul>
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>JeweLLery
 
-								</li>
-
-							</ul>
+                                            </a>
+                                        </li>
 
 
-						</div>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div className="col-md-4 col-sm-4 hidden" id="logo2">
+                            <div className="header-logo">
+                                <a href="">
+                                    <img src={logo2} />
+                                </a>
+                            </div>
+                        </div>
+                        <div className="col-lg-3 col-md-8 col-sm-8">
+                            <div className="flex justify-end" id="reponmenu">
+                                <ul style={{ display: 'inline-flex' }}>
+                                    <li className="inline-block limenu" >
+                                        <a href="" className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
+                                            <i class="fa-solid fa-heart" style={{ borderColor: 'white' }}></i>
+                                        </a>
+                                    </li>
+                                    <li className="inline-block   limenu" id='navcon' >
+                                        <a onClick={()=>isopen(true)} className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
+                                            <i class="fa fa-navicon" style={{ borderColor: 'white' }}></i>
+                                        </a>
+                                    </li>
+                                    <li className="inline-block limenu" >
+                                        <a  className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
+                                            <i class="fa-solid fa-bag-shopping" onClick={()=>setcartPopup(true)} style={{ color: 'white' }}></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="left-auto right-0 mobile-menu_wrapper" >
+                <div className="offcanvas-menu-inner" style={open ? {...closepopup,...popupopen}:closepopup}>
+                    <div className="container">
+                        <a  className="btnclose" onClick={()=>isopen(false)}>
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </a>
+                        <div className="offcanvas-inner_search">
+                            <form action="#" className="relative">
+                                <input type="text" placeholder="Search for item..." style={{ background: '#e5e5e5', border: '0', height: '40px', lineHeight: '40px', width: '100%', padding: '0 52px 0 15px', outline: 'none', color: '#888888' }} />
+                                <button style={{ backgroundColor: 'transparent', color: '#595959', position: 'absolute', top: '10px', right: '20px', border: '0', fontSize: '24px', cursor: 'pointer' }}>
+                                    <i className="ion-ios-search-strong"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <nav>
+                            <ul >
+                                <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
 
-					</div>
+                                    <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Home</span>
+                                    </a>
+                                </li>
+                                <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
+                                    <span className="menu-expand"  >
 
-				</nav>
+                                        {IsExpaned ? (
+                                            <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        ) : (
+                                            <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        )}
 
-			</section>
+                                    </span>
+                                    <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleToggle}>Shop</span>
+                                    </a>
+                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupContentStyle1 }} >
+                                        <li className="relative menu-item-has-children">
+                                            <span className="menu-expand-submenu">
+                                                {Issubmenu ? (
+                                                    <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                ) : (
+                                                    <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                )}
+                                            </span>
+                                            <a style={{ textTransform: 'capitalize', fontSize: '13px' }}>
+                                                <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleSubmenu}>Grip view</span>
+                                            </a>
+                                            <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupsubmenustyle }}>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Column Threee</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Column Four</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Left SideBar</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li className="relative menu-item-has-children">
+                                            <span className="menu-expand-submenu" >
+                                                {secondmenu ? (
+                                                    <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                ) : (
+                                                    <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                )}
+                                            </span>
+                                            <a style={{ textTransform: 'capitalize', fontSize: '13px' }}>
+                                                <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleSecondMenu}>Shop list</span>
+                                            </a>
+                                            <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupsecondMenu }}>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Full Width</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Left Sidebar</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li className="relative menu-item-has-children">
+                                            <span className="menu-expand-submenu">
+                                                {singleproduct ? (
+                                                    <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                ) : (
+                                                    <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                )}
+                                            </span>
+                                            <a style={{ textTransform: 'capitalize', fontSize: '13px' }}>
+                                                <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handlesingleProduct}>Single Product Style</span>
+                                            </a>
+                                            <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...singleproductstyle }}>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Gallery left</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Gallery Right</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Tab Style left</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Tab Style right</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Sticky left</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Sticky right</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li className="relative menu-item-has-children">
+                                            <span className="menu-expand-submenu">
+                                                {singleproducttype ? (
+                                                    <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                ) : (
+                                                    <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                )}
+                                            </span>
+                                            <a style={{ textTransform: 'capitalize', fontSize: '13px' }}>
+                                                <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handlesingleProducttype}>Single Product Type</span>
+                                            </a>
+                                            <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupsingleproducttype }}>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Single Product</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Single Product Sale</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Single Product Group</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Single Product Variable</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Single Product Affiliate</span></a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li className="relative h-[100%]" style={{ borderBottom: '1px solid #e5e5e5' }}>
+                                    <span className="menu-expand"  >
+                                        {isBlog ? (
+                                            <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        ) : (
+                                            <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        )}
+                                    </span>
+                                    <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleBlog}>Blog</span>
+                                    </a>
+                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupblog }} >
+                                        <li className="relative menu-item-has-children">
+                                            <span className="menu-expand-submenu">
+                                                {Grid ? (
+                                                    <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                ) : (
+                                                    <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                )}
+                                            </span>
+                                            <a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} ><span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleGrid}>Grid View</span></a>
+                                            <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupgrid }}>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Column Two</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Column Three</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li className="relative menu-item-has-children">
+                                            <span className="menu-expand-submenu">
+                                                {Listview ? (
+                                                    <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                ) : (
+                                                    <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                )}
+                                            </span>
+                                            <a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} ><span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleListview}>List View</span></a>
+                                            <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...poppupLisview }}>
+                                                <li className="relative "><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }}><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>List FullWidth</span> </a></li>
+                                                <li className="relative "><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }}><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>List Left Sidebar</span> </a></li>
+                                            </ul>
+                                        </li>
+                                        <li className="relative menu-item-has-children">
+                                            <span className="menu-expand-submenu">
+                                                {Blogdetail ? (
+                                                    <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                ) : (
+                                                    <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                )}
+                                            </span>
+                                            <a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} ><span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleBlogDetail}>Blog Details</span></a>
+                                            <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupBlogDetail }}>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Left Sidebar</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Right Sidebar</span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li className="relative menu-item-has-children">
+                                            <span className="menu-expand-submenu">
+                                                {BlogFormat ? (
+                                                    <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                ) : (
+                                                    <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                                )}
+                                            </span>
+                                            <a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }}><span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleBlogFormat}>Blog Format</span></a>
+                                            <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupBlogFormat }}>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Gallery Format</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Audio Format</span></a></li>
+                                                <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Video Format</span></a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
+                                    <span className="menu-expand"  >
+                                        {Page ? (
+                                            <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        ) : (
+                                            <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        )}
+                                    </span>
+                                    <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={handlePage}>Pages</span>
+                                    </a>
+                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupPage }}>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Wishlist</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Cart</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>CheckOut</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Compare</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>FAQ</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Error 404</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Comming Soon</span></a></li>
+                                    </ul>
+                                </li>
+                                <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
+                                    <span className="menu-expand"  >
+                                        {userSetting ? (
+                                            <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        ) : (
+                                            <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        )}
+                                    </span>
+                                    <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif',cursor:'pointer' }} onClick={handleuserSetting}>User Setting</span>
+                                    </a>
+                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupUsersetting }}>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
+                                    </ul>
+                                </li>
+                                <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
+                                    <span className="menu-expand"  >
+                                        {currency ? (
+                                            <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        ) : (
+                                            <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        )}
+                                    </span>
+                                    <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif',cursor:'pointer' }} onClick={handleCurrency}>Currency</span>
+                                    </a>
+                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupCurrency }}>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>EUR €</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>USD $</span></a></li>
+                                    </ul>
+                                </li>
+                                <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
+                                    <span className="menu-expand"  >
+                                        {language ? (
+                                            <i className="fa-solid fa-minus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        ) : (
+                                            <i class="fa-solid fa-plus" style={{ transition: 'all ease 2.5s' }}></i>
+                                        )}
+                                    </span>
+                                    <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif',cursor:'pointer' }} onClick={handleLanguage}>language</span>
+                                    </a>
+                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popuplanguage}}>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>English</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Français</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Romanian</span></a></li>
+                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Japanese</span></a></li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+            </div>
+            <div id="miniCart">
+                <div className="offcanvas-menu-inner" style={cartPopup ? {...closepopup,...popupopen}:closepopup} >
+                    <a  className="btn-close"  onClick={()=>setcartPopup(false)} style={{background:'transparent',color:'#595959',top:'0',right:'0',left:'auto'}}>
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    </a>
+                    <div className="minicart-content">
+                        <div className="minicart-heading">
+                            <h4 style={{marginBottom:'0',paddingBottom:'25px',fontFamily:'"Lato", sans-serif',color:'#333333',lineHeight:'1',fontWeight:'bold',fontSize:'24px'}}>Shopping Cart</h4>
+                        </div>
+                        <ul className="minicart-list" style={{maxHeight:'310px',position:'relative',overflow:'auto'}}>
+                        {cartData.map((card,index)=>(
+                                       <li className="minicart-product flex pb-[30px]">
+                                       <a href="" className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}}>
+                                          
+                                       <i class="fa fa-times" aria-hidden="true"></i>
+                                       </a>
+                                                   <div className="product-item_img" style={{flexBasis:'65px',maxWidth:'65px'}}>
+                                                   <img src={`http://127.0.0.1:8000/${card.link}`} alt="" />
+                                                   </div>
+                                                   <div className="product-item_content">
+                                           <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}}>{card.Name}</a>
+                                           <span className="product-item_quantity" style={{display:'block',paddingTop:'10px',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>{card.Quality} x {card.Price}</span>
+                                                   </div>
+                                   </li>
+                                   
+                                        ))}
+                           
+                          
+                        </ul>
+                    </div>
+                    <div className="minicart-item_total">
+                        <span style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Subtotal</span>
+                        <span style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
+                    </div>
+                    <div className="minicart-btn_area  pb-[15px]">
+                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Minicart</a>
+                    </div>
+                    <div className="minicart-btn_area pb-[15px]">
+                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
 			<section id="product">
 				<div className="container">
 					<div className="row">
@@ -582,7 +1071,7 @@ function ProductUser() {
 							<div className="col-sm-3">
 								<div className="product_1l clearfix">
 									<div className="center_shop_1li clearfix">
-										<h5 className="mgt">CATEGORY</h5>
+										<h5 className="mgt">Category</h5>
 										<div >
 											<div className="checkbox-container">
 												{categories.map((category) => (
@@ -714,7 +1203,7 @@ function ProductUser() {
 																				<a className="btn btn-primary mr-2"  onClick={() => (handleDetailProduct(productInRow.IDproduct))}>
 																					Detail
 																				</a>
-																				<button className="btn btn-success" onClick={() => handleAddTocard(productInRow)} >
+																				<button className="btn btn-success" onClick={() => handleAddCard(productInRow.IDproduct)} >
 																					Add to Cart
 																				</button>
 																			</div>
@@ -739,7 +1228,7 @@ function ProductUser() {
 										<div className="col-sm-12">
 											<ul>
 												<li><a className='cursor-pointer' onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}><i className="fa fa-chevron-left"></i></a></li>
-												{Array.from({ length: Math.ceil(Product.length / perPage) }, (_, index) => (
+												{Array.from({ length: Math.ceil(filteredProducts.length / perPage) }, (_, index) => (
 													<li key={index} className={currentPage === index ? 'act' : ''}>
 														<a className='cursor-pointer' onClick={() => setCurrentPage(index)}>
 															{index + 1}
@@ -898,7 +1387,7 @@ function ProductUser() {
 				}">
 											<div className='slick-list draggable' style={{ height: '486px' }}>
 												<div className='slick-track' style={{ opacity: '1', width: '2064px' }} >
-													<div className='red slick-slide slick-current slick-active first-active last-active' data-slick-index="0" aria-hidden="false" style={{ width: '486px', position: 'relative', left: '0px', top: '0px', zIndex: '999', opacity: '1' }} tabIndex="0">
+													<div className='red slick-slide slick-current slick-active first-active last-active' data-slick-index="0" aria-hidden="false" style={{ width: '486px', position: 'relative', left: '0px', top: '63px', zIndex: '999', opacity: '1' }} tabIndex="0">
 														<img src={formData.Main} className='block w-full object-contain' alt="" />
 													</div>
 
@@ -1012,7 +1501,7 @@ function ProductUser() {
 										<div className='quality pt-[15px]'>
 											<label htmlFor="" className='mb-[0.5rem]'>Quality</label>
 											<div className='cart-plus-minus relative' style={{ textAlign: 'left', width: '76px' }}>
-												<input type="text" value={Quality} style={{ border: '1px solid #e5e5e5', height: '46px', textAlign: 'center', width: '48px', background: '#fff' }} />
+												<input type="text" value={formData.Quality} style={{ border: '1px solid #e5e5e5', height: '46px', textAlign: 'center', width: '48px', background: '#fff' }} />
 												<div className='dec qtybutton absolute text-center font-bold' onClick={handleDecreaseQuality} style={{ borderBottom: '1px solid #e5e5e5', borderRight: '1px solid #e5e5e5', borderTop: '1px solid #e5e5e5', cursor: 'pointer', height: '23px', width: '28px', lineHeight: '21px', bottom: '0', right: '0' }}>
 													<i className='fa fa-angle-down font-bold' ></i>
 												</div>
@@ -1024,7 +1513,7 @@ function ProductUser() {
 										<div className='pt-[22px]'>
 											<ul>
 												<li className='ml-0 inline-block'>
-													<a href="" className='cart' style={{ backgroundColor: '#333333', border: '2px solid #333333', color: '#ffffff', width: '140px', height: '50px', lineHeight: '47px', display: 'block', textAlign: 'center', textDecoration: 'none' }}>Cart To Cart</a>
+													<a  className='cart' onClick={handleAddCardetail} style={{ backgroundColor: '#333333', border: '2px solid #333333', color: '#ffffff', width: '140px', height: '50px', lineHeight: '47px', display: 'block', textAlign: 'center', textDecoration: 'none',cursor:'pointer' }} >Cart To Cart</a>
 												</li>
 												<li className='ml-[5px] inline-block '>
 													<a href="" className='	' style={{ border: '2px solid #e5e5e5', width: '50px', height: '50px', lineHeight: '47px', display: 'block', textAlign: 'center' }}>

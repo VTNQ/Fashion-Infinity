@@ -72,6 +72,7 @@ class ProductController extends Controller
             'product.Price',
             'Product_Picture'
         ])
+        ->where('picture.status',1)
         ->get();
     
         return response()->json($products, 200);
@@ -170,6 +171,7 @@ class ProductController extends Controller
         $product->content = $request->input('content');
         $product->id_provider = $request->input('Provider');
         $product->Price=$request->input('Price');
+       
         $product->save();
 
         foreach ($ids as $idpic) {
@@ -178,6 +180,7 @@ class ProductController extends Controller
             $categoryProduct->id_Product = $product->ID;
             $categoryProduct->id_Category = $request->input('Category');
             $categoryProduct->size=$request->input('size');
+           
             $categoryProduct->save();
         }
 
