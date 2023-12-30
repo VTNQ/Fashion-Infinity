@@ -787,5 +787,16 @@ body{
         width: 1170px;
     }
      }
+     .product-name {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      height: 3em; /* 2 lines of text, adjust the multiplier based on line-height */
+      line-height: 1.5em; /* Your line-height may vary */
+      white-space: normal;
+    }
+    
   
     

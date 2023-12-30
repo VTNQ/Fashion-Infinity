@@ -67,6 +67,7 @@ Route::get('/ProfileInformation/{id}',[ProfileController::class,'ProfileInformat
 Route::post('/Updateprofile/{id}',[ProfileController::class,'Updateprofile'])->name('Updateprofile');
 Route::get('/getHomeProduct',[HomeProduct::class,'DisplayProduct'])->name('DisplayProduct');
 Route::get('/getProductToHomePage',[HomeProduct::class,'DisplayProductToHomePage'])->name('getProductToHomePage');
+Route::get('/getProductToNewArrival',[HomeProduct::class,'DisplayProductToHomeNewArrival'])->name('getProductToNewArrival');
 Route::get('/getHomeProductToHomepage',[ProductController::class,'DisplayProductToHomepage'])->name('getHomeProductToHomepage');
 Route::get('/getTopcategory',[HomeProduct::class,'getTopcategory'])->name('getTopcategory');
 Route::get('/latestProduct',[HomeProduct::class,'latestProduct'])->name('latestProduct');
