@@ -56,15 +56,7 @@ function Homepage() {
             price: "$900.00"
           },
     ]);
-    const [productNewArrivals, setproductNewArrival] = useState([
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",},
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",},
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",},
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",},
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",},
-        {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",},
-        
-    ]);
+    
     // const [productNew, setproductNew] = useState([
     //     {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
     //     {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},
@@ -261,40 +253,10 @@ function Homepage() {
     };
     const [showButtons, setShowButtons] = useState(false);
 
-    //filter product
     
-      // const categories = ['NECKLACES', 'EARRINGS', 'BRACELET', 'ANKLET'];
-      // const categories1 = ['NECKLACES', 'EARRINGS', 'BRACELET', 'ANKLET'];
-
-    
-        
-        // const [activeCategory1, setActiveCategory1] = useState('EARRINGS');
-        // const [products, setProducts] = useState(productNew);
-        // const [products1, setProducts1] = useState(productTrend);
-      
-        
-        
-        // const filterProducts1 = (category) => {
-        //     if (category === 'all') {
-        //         setProducts1(productTrend);
-        //     } else {
-        //         const filteredProductsTrend = productTrend.filter(product => product.category === category);
-        //         setProducts1(filteredProductsTrend);
-        //     }
-        // };
-          
-        
-        // useEffect(() => {
-        //     filterProducts1(activeCategory1);
-        // }, [activeCategory1]);
-        
-
-        
-
-        //hover image
         const [hoveredItem, setHoveredItem] = useState(null);
 
-  // ... existing functions and effects
+  
 
   // Hover effect handlers
   const handleMouseEnter = (id) => {
@@ -404,6 +366,27 @@ const handleCategorySelection1 = (categoryName) => {
   const filtered = products.filter((product) => product.NameCategory === categoryName);
   setFilterProducts1(filtered); // Update the state with filtered products
 };
+
+const [productArrival,setProductArrival] = useState([]); 
+useEffect(()=>{
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/getProductToNewArrival');
+      console.log('Full data:', response.data); // Check the full dataset
+
+      const activeProducts = response.data.filter(product => product.Picture_status === 1);
+      
+
+      // Assuming the data is sorted by ID in ascending order from the backend:
+     
+
+      setProductArrival(activeProducts);
+    } catch (error) {
+      console.error('Error fetching productArrival', error);
+    }
+  };
+  fetchData();
+},[]);
   
 
     //===============================================================================================================================
@@ -505,16 +488,16 @@ const handleCategorySelection1 = (categoryName) => {
                     <button onClick={next}><img className="h-[40px]" src={imageArrowRight} alt="" /></button>
                     </div>
                 </div>
-                <div className="border-[1px] mt-3 border-[#E5E5E5] mx-[5%]"></div>
+                <div className="border-[1px] mt-3  border-[#E5E5E5] mx-[5%]"></div>
 
 
                 <div className="slider-container mt-10 pl-[5%] pr-[2.9%]">
                 <Slider ref={sliderRef} {...settings}>
           
-          {productNewArrivals.map((productNewArrival, index) => (
-            <div>
-            <div className="relative border-[#E5E5E5] border-[1px] w-[87%]  ">
-                    <img className="w-full  object-cover" src={productNewArrival.img} alt="" />
+          {productArrival.map(productNewArrival => (
+            <div key={productNewArrival.ID}>
+            <div className="relative border-[#E5E5E5] border-[1px]  w-[87%]  ">
+                    <img className="w-full h-[250px] object-cover lg-max:h-[200px] md-max:h-[150px]" src={`http://127.0.0.1:8000/${productNewArrival.link}`} alt="" />
                     
                     <div class="tag-container absolute  left-0">
                      <div class="tag">
@@ -524,10 +507,10 @@ const handleCategorySelection1 = (categoryName) => {
                     
                     </div>
                     <div className="px-[8%]">
-                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold">{productNewArrival.name}</h1>
+                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold product-name">{productNewArrival.ProductName}</h1>
                     
                     <div className="flex justify-between items-center">
-                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${productNewArrival.price}</h1>
+                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${productNewArrival.Price}.00</h1>
                     <i class='bx bx-heart'  ></i>
                     </div>
                     <ul className="flex">
@@ -613,12 +596,12 @@ const handleCategorySelection1 = (categoryName) => {
                              <span style={{fontFamily: 'lato'}} class="tag-text">NEW</span>
                                     </div>
                     </div>
-                    <div className="px-[8%] ">
+                    <div className="px-[8%] mt-10">
                     <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold">{product.ProductName}</h1>
                     
 
                     <div className="flex justify-between items-center">
-                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${product.Price}</h1>
+                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${product.Price}.00</h1>
                     <i class='bx bx-heart'  ></i>
                     </div>
 
@@ -714,7 +697,7 @@ const handleCategorySelection1 = (categoryName) => {
                     
 
                     <div className="flex justify-between items-center">
-                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${product.Price}</h1>
+                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${product.Price}.00</h1>
                     <i class='bx bx-heart'  ></i>
                     </div>
 
