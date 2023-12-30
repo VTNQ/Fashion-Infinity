@@ -11,6 +11,7 @@ use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Account;
 use App\Http\Controllers\cardController;
+use App\Http\Controllers\DetailController;
 use App\Http\Controllers\HomeProduct;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WareHouseController;
@@ -80,6 +81,9 @@ Route::get('/getProductWareHouse',[WareHouseController::class,'getProductWareHou
 Route::post('/AddWareHouse/{id}',[WareHouseController::class,'AddWareHouse'])->name('AddWareHouse');
 Route::get('/getWareHouse/{id}',[WareHouseController::class,'getWareHouse'])->name('getWareHouse');
 Route::post("/EditWareHouse/{id}",[WareHouseController::class,"EditWareHouse"])->name("EditWareHouse");
+Route::post("/removeWareHouse/{id}",[WareHouseController::class,"removeWareHouse"])->name("removeWareHouse");
+Route::get('/getDetail/{id}',[DetailController::class,'getDetail'])->name('getDetail');
+Route::get('/getextra/{id}',[DetailController::class,'getextra'])->name('getextra');
 
 
 

@@ -23,6 +23,7 @@ import Homepage from './components/layout/homepage/Homepage';
 import ProductUser from './components/User/ProductUser';
 import Menu from './components/menu/MenuHomepage';
 import WareHouse from './components/WareHouse';
+import DetailProduct from './components/DetailProdutct/DetailProduct';
 function App() {
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -60,6 +61,7 @@ function App() {
         <Route path='/HomeProduct' element={<ProductUser/>}/>
         <Route path='/menu' element={<Menu />}/>
         <Route path='/WareHouse' element={<WareHouse/>}/>
+        <Route path='/DetailProduct' element={<DetailProduct/>}/>
       </Routes>
     </Router>
   );
