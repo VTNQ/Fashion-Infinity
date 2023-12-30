@@ -597,7 +597,7 @@ useEffect(()=>{
                                     </div>
                     </div>
                     <div className="px-[8%] mt-10">
-                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold">{product.ProductName}</h1>
+                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold product-name">{product.ProductName}</h1>
                     
 
                     <div className="flex justify-between items-center">
@@ -693,7 +693,7 @@ useEffect(()=>{
                     
                     </div>
                     <div className="px-[8%]">
-                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold">{product.ProductName}</h1>
+                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold product-name">{product.ProductName}</h1>
                     
 
                     <div className="flex justify-between items-center">
