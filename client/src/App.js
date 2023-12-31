@@ -24,6 +24,7 @@ import ProductUser from './components/User/ProductUser';
 import Customer from './components/Customer';
 import Menu from './components/menu/MenuHomepage';
 import WareHouse from './components/WareHouse';
+import Footer from './components/footer/FooterHome';
 import DetailProduct from './components/DetailProdutct/DetailProduct';
 function App() {
   const [cartData, setCartData] = useState([]);
@@ -65,6 +66,7 @@ function App() {
         <Route path='/DetailProduct' element={<DetailProduct/>}/>
         <Route path='/MiniCart' element={<MiniCart/>}/>
         <Route path='/Customer' element={<Customer/>}/>
+        <Route path='/footer' element={<Footer/>}/>
       </Routes>
     </Router>
   );
