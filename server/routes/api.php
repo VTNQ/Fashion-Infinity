@@ -13,6 +13,7 @@ use App\Http\Controllers\Account;
 use App\Http\Controllers\cardController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\HomeProduct;
+use App\Http\Controllers\MiniCartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WareHouseController;
 use Illuminate\Http\Request;
@@ -85,6 +86,12 @@ Route::post("/EditWareHouse/{id}",[WareHouseController::class,"EditWareHouse"])-
 Route::post("/removeWareHouse/{id}",[WareHouseController::class,"removeWareHouse"])->name("removeWareHouse");
 Route::get('/getDetail/{id}',[DetailController::class,'getDetail'])->name('getDetail');
 Route::get('/getextra/{id}',[DetailController::class,'getextra'])->name('getextra');
+Route::get('/detailProduct',[DetailController::class,"detailProduct"])->name("detailProduct");
+Route::get("/getNewProduct",[DetailController::class,"getNewProduct"])->name("getNewProduct");
+Route::post('/updateStatus', [LoginController::class, 'updateStatus'])->name("updateStatus");
+Route::post('/updateonline',[LoginController::class,'updateonline'])->name("updateonline");
+Route::get('/ShowMiniCart/{id}',[MiniCartController::class,'ShowMiniCart'])->name("ShowMiniCart");
+Route::post("/DeleteCard/{id}",[MiniCartController::class,"DeleteCard"])->name("DeleteCard");
 
 
 

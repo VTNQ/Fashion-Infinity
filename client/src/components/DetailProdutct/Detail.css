@@ -359,8 +359,17 @@ select {
     top: 32%;
     opacity: 0;
 }
+.slick-list {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    transition: all ease 0.5s;
+}
  .slick-list{
     margin: 0 -15px;
+    transition: all ease 0.5s;
  }
 .fa-arrow-left:hover{
     background-color: #f0f0f0;
@@ -387,6 +396,14 @@ select {
     -o-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
 }
+#next {
+    opacity: 1 !important;
+    right: -56px;
+}
+#prev{
+    opacity: 1 !important;
+    left: -54px;
+}
 .slick-track:after, .slick-track:before {
     display: table;
     content: '';
@@ -407,6 +424,90 @@ select {
     float: left;
     height: 100%;
     min-height: 1px;
+}
+.slick-track:after, .slick-track:before {
+    display: table;
+    content: '';
+}
+.sticker-2 {
+    background: #ff4000;
+    right: 20px;
+    left: auto;
+}
+.sticker, .sticker-2 {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 45px;
+    height: 20px;
+    line-height: 18px;
+    font-size: 11px;
+    text-transform: uppercase;
+    text-align: center;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+.sticker-2:before {
+    border-color: #ff4000 transparent transparent transparent;
+}
+.sticker:before, .sticker-2:before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 4px 4px 0 4px;
+    left: 9px;
+    top: 100%;
+    position: absolute;
+}
+.hiraola-product_slider .slide-item .single_product .product-img .add-actions, .hiraola-product_slider-3 .slide-item .single_product .product-img .add-actions, .hiraola-trending-product_slider .slide-item .single_product .product-img .add-actions, .hiraola-product-tab_slider-2 .slide-item .single_product .product-img .add-actions, .hiraola-product-tab_slider-3 .slide-item .single_product .product-img .add-actions, .shop-product-wrap .slide-item .single_product .product-img .add-actions {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    opacity: 0;
+}
+.hiraola-product_slider .slide-item .single_product .hiraola-product_content .product-desc_info h6, .hiraola-product_slider-3 .slide-item .single_product .hiraola-product_content .product-desc_info h6, .hiraola-trending-product_slider .slide-item .single_product .hiraola-product_content .product-desc_info h6, .hiraola-product-tab_slider-2 .slide-item .single_product .hiraola-product_content .product-desc_info h6, .hiraola-product-tab_slider-3 .slide-item .single_product .hiraola-product_content .product-desc_info h6, .shop-product-wrap .slide-item .single_product .hiraola-product_content .product-desc_info h6 {
+    margin-bottom: 0;
+    padding-bottom: 5px;
+    display: block;
+}
+.hiraola-product_slider .slide-item .single_product .hiraola-product_content .product-desc_info .price-box .new-price, .hiraola-product_slider-3 .slide-item .single_product .hiraola-product_content .product-desc_info .price-box .new-price, .hiraola-trending-product_slider .slide-item .single_product .hiraola-product_content .product-desc_info .price-box .new-price, .hiraola-product-tab_slider-2 .slide-item .single_product .hiraola-product_content .product-desc_info .price-box .new-price, .hiraola-product-tab_slider-3 .slide-item .single_product .hiraola-product_content .product-desc_info .price-box .new-price, .shop-product-wrap .slide-item .single_product .hiraola-product_content .product-desc_info .price-box .new-price {
+    font-size: 16px;
+}
+.hiraola-product_slider .slide-item .single_product .hiraola-product_content .product-desc_info .price-box, .hiraola-product_slider-3 .slide-item .single_product .hiraola-product_content .product-desc_info .price-box, .hiraola-trending-product_slider .slide-item .single_product .hiraola-product_content .product-desc_info .price-box, .hiraola-product-tab_slider-2 .slide-item .single_product .hiraola-product_content .product-desc_info .price-box, .hiraola-product-tab_slider-3 .slide-item .single_product .hiraola-product_content .product-desc_info .price-box, .shop-product-wrap .slide-item .single_product .hiraola-product_content .product-desc_info .price-box {
+    display: inline-block;
+}
+.hiraola-product_slider .slide-item .single_product .hiraola-product_content, .hiraola-product_slider-3 .slide-item .single_product .hiraola-product_content, .hiraola-trending-product_slider .slide-item .single_product .hiraola-product_content, .hiraola-product-tab_slider-2 .slide-item .single_product .hiraola-product_content, .hiraola-product-tab_slider-3 .slide-item .single_product .hiraola-product_content, .shop-product-wrap .slide-item .single_product .hiraola-product_content {
+    text-align: left;
+    padding: 0 20px 20px;
+}
+.hiraola-product_slider .slide-item .single_product .hiraola-product_content .product-desc_info .additional-add_action, .hiraola-product_slider-3 .slide-item .single_product .hiraola-product_content .product-desc_info .additional-add_action, .hiraola-trending-product_slider .slide-item .single_product .hiraola-product_content .product-desc_info .additional-add_action, .hiraola-product-tab_slider-2 .slide-item .single_product .hiraola-product_content .product-desc_info .additional-add_action, .hiraola-product-tab_slider-3 .slide-item .single_product .hiraola-product_content .product-desc_info .additional-add_action, .shop-product-wrap .slide-item .single_product .hiraola-product_content .product-desc_info .additional-add_action {
+    display: inline-block;
+    float: right;
+}
+.hiraola-product_slider .slide-item .single_product .product-img .add-actions > ul li, .hiraola-product_slider-3 .slide-item .single_product .product-img .add-actions > ul li, .hiraola-trending-product_slider .slide-item .single_product .product-img .add-actions > ul li, .hiraola-product-tab_slider-2 .slide-item .single_product .product-img .add-actions > ul li, .hiraola-product-tab_slider-3 .slide-item .single_product .product-img .add-actions > ul li, .shop-product-wrap .slide-item .single_product .product-img .add-actions > ul li {
+    position: relative;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+.hiraola-product_slider .slide-item .single_product .product-img .add-actions > ul li > a, .hiraola-product_slider-3 .slide-item .single_product .product-img .add-actions > ul li > a, .hiraola-trending-product_slider .slide-item .single_product .product-img .add-actions > ul li > a, .hiraola-product-tab_slider-2 .slide-item .single_product .product-img .add-actions > ul li > a, .hiraola-product-tab_slider-3 .slide-item .single_product .product-img .add-actions > ul li > a, .shop-product-wrap .slide-item .single_product .product-img .add-actions > ul li > a {
+    background-color: #333333;
+    color: #ffffff;
+    display: block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    -webkit-transform: scaleX(0);
+    -ms-transform: scaleX(0);
+    transform: scaleX(0);
+}
+.slick-list .slick-slide {
+    margin-left: 30px;
+    outline: none;
 }
 .slick-track {
     position: relative;
@@ -503,6 +604,79 @@ select {
     height: 2px;
     width: 18px;
 }
+.hiraola-product_area .hiraola-section_title {
+    margin-bottom: 30px;
+}
+.hiraola-section_title > h4 {
+    position: relative;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    padding-bottom: 25px;
+}
+.hiraola-section_title > h4:before {
+    background-color: #cda557;
+}
+.slick-slider {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -ms-touch-action: pan-y;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+}
+.main-slider .slick-arrow, .hiraola-product-tab_slider-2 .slick-arrow, .hiraola-product_slider-3 .slick-arrow, .sp-img_slider .slick-arrow, .sp-slider .slick-arrow, .sp-img_slider-3 .slick-arrow, .brand-slider .slick-arrow {
+    background-color: rgba(255, 255, 255, 0.5);
+    -webkit-box-shadow: 0px 0px 9.8px 0.2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 0px 9.8px 0.2px rgba(0, 0, 0, 0.05);
+    font-size: 24px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    display: block;
+    color: #cda557;
+    text-align: center;
+    position: absolute;
+    z-index: 8;
+    cursor: pointer;
+    border-radius: 100%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    opacity: 0;
+    visibility: hidden;
+    left: 20px;
+}
+.hiraola-section_title > h4:before {
+    content: "";
+    height: 1px;
+    width: 160px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.hiraola-section_title {
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+}
+.hiraola-product_area {
+    padding-top: 75px;
+    margin: 0 auto;
+    text-align: center;
+}
+#tab:hover{
+    color: #cda557 !important;
+    transition: all ease 0.5s;
+}
+.sp-product-tab_area .sp-product-tab_nav .tab-content .form-horizontal .table-striped {
+    margin-bottom: 25px;
+}
 .sp-product-tab_area .sp-product-tab_nav .tab-content {
     border: 1px solid #e5e5e5;
     padding: 30px;
@@ -530,4 +704,7 @@ select {
 }
 .sp-product-tab_area .sp-product-tab_nav .tab-content .product-description > ul > li:first-child {
     padding-top: 0;
+}
+.table-bordered{
+    border: 1px solid #e5e5e5;
 }

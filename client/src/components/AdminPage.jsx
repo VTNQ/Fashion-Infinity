@@ -84,6 +84,11 @@ function AdminPage(){
                 <i className="fa fa-th"></i> <span>WareHouse</span> 
               </a>
             </li>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/Customer', { state: { username: username,ID:ID } })}>
+                <i className="fa fa-th"></i> <span>Customer</span> 
+              </a>
+            </li>
             <li className="treeview">
               <a href="#">
                 <i className="fa fa-pie-chart"></i>
@@ -268,53 +273,12 @@ function AdminPage(){
        
             <section className="col-lg-7 connectedSortable">
            
-              <div className="nav-tabs-custom">
-                
-                <ul className="nav nav-tabs pull-right">
-                  <li className="active"><a href="#revenue-chart" data-toggle="tab">Area</a></li>
-                  <li><a href="#sales-chart" data-toggle="tab">Donut</a></li>
-                  <li className="pull-left header"><i className="fa fa-inbox"></i> Sales</li>
-                </ul>
-                <div className="tab-content no-padding">
-                
-                  <div className="chart tab-pane active" id="revenue-chart"></div>
-                  <div className="chart tab-pane" id="sales-chart" ></div>
-                </div>
-              </div>
+              
               <div className="box box-success">
-                <div className="box-header">
-                  <i className="fa fa-comments-o"></i>
-                  <h3 className="box-title">Chat</h3>
-                  <div className="box-tools pull-right" data-toggle="tooltip" title="Status">
-                    <div className="btn-group" data-toggle="btn-toggle" >
-                      <button type="button" className="btn btn-default btn-sm active"><i className="fa fa-square text-green"></i></button>
-                      <button type="button" className="btn btn-default btn-sm"><i className="fa fa-square text-red"></i></button>
-                    </div>
-                  </div>
-                </div>
+              
                 <div className="box-body chat" id="chat-box">
               
-                  <div className="item">
-                    <img src="dist/img/user4-128x128.jpg" alt="user image" className="online"/>
-                    <p className="message">
-                      <a href="#" className="name">
-                        <small className="text-muted pull-right"><i className="fa fa-clock-o"></i> 2:15</small>
-                        Mike Doe
-                      </a>
-                      I would like to meet you to discuss the latest news about
-                      the arrival of the new theme. They say it is going to be one the
-                      best themes on the market
-                    </p>
-                    <div className="attachment">
-                      <h4>Attachments:</h4>
-                      <p className="filename">
-                        Theme-thumbnail-image.jpg
-                      </p>
-                      <div className="pull-right">
-                        <button className="btn btn-primary btn-sm btn-flat">Open</button>
-                      </div>
-                    </div>
-                  </div>
+                 
                   <div className="item">
                     <img src="dist/img/user3-128x128.jpg" alt="user image" className="offline"/>
                     <p className="message">

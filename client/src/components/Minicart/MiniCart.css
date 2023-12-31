@@ -1,0 +1,158 @@
+.hiraola-cart-area {
+    padding: 80px 0;
+}
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.table-content table {
+    background: #ffffff none repeat scroll 0 0;
+    border-color: #e5e5e5;
+    border-radius: 0;
+    border-style: solid;
+    border-width: 1px 0 0 1px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 0;
+}
+.table>thead {
+    vertical-align: bottom;
+}
+.table-content .table > :not(:last-child) > :last-child > * {
+    border-bottom-color: #e5e5e5;
+}
+.table-content table th {
+    border-top: medium none;
+    font-size: 15px;
+    text-transform: capitalize;
+    padding: 20px 10px;
+    text-align: center;
+    font-weight: 500;
+    vertical-align: middle;
+}
+#trash:hover{
+    color: #cda557 !important;
+    transition: all ease 0.5s;
+}
+#productName:hover{
+    color: #cda557 !important;
+    transition: all ease 0.5s;
+}
+.table-content table td {
+    border-top: medium none;
+    padding: 18px 10px;
+    vertical-align: middle;
+    font-size: 13px;
+}
+.table-content table {
+    background: #ffffff none repeat scroll 0 0;
+    border-color: #e5e5e5;
+    border-radius: 0;
+    border-style: solid;
+    border-width: 1px 0 0 1px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 0;
+}
+.table-content table th, .table-content table td {
+    border-bottom: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+}
+.cart-plus-minus{
+    margin: 0 auto;
+}
+.quantity .cart-plus-minus {
+    position: relative;
+    width: 76px;
+    text-align: left;
+}
+.quantity .cart-plus-minus > .cart-plus-minus-box {
+    border: 1px solid #e5e5e5;
+    height: 46px;
+    text-align: center;
+    width: 48px;
+    background: #ffffff;
+}
+.quantity .cart-plus-minus > .qtybutton.dec {
+    bottom: 0;
+    right: 0;
+}
+.quantity .cart-plus-minus > .qtybutton.inc {
+    border-bottom: none;
+    top: 0;
+    right: 0;
+}
+.coupon-all{
+    margin-top: 30px;
+}
+.coupon-all .coupon {
+    float: left;
+}
+.coupon-all .coupon input {
+    background-color: transparent;
+    border: 1px solid #e5e5e5;
+    font-size: 13px;
+    border-radius: 0;
+    height: 42px;
+    width: 120px;
+    padding: 0 10px;
+    outline: none;
+    margin-right: 3px;
+    color: #888888;
+}
+.coupon-all .coupon input.button, .coupon-all .coupon2 input.button {
+    background-color: #595959;
+    border: 0 none;
+    border-radius: 2px;
+    color: #ffffff;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    height: 42px;
+    letter-spacing: 1px;
+    line-height: 42px;
+    padding: 0 25px;
+    text-transform: uppercase;
+    width: inherit;
+    
+}
+ .button:hover{
+    background-color: #cda557 !important;
+    transition: all ease 0.5s;
+}
+.cart-page-total > h2 {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+.cart-page-total > ul {
+    border: 1px solid #e5e5e5;
+}
+.cart-page-total > ul li {
+    list-style: none;
+    font-size: 15px;
+    padding: 10px 30px;
+    border-bottom: 1px solid #e5e5e5;
+    font-weight: 700;
+}
+.cart-page-total > ul li span {
+    float: right;
+}
+.cart-page-total > ul li:last-child {
+    border-bottom: 0;
+}
+.cart-page-total a {
+    background-color: #595959;
+    border: 1px solid #e5e5e5;
+    color: #ffffff;
+    display: inline-block;
+    margin-top: 30px;
+    padding: 10px 20px;
+    text-transform: capitalize;
+}
+#checkout:hover{
+    background-color: #cda557 !important;
+    transition: all ease 0.5s;
+}

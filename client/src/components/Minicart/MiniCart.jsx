@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Magnifier } from 'react-image-magnify';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import '../menu/menu.css';
-import './Detail.css';
-import Slider from 'react-slick';
+import './MiniCart.css';
+import Swal from 'sweetalert2';
 import us from '../menu/image/us.png';
 import France from '../menu/image/France.png';
 import 'slick-carousel/slick/slick.css';
@@ -14,334 +14,20 @@ import product from '../menu/image/product.png';
 import product2 from '../menu/image/product2.png';
 import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
-import jewry from '../User/images/jewry.png';
+import jewry from './2-2.png';
 import axios from "axios";
-function DetailProduct() {
-    const [Picture, setPicture] = useState([]);
-    const [current,setcurrent]=useState(0);
+function MiniCart() {
     const location = useLocation();
-    const [newProduct,setnewProduct]=useState([]);
-    const [Product,setProduct]=useState([]);
     const ID = location.state?.ID || '';
-    const IDProduct = location.state?.IDProduct || '';
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [formData, setFormData] = useState({
-        Quality:1,
-    });
-    
-    useEffect(()=>{
-        const fetchProduct = async () => {
-            try {
-                const response = await axios.get("http://127.0.0.1:8000/api/getNewProduct");
-                setnewProduct(response.data);
-            } catch (error) {
-                console.error('Error fetching providers:', error);
-            }
-        };
-        fetchProduct();
-    },[])
-    const NewProduct =newProduct.map((item)=>({
-        id:item.id,
-        name:item.ProductName,
-        price:item.Price,
-        image:`http://127.0.0.1:8000/${item.link}`,
-    })) 
-    const handleIncreaseQuality = () => {
-		setFormData((prevData) => ({
-		  ...prevData,
-		  Quality: prevData.Quality + 1,
-		}));
-	  };
-	
-	  const handleDecreaseQuality = () => {
-		if (formData.Quality > 1) {
-		  setFormData((prevData) => ({
-			...prevData,
-			Quality: prevData.Quality - 1,
-		  }));
-		}
-	  };
-      const handleAddToCard = async (ProductID) => {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/addCard/${ProductID}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id_Account: ID,
-                }),
-            });
-    
-            if (!response.ok) {
-                throw new Error('Failed to add card');
-            }
-    
-            const data = await response.json();
-            if (data.message) {
-                toast.success("Card added successfully", {
-                    position: 'top-right',
-                    autoClose: 3000,
-                });
-                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setCardData(data);
-                }
-            } else {
-                toast.success("Card added successfully", {
-                    position: 'top-right',
-                    autoClose: 3000,
-                });
-                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setCardData(data);
-                }
-            
-            }
-        } catch (error) {
-            console.error('Error adding card:', error);
-        }
-    };
-    const handleAddCard = async () => {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/AddCardDetail/${IDProduct}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id_Account: ID,
-                    Quality:formData.Quality
-                }),
-            });
-    
-            if (!response.ok) {
-                throw new Error('Failed to add card');
-            }
-    
-            const data = await response.json();
-            if (data.message) {
-                toast.success("Card added successfully", {
-                    position: 'top-right',
-                    autoClose: 3000,
-                });
-                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setCardData(data);
-                }
-            } else {
-                toast.success("Card added successfully", {
-                    position: 'top-right',
-                    autoClose: 3000,
-                });
-                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setCardData(data);
-                }
-            
-            }
-        } catch (error) {
-            console.error('Error adding card:', error);
-        }
-    };
-    useEffect(()=>{
-        const fetchProduct = async () => {
-            try {
-                const response = await axios.get("http://127.0.0.1:8000/api/detailProduct");
-                setProduct(response.data);
-            } catch (error) {
-                console.error('Error fetching providers:', error);
-            }
-        };
-        fetchProduct();
-    },[])
-   
-    const products =Product.map((item)=>({
-        id:item.id,
-        name:item.ProductName,
-        price:item.Price,
-        image:`http://127.0.0.1:8000/${item.link}`,
-    })) 
-
-     
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        autoplay: true, // Enable autoplay
-        autoplaySpeed: 2000, // Set autoplay speed in milliseconds (e.g., 2000ms or 2 seconds)
-        responsive: [
-          {
-            breakpoint: 1024,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1,
-              infinite: true,
-              dots: true,
-            },
-          },
-          {
-            breakpoint: 600,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
-            },
-          },
-        ],
-      };
-    
-   const [ActiveTab,setActiveTab]=useState('description');
-   const handleTabChange=(tabID)=>{
-    setActiveTab(tabID);
-   }
-   const renderTabContent = () => {
-    switch (ActiveTab) {
-      case 'description':
-        return (
-          <div className="product-description">
-            <ul>
-              {/* Nội dung của tab Description */}
-              {detail && (
-                <li>
-                  <strong style={{ display: 'block', fontSize: '18px', paddingBottom: '10px', color: '#595959' }}>Content</strong>
-                  <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>{detail.content}</span>
-                </li>
-              )}
-            </ul>
-          </div>
-        );
-
-      case 'specification':
-        return (
-            <table className="table table-bordered specification-inner_stuff" style={{verticalAlign:'inherit'}}>
-            <tbody style={{verticalAlign:'inherit'}}>
-                <tr style={{borderWidth:'1px 0'}}>
-                <td colSpan={2} style={{borderWidth:'0 1px'}}>
-                <strong style={{fontFamily:'"Lato", sans-serif',fontSize:'16px'}}>Memory</strong>
-                </td>
-                </tr>
-            </tbody>
-            <tbody style={{verticalAlign:'inherit'}}>
-                <tr style={{borderWidth:'1px 0'}}>
-               <td>test 1</td>
-               <td>8gb</td>
-                </tr>
-            </tbody>
-            <tbody>
-                <tr>
-                    <td colSpan={2}>
-                    <strong style={{fontFamily:'"Lato", sans-serif',fontSize:'16px'}}>Processor</strong>
-                    </td>
-                </tr>
-            </tbody>
-            <tbody style={{verticalAlign:'inherit'}}>
-            <tr style={{borderWidth:'1px 0'}}>
-            <td>No. of Cores</td>
-            <td>1</td>
-            </tr>
-            </tbody>
-        </table>
-        );
-
-      case 'reviews':
-        return (
-          <div>
-           <form action="" className="form-horizontal" id="form-review">
-            <div id="review">
-                <table className="table table-striped table-bordered">
-                    <tbody style={{verticalAlign:'inherit'}}>
-                        <tr style={{borderWidth:'1px 0'}}>
-                            <td style={{width:'50%',padding:'20px'}}>
-                                <strong style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',color:"#212529"}}>Customer</strong>
-                            </td>
-                            <td className="text-right" style={{width:'50%',padding:'20px',fontFamily:'"Lato", sans-serif',fontSize:'16px',color:"#212529"}}>
-                            25/04/2022
-                            </td>
-                        </tr>
-                        <tr colSpan={2} >
-                            <td>
-                            <p style={{marginBottom:'0',paddingBottom:'20px',fontFamily:'"Lato", sans-serif',fontSize:"16px",color:"#595959"}}>Good product! Thank you very much</p>
-                            <div className="rating-box">
-                                <ul>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                </ul>
-                            </div>
-                            </td>
-                            
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-           </form>
-          </div>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-    const goToPrev = () => {
-        if (currentSlide > 0) {
-            setCurrentSlide(currentSlide - 1);
-        }
-    };
-    
-    const handleThumbnailClick = (index, thumbnailSrc) => {
-        setCurrentSlide(index);
-        setMainImageSrc(thumbnailSrc);
-        setShowMainImage(true);
-    };
-
-    const goToNext = () => {
-        if (currentSlide < images.length - 1) {
-            setCurrentSlide(currentSlide + 1);
-        } else {
-
-            setCurrentSlide(0);
-        }
-        console.log(IDProduct)
-    };
-    const goToNextsecond = () => {
-       setcurrency((prevSlide) => (prevSlide < products.length - 1 ? prevSlide + 1 : 0));
-      };
-    const goToNextsecond2 = () => {
-        setcurent((prevSlide) => (prevSlide < newProduct.length - 1 ? prevSlide + 1 : 0));
-      };
-      const goToPrevSecond=()=>{
-        setcurrency((prevSlide) => (prevSlide > 0 ? prevSlide - 1 : products.length - 1));
-      }
-      const goToPrevSecond2=()=>{
-        setcurent((prevSlide) => (prevSlide > 0 ? prevSlide - 1 : newProduct.length - 1));
-      }
     const [IsExpaned, setIsExpanded] = useState(false);
     const [Issubmenu, setIsubmenu] = useState(false);
     const [isBlog, setisblod] = useState(false);
     const [cartPopup, setcartPopup] = useState(false);
     const [secondmenu, SetSecondmenu] = useState(false);
-  
+
     const navigate = useNavigate();
-   
+
     const [singleproduct, setsingleproduct] = useState(false);
     const [Listview, setListView] = useState(false);
 
@@ -354,45 +40,62 @@ function DetailProduct() {
     const [detail, setDetail] = useState(null);
     const [cartData, setCardData] = useState([]);
     const [currency, setcurrency] = useState(false);
-    const[curent,setcurent]=useState(false);
     const [language, setlanguage] = useState(false);
     const [open, isopen] = useState(false);
-    const [isHovered, setisHovered] = useState(false);
-    const [showMainImage, setShowMainImage] = useState(false);
-    
+    const [Minicart,setMiniCart]=useState([]);
+    const caculateTotalPrice=(quanlity,Price)=>{
+        return (quanlity*Price).toFixed(2);
+    }
     useEffect(()=>{
-        const fetchProduct = async () => {
-            try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/getextra/${IDProduct}`);
-                setPicture(response.data);
-            } catch (error) {
-                console.error('Error fetching providers:', error);
-            }
-        };
-        fetchProduct();
-    },[IDProduct])
-    const images = Picture.map((item) => ({
-        id: item.id,
-        src: `http://127.0.0.1:8000/${item.link}`,
-      }));
-    const handleMouseEnter = () => {
-        setisHovered(true);
-    }
-    const handleMouseLeave = () => {
-        setisHovered(false);
-    }
-    useEffect(() => {
-        const fetchdata = async () => {
-            try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/getDetail/${IDProduct}`);
-                setDetail(response.data);
-            } catch (error) {
-                console.log("error fetching data", error);
+        const fetchMinicart=async()=>{
+            try{
+                const response=await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
+                if(response.ok){
+                    const data=await response.json();
+                    setMiniCart(data);
+                }else {
+                    console.error("Failed to fetch cart data");
+                }
+            }catch(error){
+                console.error('Error during fetch:', error);
             }
         }
-        fetchdata();
-    }, [IDProduct])
-    const [mainImageSrc, setMainImageSrc] = useState(`http://127.0.0.1:8000/${detail?.link || ''}`);
+        fetchMinicart();
+    },[])
+    const deleteCard=async (IDProduct)=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    id_Account: ID,
+                }),
+            });
+            if(!response.ok){
+                throw new Error('Failed to Delete card');
+            }
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }else{
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+    }
     useEffect(() => {
         const fetchCardData = async () => {
             try {
@@ -416,7 +119,7 @@ function DetailProduct() {
         visibility: 'visible',
         opacity: '1',
         padding: '105px 29px 0px',
-        zIndex:'1'
+        zIndex: '1'
 
     }
     const closepopup = {
@@ -440,6 +143,71 @@ function DetailProduct() {
     const handleuserSetting = () => {
         setuserSetting(!userSetting)
     }
+    const handleIncrement = (index) => {
+        // Clone the Minicart array to avoid mutating state directly
+        const updatedMinicart = [...Minicart];
+  // Convert the quantity to a number and increment it
+  updatedMinicart[index].TotalQuantity = Number(updatedMinicart[index].TotalQuantity) + 1;
+  // Update the state with the new Minicart array
+  setMiniCart(updatedMinicart);
+      };
+    
+      const handleDecrement = async (index,IDproduct) => {
+        // Clone the Minicart array to avoid mutating state directly
+        const updatedMinicart = [...Minicart];
+  // Calculate the updated quantity
+  const newQuantity = Math.max(0, updatedMinicart[index].TotalQuantity - 1);
+  updatedMinicart[index].TotalQuantity = newQuantity;
+ 
+  // Show a confirmation dialog before updating the state
+  if (newQuantity <= 0 ) {
+    const confirmation = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      });
+    if(confirmation.isConfirmed){
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDproduct}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    id_Account: ID,
+                }),
+            });
+            if(!response.ok){
+                throw new Error('Failed to Delete card');
+            }
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }else{
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+    }
+  }else{
+    setMiniCart(updatedMinicart);
+  }
+      };
     const popupCurrency = {
         display: currency ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s'
@@ -525,7 +293,7 @@ function DetailProduct() {
         setIsExpanded(!IsExpaned);
 
     }
-    const sliderRef = useRef(null);
+
 
 
     const popupContentStyle = {
@@ -534,11 +302,11 @@ function DetailProduct() {
         animation: 'cloudAnimation 0.5s',// Default animation
     };
     return (
-        
+
         <div>
-           
+
             <header className="block">
-            <ToastContainer zIndex={1000000}/>
+                <ToastContainer zIndex={1000000} />
                 <div id="contact" style={{ border: '1px solid #e5e5e5' }}>
                     <div className="container">
                         <div className="row">
@@ -1075,7 +843,7 @@ function DetailProduct() {
                             <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                         </div>
                         <div className="minicart-btn_area  pb-[15px]">
-                            <a  style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>Minicart</a>
+                            <a href="" style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Minicart</a>
                         </div>
                         <div className="minicart-btn_area pb-[15px]">
                             <a href="" style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>
@@ -1086,7 +854,7 @@ function DetailProduct() {
             <div className="breadcrumb-area">
                 <div className="container">
                     <div className="breadcrumb-content">
-                        <h2 className="font-bold" style={{ color: '#ffffff', textTransform: 'uppercase', textAlign: 'center', fontSize: '36px', marginBottom: '0', paddingBottom: '20px', fontFamily: '"Lato", sans-serif' }}>Single Product Type</h2>
+                        <h2 className="font-bold" style={{ color: '#ffffff', textTransform: 'uppercase', textAlign: 'center', fontSize: '36px', marginBottom: '0', paddingBottom: '20px', fontFamily: '"Lato", sans-serif' }}>Other</h2>
                         <ul>
                             <li>
                                 <a href="" style={{ textDecoration: 'none' }}>Home</a>
@@ -1096,497 +864,98 @@ function DetailProduct() {
                     </div>
                 </div>
             </div>
-            {detail && (
-                <div className="sp-area" style={{ padding: '60px 0 0' }}>
-                    <div className="container">
-                        <div className="sp-nav">
-                            <div className="row">
-                                <div className="col-lg-5 col-md-5">
-                                    <div className="sp-img_area">
-                                        <div className="zoompro-border" style={{ border: '1px solid #e5e5e5' }}>
-                                            
-                                            {showMainImage ? (
-                    <img src={mainImageSrc}  alt="" />
-                ) : (
-                    <img src={`http://127.0.0.1:8000/${detail?.link}`}  alt="" />
-                )}
-                                        </div>
-                                        <div id="gallery" className="sp-img_slider slick-initialized slick-slider">
-                                            <button className="fa-solid fa-arrow-left" onClick={goToPrev}></button>
-                                            <div className="slick-list draggable">
-                                                <div
-                                                    className="slick-track"
-                                                    style={{
-                                                        opacity: '1',
-                                                        width: '1696px',
-                                                        transform: `translate3d(-${currentSlide * 76}px, 0px, 0px)`, // Thay đổi giá trị của transform
-                                                        transition: 'transform 0.5s ease', // Thêm transition để làm mượt chuyển động
-                                                    }}
-                                                >
-                                                    {images.map((image, index) => (
-                                                        <a
-                                                            key={image.id}
-                                                        
-                                                            className={`slick-slide ${index === currentSlide ? 'slick-current slick-active' : ''}`}
-                                                            style={{ width: '76px' }}
-                                                            onClick={() => handleThumbnailClick(index, image.src)}
-                                                        >
-                                                            <img src={image.src} style={{ width: '100%' }} alt="" />
-                                                        </a>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <button className="fa-solid fa-arrow-right" onClick={goToNext}>
-                                                <i className="ion-ios-arrow-forward"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-7 col-md-7">
-                                    <div className="sp-content">
-                                        <div className="sp-heading">
-                                            <h5 style={{ marginBottom: '0', paddingBottom: '20px', color: '#333333', fontWeight: 'bold' }}>
-                                                <a href="" style={{ color: '#595959', textDecoration: 'none', fontSize: '2.25rem', fontFamily: '"Lato", sans-serif' }}>{detail.ProductName}</a>
-                                            </h5>
-                                        </div>
-                                        <span className="reference" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px' }}>Reference: demo_1</span>
-                                        <div className="rating-box" style={{ padding: '15px 0 20px' }}>
-                                            <ul>
-                                                <li style={{ display: 'inline-block', paddingRight: '1px' }}>
-                                                    <i className="fa fa-star-of-david" style={{ fontSize: '15px', color: '#cda557', fontWeight: '900', fontFamily: '"Font Awesome 5 Free"' }}></i>
-                                                </li>
-                                                <li style={{ display: 'inline-block', paddingRight: '1px' }}>
-                                                    <i className="fa fa-star-of-david" style={{ fontSize: '15px', color: '#cda557', fontWeight: '900', fontFamily: '"Font Awesome 5 Free"' }}></i>
-                                                </li>
-                                                <li style={{ display: 'inline-block', paddingRight: '1px' }}>
-                                                    <i className="fa fa-star-of-david" style={{ fontSize: '15px', color: '#cda557', fontWeight: '900', fontFamily: '"Font Awesome 5 Free"' }}></i>
-                                                </li>
-                                                <li style={{ display: 'inline-block', paddingRight: '1px' }}>
-                                                    <i className="fa fa-star-of-david" style={{ fontSize: '15px', color: '#cda557', fontWeight: '900', fontFamily: '"Font Awesome 5 Free"' }}></i>
-                                                </li>
-                                                <li style={{ display: 'inline-block', paddingRight: '1px' }}>
-                                                    <i className="fa fa-star-of-david" style={{ fontSize: '15px', color: '#bababa', fontWeight: '900', fontFamily: '"Font Awesome 5 Free"' }}></i>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div className="sp-essential_stuff font-bold" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px' }}>
-                                            <ul>
-                                                <li>EX Tax:
-                                                    <a href="" style={{ color: '#cda557', fontWeight: '400', paddingLeft: '5px', fontFamily: '"Lato", sans-serif', fontSize: '15px' }}>
-                                                        <span style={{ color: '#595959', fontFamily: '"Lato", sans-serif', fontSize: '15px' }}>£{detail.Price}</span>
-                                                    </a>
-                                                </li>
-                                                <li>Brands:
-                                                    <a href="" style={{ color: '#cda557', fontWeight: '400', paddingLeft: '5px', fontFamily: '"Lato", sans-serif', fontSize: '15px' }}>
-                                                        Buxton
-                                                    </a>
-                                                </li>
-                                                <li>Product Code:
-                                                    <a href="" style={{ color: '#cda557', fontWeight: '400', paddingLeft: '5px', fontFamily: '"Lato", sans-serif', fontSize: '15px' }}>
-                                                        Product 16
-                                                    </a>
-                                                </li>
-                                                <li>Reward Points:
-                                                    <a href="" style={{ color: '#cda557', fontWeight: '400', paddingLeft: '5px', fontFamily: '"Lato", sans-serif', fontSize: '15px' }}>
-                                                        600
-                                                    </a>
-                                                </li>
-                                                <li>Availability:
-                                                    {detail.TotalQuantity > 0 ? (
-                                                        <a
-                                                            href=""
-                                                            style={{
-                                                                color: '#cda557',
-                                                                fontWeight: '400',
-                                                                paddingLeft: '5px',
-                                                                fontFamily: '"Lato", sans-serif',
-                                                                fontSize: '15px',
-                                                            }}
-                                                        >
-                                                            In Stock
-                                                        </a>
-                                                    ) : (
-                                                        <span
-                                                            style={{
-                                                                color: 'red',
-                                                                fontWeight: '400',
-                                                                paddingLeft: '5px',
-                                                                fontFamily: '"Lato", sans-serif',
-                                                                fontSize: '15px',
-                                                            }}
-                                                        >
-                                                            Out of Stock
-                                                        </span>
-                                                    )}
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div className="product-size_box" >
-                                            <span style={{ paddingRight: '15px', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px' }}>Size</span>
-                                            <select name="" className="myniceselect nice-select" id="" style={{ display: 'none' }}>
-                                                <option value="1">S</option>
-                                                <option value="2">M</option>
-                                                <option value="2">L</option>
-                                                <option value="2">XL</option>
-                                            </select>
-                                            <div className="nice-select myniceselect" tabindex="0">
-                                                <span className="current">S</span>
-                                                <ul className="list">
-                                                    <li data-value="1" className="option selected focus">
-                                                        S
-                                                    </li>
-                                                    <li data-value="2" className="option ">
-                                                        M
-                                                    </li>
-                                                    <li data-value="2" className="option ">
-                                                        L
-                                                    </li>
-                                                    <li data-value="2" className="option ">
-                                                        XL
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="quantity" style={{ paddingTop: '30px' }}>
-                                            <label htmlFor="" className="" style={{ marginBottom: '0.5rem', display: 'inline-block', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px' }}>Quantity</label>
-                                            <div className="cart-plus-minus">
-                                                <input type="text" className="cart-plus-minus-box" value={formData.Quality} />
-                                                <div className="dec qtybutton"  >
-                                                    <i className="fa fa-angle-down"></i>
-                                                </div>
-                                                <div className="inc qtybutton" >
-                                                    <i className="fa fa-angle-up"></i>
-                                                </div>
-                                                <div className="dec qtybutton" onClick={handleDecreaseQuality}>
-                                                    <i className="fa fa-angle-down"></i>
-                                                </div>
-                                                <div className="inc qtybutton" onClick={handleIncreaseQuality}>
-                                                    <i className="fa fa-angle-up"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="qty-btn_area" style={{ paddingTop: '30px' }}>
-                                            <ul>
-                                                <li>
-                                                    <a  className="qty-cart_btn" onClick={()=>handleAddCard()}>Add To Cart</a>
-                                                </li>
-                                                <li>
-
-                                                    <a href="" className="qty-wishlist_btn" data-bs-toggle="tooltip " id="btn" aria-label="Add To Wishlist" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-
-
-                                                        <i className="fa-solid fa-heart" style={{ color: 'black', borderColor: 'black' }}></i>
-
-                                                    </a>
-                                                </li>
-                                                <li>
-
-                                                    <a href="" className="qty-wishlist_btn" id="btn" data-bs-toggle="tooltip" aria-label="Add To Wishlist" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-
-
-                                                        <i class="fa-solid fa-shuffle" style={{ color: 'black', borderColor: 'black' }}></i>
-
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div className="hiraola-tag-line">
-                                            <h6 style={{ fontSize: '18px', marginBottom: '0', fontFamily: '"Lato", sans-serif', color: '#333333', fontWeight: 'bold' }}>Tags:</h6>
-                                            <a href="" className="pl-[10px] block">Ring,</a>
-                                            <a href="" className="pl-[10px] block">Necklaces,</a>
-                                            <a href="" className="pl-[10px] block">Braid,</a>
-                                        </div>
-                                        <div className="hiraola-social_link flex items-center pt-[25px]">
-                                            <ul>
-                                                <li className='inline-block pr-[10px]'>
-                                                    <a href="" data-bs-toggle="tooltip" id="btn" style={{ border: '1px solid rgba(0, 0, 0, 0.07)', fontSize: '15px', display: 'block', width: '40px', height: '40px', lineHeight: '40px', textAlign: 'center' }} target="_blank" aria-label="Facebook">
-                                                        <i className='fab fa-facebook' style={{ color: 'black' }}></i>
-                                                    </a>
-                                                </li>
-                                                <li className='inline-block pr-[10px]'>
-                                                    <a href="" data-bs-toggle="tooltip" id="btn" style={{ border: '1px solid rgba(0, 0, 0, 0.07)', fontSize: '15px', display: 'block', width: '40px', height: '40px', lineHeight: '40px', textAlign: 'center' }} target="_blank" aria-label="Facebook">
-                                                        <i className='fab fa-twitter-square' style={{ color: 'black' }}></i>
-                                                    </a>
-                                                </li>
-                                                <li className='inline-block pr-[10px]'>
-                                                    <a href="" data-bs-toggle="tooltip" id="btn" style={{ border: '1px solid rgba(0, 0, 0, 0.07)', fontSize: '15px', display: 'block', width: '40px', height: '40px', lineHeight: '40px', textAlign: 'center' }} target="_blank" aria-label="Facebook">
-                                                        <i className='fab fa-youtube' style={{ color: 'black' }}></i>
-                                                    </a>
-                                                </li>
-                                                <li className='inline-block pr-[10px]'>
-                                                    <a href="" data-bs-toggle="tooltip" id="btn" style={{ border: '1px solid rgba(0, 0, 0, 0.07)', fontSize: '15px', display: 'block', width: '40px', height: '40px', lineHeight: '40px', textAlign: 'center' }} target="_blank" aria-label="Facebook">
-                                                        <i className='fab fa-google-plus' style={{ color: 'black' }}></i>
-                                                    </a>
-                                                </li>
-                                                <li className='inline-block pr-[10px]'>
-                                                    <a href="" data-bs-toggle="tooltip" id="btn" style={{ border: '1px solid rgba(0, 0, 0, 0.07)', fontSize: '15px', display: 'block', width: '40px', height: '40px', lineHeight: '40px', textAlign: 'center' }} target="_blank" aria-label="Facebook">
-                                                        <i className='fab fa-instagram' style={{ color: 'black' }}></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            )}
-            <div className="hiraola-product-tab_area-2 sp-product-tab_area">
+            <div className="hiraola-cart-area">
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-12">
-                            <div className="sp-product-tab_nav">
-                                <div className="product-tab">
-                                    <ul className="nav product-menu">
-                                    <li>
-                                        <a id="tab"  style={{ color: ActiveTab === 'description' ? "#cda557" : '#595959',cursor:'pointer' }}>
-                                            <span style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',fontWeight:'bold',cursor:'pointer'}} onClick={()=>handleTabChange("description")}>Description</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a id="tab"  style={{ color: ActiveTab === 'specification' ? "#cda557" : '#595959' }} >
-                                            <span style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',fontWeight:'bold',cursor:'pointer'}} onClick={()=>handleTabChange("specification")}>Specification</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a id="tab"  style={{ color: ActiveTab === 'reviews' ? "#cda557" : '#595959' }} >
-                                            <span style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',fontWeight:'bold',cursor:'pointer'}} onClick={()=>handleTabChange("reviews")}>Reviews</span>
-                                        </a>
-                                    </li>
-                                    </ul>
-                                </div>
-                                <div className="tab-content hiraola-tab_content">
-                                    <div id="description" className={`tab-pane ${ActiveTab === 'description' ? 'active show' : ''}`}>
-                                    {renderTabContent()}
-                                        {/* 
-                                        <div id="reviews" className="tab-pane" ></div> */}
-                                    </div>
-                                    <div id="specification" className={`tab-pane ${ActiveTab === 'specification' ? 'active show' : ''}`}>
-                                    {renderTabContent()}
-</div>
-<div id="reviews" className={`tab-pane ${ActiveTab === 'reviews' ? 'active show' : ''}`}>
-  {/* Nội dung của tab Reviews */}
-  {renderTabContent()}
-</div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="hiraola-product_area hiraola-product_area-2 ">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="hiraola-section_title">
-                                <h4 style={{fontFamily:'"Lato", sans-serif',color:"#333333",fontWeight:"700",fontSize:'24px'}}>Special Offer</h4>
-                            </div>
-                        </div>
-                        <div className="col-lg-12">
-                            <div className="hiraola-product_slider-3 slick-initialized slick-slider">
-                            <button className="fa-solid fa-arrow-right" onClick={goToNextsecond} id="next">
-                                                <i className="ion-ios-arrow-forward"></i>
-                                            </button>
-                                <div className="slick-list draggable">
-                                    <div className="slick-track" style={{opacity:"1",width:"4624px", transform: `translate3d(-${currency * 76}px, 0px, 0px)`,transition:"all ease 0.5s"}}>
-                                    {products.map((product) => (
-                                        <div key={product.id} className="slide-item slick-slide slick-cloned" style={{width:'259px'}}>
-                                            <div className="single_product" style={{border:"1px solid #e5e5e5"}}>
-                                                <div className="product-img" style={{position:"relative",overflow:"visible"}}>
-                                                    <a href="" style={{display:"block"}}>
-                                                   
-                                                        <img src={product.image} style={{width:"100%"}} alt="" />
+                        <div className="col-12">
+                            <form action="">
+                                <div className="table-content table-responsive">
+                                    <table className="table">
+                                        <thead>
+                                            <tr>
+                                                <th className="hiraola-product-remove">Remove</th>
+                                                <th className="hiraola-product-thumbnail">Images</th>
+                                                <th className="cart-product-name">Product</th>
+                                                <th className="hiraola-product-price">Unit Price</th>
+                                                <th className="hiraola-product-quantity">Quantity</th>
+                                                <th className="hiraola-product-subtotal">Total Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style={{ verticalAlign: 'inherit' }}>
+                                        {Minicart.map((card, index) => (
+                                            <tr>
+                                                <td className="hiraola-product-remove">
+                                                    <a  id="trash" onClick={()=>deleteCard(card.ID)} style={{ color: "#595959" }}>
+                                                        <i className="fa fa-trash" title="Remove"></i>
                                                     </a>
-                                                    <span className="sticker-2">
-                                                        Sale
-                                                    </span>
-                                                    <div className="add-actions">
-                                                        <ul>
-                                                            <li>
-                                                                <a href="" className="hiraola-add_cart">
-                                                                    <i className="ion-bag"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="" className="hiraola-add_compare">
-                                                                    <i className="ion-ios-shuffle-strong"></i>
-                                                                    </a></li>
-                                                                    <li className="quick-view-btn">
-                                                                        <a href="">
-                                                                            <i className="ion-eye"></i>
-                                                                        </a>
-                                                                    </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div className="hiraola-product_content">
-                                                    <div className="product-desc_info">
-                                                        <h6 style={{fontFamily:"Lato, sans-serif",color:"#333333",fontWeight:"700"}}>
-                                                            <a href="" style={{fontFamily:"Lato, sans-serif",color:"#333333",fontWeight:"700"}} className="product-name">{product.name}</a>
-                                                        </h6>
-                                                        <div className="price-box">
-                                                            <span className="new-price">£{product.price}</span>
+                                                </td>
+                                                <td className="hiraola-product-thumbnail">
+                                                    <a href="" className="flex justify-center">
+                                                        <img src={`http://127.0.0.1:8000/${card.link}`} style={{ objectFit: 'cover' }} width={90} height={115} alt="" />
+                                                    </a>
+                                                </td>
+                                                <td className="hiraola-product-name">
+                                                    <a href="" id="productName" style={{ fontSize: '16px', fontWeight: '500', textTransform: 'capitalize', fontFamily: '"Lato", sans-serif', color: "#595959" }}>{card.Name}</a>
+                                                </td>
+                                                <td className="hiraola-product-price" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                                                    <span className="amount" style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: '"Lato", sans-serif', color: '#212529' }}>${card.Price}</span>
+                                                </td>
+                                                <td className="quantity">
+                                                    <label htmlFor="" style={{ marginBottom: '0', fontFamily: '"Lato", sans-serif', color: '#212529', fontSize: '13px' }}>Quanlity</label>
+                                                    <br />
+                                                    <div className="cart-plus-minus" style={{ margin: '6px 0' }}>
+                                                        <input type="text" value={card.TotalQuantity} className="cart-plus-minus-box" style={{ color: '#888888' }} />
+                                                        <div className="dec qtybutton">
+                                                            <i className="fa fa-angle-down"></i>
                                                         </div>
-                                                        <div className="additional-add_action">
-                                                            <ul>
-                                                                <li>
-                                                                    <a href="" className="hiraola-add_compare" style={{color:"#595959",textDecoration:"none"}}>
-                                                                        <i className="ion-android-favorite-outline"></i>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                        <div className="inc qtybutton">
+                                                            <i className="fa fa-angle-up"></i>
                                                         </div>
-                                                        <div className="rating-box">
-                                <ul>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="product-buttons" style={{paddingTop:'12px'}}>
-																				<a className="btn btn-primary mr-2"  >
-																					Detail
-																				</a>
-																				<button className="btn btn-success" onClick={()=>handleAddToCard(product.id)}     >
-																					Add to Cart
-																				</button>
-																			</div>
+                                                        <div className="dec qtybutton">
+                                                            <i className="fa fa-angle-down" onClick={() => handleDecrement(index,card.ID)}></i>
+                                                        </div>
+                                                        <div className="inc qtybutton" onClick={() => handleIncrement(index)}>
+                                                            <i className="fa fa-angle-up"></i>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                </td>
+                                                <td className="product-subtotal" style={{ fontSize: '16px', fontWeight: '700' }}>
+                                                    <span className="amount" style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: '"Lato", sans-serif', color: '#212529' }}>${caculateTotalPrice(card.TotalQuantity,card.Price)}</span>
+                                                </td>
+                                            </tr>
+                                         ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="row">
+                                    <div className="col-12">
+                                        <div className="coupon-all">
+                                            <div className="coupon">
+                                                <input type="text" id="coupon_code" className="input-text" placeholder="Coupon code" />
+                                                <input type="submit" className="button" name="apply_coupon" value={"Apply coupon"}/>
                                             </div>
                                         </div>
-                                       ))}
-                                     
-                                      
-                                       
                                     </div>
                                 </div>
-                                <button className="fa-solid fa-arrow-left" onClick={goToPrevSecond} id="prev" >
-                                                <i className="ion-ios-arrow-forward"></i>
-                                            </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="hiraola-product_area hiraola-product_area-2 ">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="hiraola-section_title">
-                                <h4 style={{fontFamily:'"Lato", sans-serif',color:"#333333",fontWeight:"700",fontSize:'24px'}}>New Product</h4>
-                            </div>
-                        </div>
-                        <div className="col-lg-12">
-                            <div className="hiraola-product_slider-3 slick-initialized slick-slider">
-                            <button className="fa-solid fa-arrow-right" onClick={goToNextsecond2} id="next">
-                                                <i className="ion-ios-arrow-forward"></i>
-                                            </button>
-                                <div className="slick-list draggable">
-                                    <div className="slick-track" style={{opacity:"1",width:"4624px", transform: `translate3d(-${curent * 76}px, 0px, 0px)`,transition:"all ease 0.5s"}}>
-                                    {NewProduct.map((product) => (
-                                        <div key={product.id} className="slide-item slick-slide slick-cloned" style={{width:'259px'}}>
-                                            <div className="single_product" style={{border:"1px solid #e5e5e5"}}>
-                                                <div className="product-img" style={{position:"relative",overflow:"visible"}}>
-                                                    <a href="" style={{display:"block"}}>
-                                                   
-                                                        <img src={product.image} style={{width:"100%"}} alt="" />
-                                                    </a>
-                                                    <span className="sticker-2">
-                                                        Sale
-                                                    </span>
-                                                    <div className="add-actions">
-                                                        <ul>
-                                                            <li>
-                                                                <a href="" className="hiraola-add_cart">
-                                                                    <i className="ion-bag"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="" className="hiraola-add_compare">
-                                                                    <i className="ion-ios-shuffle-strong"></i>
-                                                                    </a></li>
-                                                                    <li className="quick-view-btn">
-                                                                        <a href="">
-                                                                            <i className="ion-eye"></i>
-                                                                        </a>
-                                                                    </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div className="hiraola-product_content">
-                                                    <div className="product-desc_info">
-                                                        <h6 style={{fontFamily:"Lato, sans-serif",color:"#333333",fontWeight:"700"}}>
-                                                            <a href="" style={{fontFamily:"Lato, sans-serif",color:"#333333",fontWeight:"700"}} className="product-name">{product.name}</a>
-                                                        </h6>
-                                                        <div className="price-box">
-                                                            <span className="new-price">£{product.price}</span>
-                                                        </div>
-                                                        <div className="additional-add_action">
-                                                            <ul>
-                                                                <li>
-                                                                    <a href="" className="hiraola-add_compare" style={{color:"#595959",textDecoration:"none"}}>
-                                                                        <i className="ion-android-favorite-outline"></i>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div className="rating-box">
-                                <ul>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                    <li style={{display:'inline-block'}}>
-                                        <i className="fa fa-star-of-david" style={{color:"#cda557",fontWeight:"900"}}></i>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="product-buttons" style={{paddingTop:'12px'}}>
-																				<a className="btn btn-primary mr-2"  >
-																					Detail
-																				</a>
-																				<button className="btn btn-success" onClick={()=>handleAddToCard(product.id)}     >
-																					Add to Cart
-																				</button>
-																			</div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <div className="row">
+                                    <div className="col-md-5    " style={{paddingTop:"30px"}}>
+                                        <div className="cart-page-total">
+                                        <h2 style={{fontFamily:'"Lato", sans-serif',color:'#333333'}}>Cart totals</h2>
+                                        <ul>
+                                            <li style={{fontFamily:'"Lato", sans-serif',color:'#595959'}}>Subtotal 
+                                                <span>${Minicart.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2)}</span>
+                                            </li>
+                                            <li style={{fontFamily:'"Lato", sans-serif',color:'#595959'}}>
+                                            Total 
+                                            <span>${Minicart.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2)}</span>
+                                            </li>
+                                        </ul>
+                                        <a href="" id="checkout">Proceed to checkout</a>
                                         </div>
-                                       ))}
-                                     
-                                      
-                                       
+                                        
                                     </div>
                                 </div>
-                                <button className="fa-solid fa-arrow-left" onClick={goToPrevSecond2} id="prev" >
-                                                <i className="ion-ios-arrow-forward"></i>
-                                            </button>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -1597,4 +966,4 @@ function DetailProduct() {
 
     )
 }
-export default DetailProduct;
+export default MiniCart;

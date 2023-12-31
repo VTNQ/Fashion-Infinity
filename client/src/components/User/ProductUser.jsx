@@ -1180,7 +1180,7 @@ function ProductUser() {
 																<div className="col-sm-4 mb-3" key={index + rowIndex}>
 																	<div className="product_1r1 clearfix">
 																		<div className="clearfix mgt-center">
-																			<a onClick={()=>navigate('/DetailProduct',{state:{IDProduct:productInRow.IDproduct}})} className="product-link">
+																			<a onClick={()=>navigate('/DetailProduct',{state:{IDProduct:productInRow.IDproduct,ID:ID}})} className="product-link">
 																				{/* Use the same image for each product */}
 																				<img
 																					src={`http://127.0.0.1:8000/${productInRow.link}`}

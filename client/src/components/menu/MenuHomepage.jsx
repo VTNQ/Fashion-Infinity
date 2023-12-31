@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import { useLocation,useNavigate } from 'react-router-dom';
 import './menu.css';
+import Swal from 'sweetalert2';
 import us from './image/us.png';
 import France from './image/France.png';
 import logo from './image/logo.png';
@@ -353,7 +354,7 @@ function MenuHomepage() {
                                                 <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Compare</a></li>
                                                 <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>FAQ</a></li>
                                                 <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>404 Error</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Comming soon</a></li>
+
                                             </ul>
                                         </li>
                                         <li className="inline-block pr-[30px]">

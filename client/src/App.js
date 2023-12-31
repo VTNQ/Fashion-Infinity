@@ -19,8 +19,9 @@ import ShowCustomer from './components/superadmin/ShowCustomer';
 import ShowAdmin  from './components/superadmin/ShowAdmin';
 import Layout from './components/Layout';
 import Homepage from './components/layout/homepage/Homepage';
-
+import MiniCart from './components/Minicart/MiniCart';
 import ProductUser from './components/User/ProductUser';
+import Customer from './components/Customer';
 import Menu from './components/menu/MenuHomepage';
 import WareHouse from './components/WareHouse';
 import DetailProduct from './components/DetailProdutct/DetailProduct';
@@ -62,6 +63,8 @@ function App() {
         <Route path='/menu' element={<Menu />}/>
         <Route path='/WareHouse' element={<WareHouse/>}/>
         <Route path='/DetailProduct' element={<DetailProduct/>}/>
+        <Route path='/MiniCart' element={<MiniCart/>}/>
+        <Route path='/Customer' element={<Customer/>}/>
       </Routes>
     </Router>
   );
