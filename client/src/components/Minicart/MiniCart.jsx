@@ -17,6 +17,15 @@ import logo2 from '../menu/image/logorespon.png';
 import jewry from './2-2.png';
 import axios from "axios";
 function MiniCart() {
+    const [paymentUrl, setPaymentUrl] = useState('');
+
+    const [selectedBank, setSelectedBank] = useState('NCB'); // Default to NCB
+
+    const handleBankSelection = (event) => {
+      setSelectedBank(event.target.value);
+    };
+    
+  
     const location = useLocation();
     const ID = location.state?.ID || '';
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -46,6 +55,7 @@ function MiniCart() {
     const caculateTotalPrice=(quanlity,Price)=>{
         return (quanlity*Price).toFixed(2);
     }
+    const IDProduct = location.state?.IDProduct || '';
     useEffect(()=>{
         const fetchMinicart=async()=>{
             try{
@@ -950,7 +960,7 @@ function MiniCart() {
                                             <span>${Minicart.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2)}</span>
                                             </li>
                                         </ul>
-                                        <a href="" id="checkout">Proceed to checkout</a>
+                                        <a  id="checkout" onClick={() => navigate('/Check', { state: { username: username, ID: ID,IDProduct:IDProduct } })}>Proceed to checkout</a>
                                         </div>
                                         
                                     </div>
@@ -960,6 +970,8 @@ function MiniCart() {
                     </div>
                 </div>
             </div>
+        
+    
         </div>
 
 

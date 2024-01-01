@@ -14,6 +14,7 @@ use App\Http\Controllers\cardController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\HomeProduct;
 use App\Http\Controllers\MiniCartController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WareHouseController;
 use Illuminate\Http\Request;
@@ -92,7 +93,7 @@ Route::post('/updateStatus', [LoginController::class, 'updateStatus'])->name("up
 Route::post('/updateonline',[LoginController::class,'updateonline'])->name("updateonline");
 Route::get('/ShowMiniCart/{id}',[MiniCartController::class,'ShowMiniCart'])->name("ShowMiniCart");
 Route::post("/DeleteCard/{id}",[MiniCartController::class,"DeleteCard"])->name("DeleteCard");
-
+Route::post('/payment',[PaymentController::class,'payment'])->name('payment');
 
 
 

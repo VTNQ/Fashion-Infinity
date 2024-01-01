@@ -26,6 +26,8 @@ import Menu from './components/menu/MenuHomepage';
 import WareHouse from './components/WareHouse';
 import Footer from './components/footer/FooterHome';
 import DetailProduct from './components/DetailProdutct/DetailProduct';
+import CheckOut from './components/Checkout/CheckOut';
+
 function App() {
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -67,6 +69,8 @@ function App() {
         <Route path='/MiniCart' element={<MiniCart/>}/>
         <Route path='/Customer' element={<Customer/>}/>
         <Route path='/footer' element={<Footer/>}/>
+        <Route path='/Check' element={<CheckOut/>}/>
+       
       </Routes>
     </Router>
   );

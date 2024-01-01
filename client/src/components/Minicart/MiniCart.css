@@ -156,3 +156,19 @@
     background-color: #cda557 !important;
     transition: all ease 0.5s;
 }
+#checkout{
+    background-color: #595959;
+    border: 0 none;
+    border-radius: 2px;
+    color: #ffffff;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    height: 42px;
+    letter-spacing: 1px;
+    line-height: 42px;
+    padding: 0 25px;
+    text-transform: uppercase;
+    width: inherit;
+}
