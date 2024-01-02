@@ -125,6 +125,43 @@
     border: 1px solid transparent;
     cursor: pointer;
 }
+.checkout-payment-method-view__current {
+    display: flex;
+    align-items: center;
+    min-height: 5.625rem;
+    box-sizing: border-box;
+    padding-left: 1.875rem;
+    padding-right: 1.875rem;
+}
+.checkout-payment-setting {
+    position: relative;
+    padding: 0.625rem 1.5rem 1.25rem;
+    border-bottom: 0.0625rem solid rgba(0,0,0,.05);
+}
+.checkout-payment-method-view__current-title {
+    font-size: 1.125rem;
+    width: 12.5rem;
+    color: #222;
+}
+.cod-button:hover{
+    background-color: #4CAF50 !important;
+    color: #fff !important;
+    transition: all ease 0.5s;
+}
+.col-paypal{
+    background: #0070ba !important;
+    color: #fff !important;
+}
+.col-delivery{
+    background-color: #4CAF50 !important;
+    color: #fff !important;
+}
+.paypal-button:hover{
+    background: #0070ba !important;
+    color: #fff !important;
+    transition: all ease 0.5s;
+}
+
 .order-button-payment input:hover{
     background-color: #cda557 !important;
     transition: all ease 0.5s;

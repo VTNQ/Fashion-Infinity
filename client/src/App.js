@@ -70,7 +70,6 @@ function App() {
         <Route path='/Customer' element={<Customer/>}/>
         <Route path='/footer' element={<Footer/>}/>
         <Route path='/Check' element={<CheckOut/>}/>
-       
       </Routes>
     </Router>
   );

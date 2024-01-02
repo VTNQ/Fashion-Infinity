@@ -28,7 +28,47 @@ function MenuHomepage() {
     const [BlogFormat, setBlogFormat] = useState(false);
     const [Grid, setGrid] = useState(false);
     const [userSetting,setuserSetting]=useState(false);
-    
+    const [formData, setFormData] = useState({
+        Country: '',
+        FullName:'',
+        City:'',
+        PostCode:'',
+        Phone:''
+      });
+      const deleteCard=async (IDProduct)=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    id_Account: ID,
+                }),
+            });
+            if(!response.ok){
+                throw new Error('Failed to Delete card');
+            }
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }else{
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+    }
     const [cartData,setCardData]=useState([]);
     const [currency,setcurrency]=useState(false);
     const[language,setlanguage]=useState(false);

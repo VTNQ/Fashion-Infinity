@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import { Magnifier } from 'react-image-magnify';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import '../menu/menu.css';
 import Slider from 'react-slick';
-
+import Swal from 'sweetalert2';
 import us from '../menu/image/us.png';
 import France from '../menu/image/France.png';
 import 'slick-carousel/slick/slick.css';
@@ -17,24 +18,49 @@ import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
 
 import axios from "axios";
-function CheckOut() {
 
+function CheckOut() {
+    const [Account,setAccount]=useState([]);
+    const location = useLocation();
+    const ID = location.state?.ID || '';
+    const [formData, setFormData] = useState({
+        Address:'',
+        FullName:'',
+        City:'',
+        PostCode:'',
+        Phone:'',
+        Email:''
+    });
+    useEffect(() => {
+        const fetchMinicart = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/DefaultOrder/${ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setAccount(data);
+    
+                    // Set formData based on Account values
+                    setFormData({
+                        Address: data.Address || '', // Set to empty string if null
+                        FullName: data.FullName || '',
+                        City: data.City || '',
+                        PostCode: data.PostCode || '',
+                        Phone: data.Phone || ''
+                    });
+                    setselectedItem(data.Country || 'Bangladesh')
+                } else {
+                    console.error("Failed to fetch cart data");
+                }
+            } catch (error) {
+                console.error('Error during fetch:', error);
+            }
+        };
+        fetchMinicart();
+    }, [ID]);
     const [selectedItem,setselectedItem]=useState("Bangladesh");
     const [shipItem,setshipItem]=useState("Bangladesh");
     const [checkout,setcheckout]=useState([]);
-    const location = useLocation();
-    const ID = location.state?.ID || '';
-    const IDProduct = location.state?.IDProduct || '';
-    const [isCouponVisible,setIsCouponVisible]=useState(false);
-    const [combo,setcombo]=useState(false);
-    const [ship,setship]=useState(false);
-    const caculateTotalPrice=(quanlity,Price)=>{
-        return (quanlity*Price).toFixed(2);
-    }
-    const [ischeckbox,setischeckbox]=useState(false);
-    const [Direct,setDirect]=useState(false);
-     const [Payment,setPayment]=useState(false);
-     useEffect(()=>{
+    useEffect(()=>{
         const fetchMinicart=async()=>{
             try{
                 const response=await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
@@ -50,6 +76,115 @@ function CheckOut() {
         }
         fetchMinicart();
     },[])
+    
+    const IDProduct = location.state?.IDProduct || '';
+    const [isCouponVisible,setIsCouponVisible]=useState(false);
+    const [combo,setcombo]=useState(false);
+    const [ship,setship]=useState(false);
+    const caculateTotalPrice=(quanlity,Price)=>{
+        return (quanlity*Price).toFixed(2);
+    }
+    const [paypal,setpaypal]=useState(false);
+    const [delivery,setdelivery]=useState(false);
+    const buttondelivery=()=>{
+        setdelivery(!delivery);
+        setpaypal(false)
+    }
+    const buttonpaypal=()=>{
+        setdelivery(false);
+        setpaypal(!paypal);
+        
+    }
+    const [ischeckbox,setischeckbox]=useState(false);
+    const [Direct,setDirect]=useState(false);
+     const [Payment,setPayment]=useState(false);
+     const AddCard = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/Addorder", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id_Account: ID,
+                    Country: selectedItem,
+                    FullName: formData.FullName,
+                    City: formData.City,
+                    PostCode: formData.PostCode,
+                    Phone: formData.Phone,
+                    Address: formData.Address,
+                    TotalPrice: checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2),
+                    id_product: checkout.map(card => card.ID),
+                    Quality: checkout.map(card => card.TotalQuantity),
+                }),
+            });
+            console.log(checkout.map(card => card.ID))
+            const responseData=await response.json();
+            if(response.ok){
+                Swal.fire({
+                    icon: "success",
+                    title: "Add category successfully",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  const response = await fetch(`http://127.0.0.1:8000/api/DefaultOrder/${ID}`);
+                  
+                  if (response.ok) {
+                      const data = await response.json();
+                      setAccount(data);
+      
+                      // Set formData based on Account values
+                      setFormData({
+                          Address: data.Address || '', // Set to empty string if null
+                          FullName: data.FullName || '',
+                          City: data.City || '',
+                          PostCode: data.PostCode || '',
+                          Phone: data.Phone || ''
+                      });
+                      setselectedItem(data.Country || 'Bangladesh')
+                      const responsedata=await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
+                if(response.ok){
+                    const data=await responsedata.json();
+                    setcheckout(data);
+                }
+            }
+        }
+           
+        } catch (error) {
+            console.error('Error adding card:', error);
+        }
+    };
+    
+    // Helper function to show success message using SweetAlert
+    const showSuccessMessage = () => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Add Successful',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    };
+    
+    // Helper function to reset the form fields and selected item after success
+    const resetFormAndSelectedItem = () => {
+        setFormData({
+            id_Account: ID,
+            Country: selectedItem,
+            FullName: formData.FullName,
+            City: formData.City,
+            PostCode: formData.PostCode,
+            Phone: formData.Phone,
+            Address: formData.Address,
+            TotalPrice: checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2),
+            id_product: checkout.map(card => card.ID),
+            Quality: checkout.map(card => card.TotalQuantity),
+        });
+    
+        // Assuming selectedItem is a state variable that needs to be reset
+        selectedItem = '';
+    };
+    
+    
      const tooglePayment=()=>{
         setPayment(!Payment);
      }
@@ -825,7 +960,7 @@ function CheckOut() {
                                                 <span className="required">*</span>
                                                 </label>
                                                 <div className={`nice-select myniceselect wide  ${combo ? 'open' :''}`}>
-                                                    <span className="current" onClick={comboshow}>{selectedItem}</span>
+                                                    <span className="current"  onClick={comboshow}>{selectedItem}</span>
                                                     <ul className="list">
                                                         <li key="Bangladesh" data-value="Bangladesh" data-display="Bangladesh" className={`option ${selectedItem === 'Bangladesh' ? 'selected focus' : ''}`} onClick={()=>handleItemClick('Bangladesh')}>Bangladesh</li>
                                                         <li key="uk" data-value="uk"  className={`option ${selectedItem === 'London' ? 'selected focus' : ''}`} onClick={()=>handleItemClick('London')}>London</li>
@@ -837,195 +972,52 @@ function CheckOut() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-md-6">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px' }}>
-                                                First Name 
-                                                <span className="required">*</span>
-                                                </label>
-                                                <input type="text" />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Last Name 
-                                                <span className="required">*</span>
-                                                </label>
-                                                <input type="text" />
-                                            </div>
-                                        </div>
                                         <div className="col-md-12">
                                             <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Company Name</label>
-                                                <input type="text"  />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-12">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Address 
+                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Full Name
                                                 <span className="required">*</span>
                                                 </label>
-                                                <input type="text" placeholder="Street address" />
+                                                <input type="text" value={formData.FullName} onChange={(e) => setFormData({ ...formData, FullName: e.target.value })} />
                                             </div>
                                         </div>
+
                                         <div className="col-md-12">
                                             <div className="checkout-form-list">
-                                                <input type="text" placeholder="Apartment, suite, unit etc. (optional)" />
+                                                <label htmlFor=""  style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Address 
+                                                <span className="required">*</span>
+                                                </label>
+                                                <input type="text" value={formData.Address} onChange={(e)=>setFormData({...formData,Address:e.target.value})} placeholder="Street address" />
                                             </div>
                                         </div>
+  
                                         <div className="col-md-12">
                                             <div className="checkout-form-list">
                                                 <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Town / City 
                                                 <span className="required">*</span>
                                                 </label>
-                                                <input type="text" />
+                                                <input type="text" value={formData.City} onChange={(e) => setFormData({ ...formData, City: e.target.value })} />
                                             </div>
                                         </div>
-                                        <div className="col-md-6">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>State / County 
-                                                <span className="required">*</span>
-                                                </label>
-                                                <input type="text" placeholder="" />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-6">
+                                        
+                                        <div className="col-md-12">
                                             <div className="checkout-form-list">
                                                 <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Postcode / Zip 
                                                 <span className="required">*</span>
                                                 </label>
-                                                <input type="text" />
+                                                <input type="text" value={formData.PostCode} onChange={(e) => setFormData({ ...formData, PostCode: e.target.value })} />
                                             </div>
                                         </div>
-                                        <div className="col-md-6">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Email Address 
-                                                <span className="required">*</span>
-                                                </label>
-                                                <input type="email" />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-6">
+                                       
+                                        <div className="col-md-12">
                                             <div className="checkout-form-list">
                                                 <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Phone
                                                 <span className="required">*</span>
                                                 </label>
-                                                <input type="number" />
+                                                <input type="text" value={formData.Phone} onChange={(e) => setFormData({ ...formData, Phone: e.target.value })} />
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="different-address">
-                                        <div className="ship-different-title">
-                                            <h3 style={{fontFamily:'"Lato", sans-serif',color:'#333333',fontWeight:'bold'}}>
-                                                <label htmlFor="">Ship to a different address?</label>
-                                                <input id="ship-box" type="checkbox" onChange={tooglecheckbox}  />
-                                            </h3>
-                                        </div>
-                                        <div  className={`ship-box-info ${ischeckbox ? 'visible' : 'hidden'}`} >
-                                            <div className="col-md-12">
-                                                <div className="myniceselect country-select clearfix">
-                                                    <label htmlFor=""style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>
-                                                    Country 
-                                                    <span className="required">*</span>
-                                                    </label>
-                                                    <div className={`nice-select myniceselect wide  ${ship ? 'open' :''}`}>
-                                                    <span className="current" onClick={showship}>{shipItem}</span>
-                                                    <ul className="list">
-                                                        <li key="Bangladesh" data-value="Bangladesh" data-display="Bangladesh" className={`option ${shipItem === 'Bangladesh' ? 'selected focus' : ''}`} onClick={()=>handleItemHistory('Bangladesh')}>Bangladesh</li>
-                                                        <li key="uk" data-value="uk"  className={`option ${shipItem === 'London' ? 'selected focus' : ''}`} onClick={()=>handleItemHistory('London')}>London</li>
-                                                        <li key="rou" data-value="rou"  className={`option ${shipItem === 'Romania' ? 'selected focus' : ''}`} onClick={()=>handleItemHistory('Romania')}>Romania</li>
-                                                        <li key="fr" data-value="fr"  className={`option ${shipItem === 'French' ? 'selected focus' : ''}`} onClick={()=>handleItemHistory('French')}>French</li> 
-                                                        <li key="de" data-value="de"  className={`option ${shipItem === 'Germany' ? 'selected focus' : ''}`} onClick={()=>handleItemHistory('Germany')}>Germany</li> 
-                                                        <li key="aus" data-value="aus"  className={`option ${shipItem === 'Australia' ? 'selected focus' : ''}`} onClick={()=>handleItemHistory('Australia')}>Australia</li> 
-                                                    </ul>
-                                                </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="checkout-form-list">
-                                                    <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>First Name 
-                                                    <span className="required">*</span>
-                                                    </label>
-                                                    <input type="text" />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="checkout-form-list">
-                                                    <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Last Name 
-                                                    <span className="required">*</span>
-                                                    </label>
-                                                    <input type="text" />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="checkout-form-list">
-                                                    <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Company Name 
-                                                    </label>
-                                                    <input type="text" />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="checkout-form-list">
-                                                    <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Address
-                                                    <span className="required">*</span>
-                                                    </label>
-                                                    <input type="text" placeholder="Street address"/>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="checkout-form-list">
-                                                   
-                                                    <input type="text" placeholder="Apartment, suite, unit etc. (optional)"/>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="checkout-form-list">
-                                                    <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Town / City
-                                                    <span className="required">*</span>
-                                                    </label>
-                                                    <input type="text" />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="checkout-form-list">
-                                                    <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>State / County
-                                                    <span className="required">*</span>
-                                                    </label>
-                                                    <input type="text" />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="checkout-form-list">
-                                                    <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Postcode / Zip
-                                                    <span className="required">*</span>
-                                                    </label>
-                                                    <input type="text" />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="checkout-form-list">
-                                                    <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Email Address
-                                                    <span className="required">*</span>
-                                                    </label>
-                                                    <input type="email" />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="checkout-form-list">
-                                                    <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Phone
-                                                    <span className="required">*</span>
-                                                    </label>
-                                                    <input type="text" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="order-notes">
-                                            <div className="checkout-form-list checkout-form-list-2">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Order Notes</label>
-                                                <textarea name="" id="checkout-mess" placeholder="Notes about your order, e.g. special notes for delivery." cols="30" rows="10"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </form>
                         </div>
@@ -1112,10 +1104,38 @@ function CheckOut() {
                                                         </p>
                                                     </div>
                                                 </div>
+                                                <div className="card">
+                                            <div className="card-header" id="payment-1">
+                                                    <h5 className="panel-title">
+                                                        <a  className="collapsed" style={{color:'#595959',textDecoration:'none'}}  >
+                                                       
+                                                   Phuong thuc thanh toan
+                                                    
+                                                    </a>
+                                                    </h5>
+                                                </div>
+                                                <div >
+                                                    <div className="card-body">
+                                                        <p style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px',marginTop:'0',marginBottom:'1rem'}}>
+                                                        Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.
+                                                        </p>
+                                                        <button className={`paypal-button ${paypal ?'col-paypal':''}`} onClick={buttonpaypal}  style={{ background: '#fff', color: '#000000CC',border:'1px solid rgba(0,0,0,.09)', padding: '10px', borderRadius: '5px', marginRight: '10px',outline:'none' }}>
+                                                        <i class="fa-brands fa-paypal"></i>
+            Pay with PayPal
+          </button>
+          <button className={`cod-button ${delivery ?'col-delivery':''}`}  style={{ background: '#fff', color: '#000000CC',border:'1px solid rgba(0,0,0,.09)', padding: '10px', borderRadius: '5px' }} onClick={buttondelivery}>
+          Payment on delivery
+          </button>
+                                                    </div>
+                                                </div>
+                                               
+                                               
+                                            </div>
                                                 <div className="order-button-payment">
-                                                    <input type="button" value="Place order" />
+                                                    <input type="button" value="Place order" onClick={()=>AddCard()} />
                                                 </div>
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
