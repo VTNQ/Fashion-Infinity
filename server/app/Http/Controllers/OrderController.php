@@ -15,6 +15,21 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     //
+    public function detailCustomer($ID){
+        $Customer=DB::table("order")->where("ID",$ID)->first();
+        return response()->json($Customer,200);
+    }
+    public function detailProductOrder($ID){
+        $ProductOrder=DB::table('order')->join("detailorder","order.ID","=","detailorder.id_order")->join
+        ("product","detailorder.id_product","=","product.ID")->where("order.ID",$ID)->get();
+        return response()->json($ProductOrder,200);
+    }
+    public function displayOrder(){
+        $Order=DB::table("account")->join("order","account.ID","=","order.id_Account")->select(
+          ["order.ID","order.order_code","order.status"]  
+        )->get();
+        return response()->json($Order,200);
+    }
     public function DefaultOrder($ID)
     {
         $Account = DB::table('account')->where('ID', $ID)->first();
@@ -56,7 +71,9 @@ class OrderController extends Controller
                     'Postcode' => $request->input('PostCode'),
                     'id_Account' => $request->input('id_Account'),
                     'TotalPrice' => $request->input('TotalPrice'),
-                    'Country' => $request->input('Country')
+                    'Country' => $request->input('Country'),
+                    'payments'=>$request->input('payments'),
+                    'order_code'=>bin2hex(random_bytes(4))
                 ]);
                 $idProducts = $request->input('id_product');
                 $qualities = $request->input('Quality');
@@ -131,7 +148,9 @@ class OrderController extends Controller
                     'Postcode' => $request->input('PostCode'),
                     'id_Account' => $request->input('id_Account'),
                     'TotalPrice' => $request->input('TotalPrice'),
-                    'Country' => $request->input('Country')
+                    'Country' => $request->input('Country'),
+                    'payments'=>$request->input('payments'),
+                    'order_code'=>bin2hex(random_bytes(4))
                 ]);
                 $idProducts = $request->input('id_product');
                 $qualities = $request->input('Quality');

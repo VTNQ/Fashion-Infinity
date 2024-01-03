@@ -17,6 +17,7 @@ use App\Http\Controllers\MiniCartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransportfeeController;
 use App\Http\Controllers\WareHouseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -96,12 +97,14 @@ Route::get('/ShowMiniCart/{id}',[MiniCartController::class,'ShowMiniCart'])->nam
 Route::post("/DeleteCard/{id}",[MiniCartController::class,"DeleteCard"])->name("DeleteCard");
 Route::post('/Addorder',[OrderController::class,'Addorder'])->name('Addorder');
 Route::get('/DefaultOrder/{id}',[OrderController::class,'DefaultOrder'])->name('DefaultOrder');
-
-
-
-
-
-
+Route::get('/displayOrder',[OrderController::class,'displayOrder'])->name('displayOrder');
+Route::get('/detailCustomer/{id}',[OrderController::class,'detailCustomer'])->name('detailCustomer');
+Route::get('/detailProductOrder/{id}',[OrderController::class,'detailProductOrder'])->name('detailProductOrder');
+Route::get('/displaywardCity',[TransportfeeController::class,'displaywardCity'])->name('displaywardCity');
+Route::get('/displaydistrict',[TransportfeeController::class,'displaydistrict'])->name('displaydistrict');
+Route::get('/displayward',[TransportfeeController::class,'displayward'])->name('displayward');
+Route::post('/Adddelivery_charges',[TransportfeeController::class,'Adddelivery_charges'])->name('Adddelivery_charges');
+Route::get('/displaydelivery',[TransportfeeController::class,'displaydelivery'])->name('displaydelivery');
 
 
 

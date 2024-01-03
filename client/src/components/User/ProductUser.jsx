@@ -461,7 +461,7 @@ function ProductUser() {
 			copyOfProducts.sort((a, b) => b.Price - a.Price);
 		} else if (selectedSortOption === 'Price, Low To High') {
 			copyOfProducts.sort((a, b) => a.Price - b.Price);
-		} else if (selectedSortOption === 'latest product') {
+		} else if (selectedSortOption === 'Date, New To Old') {
 			copyOfProducts.sort((a, b) => b.IDproduct - a.IDproduct);
 		}
 

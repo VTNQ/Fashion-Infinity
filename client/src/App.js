@@ -27,7 +27,9 @@ import WareHouse from './components/WareHouse';
 import Footer from './components/footer/FooterHome';
 import DetailProduct from './components/DetailProdutct/DetailProduct';
 import CheckOut from './components/Checkout/CheckOut';
-
+import Order from './components/Order';
+import DetailOrder from './components/DetailOrder';
+import Transport_fee from './components/Transport_fee';
 function App() {
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -70,6 +72,9 @@ function App() {
         <Route path='/Customer' element={<Customer/>}/>
         <Route path='/footer' element={<Footer/>}/>
         <Route path='/Check' element={<CheckOut/>}/>
+        <Route path='/order' element={<Order/>}/>
+        <Route path='/DetailOrder' element={<DetailOrder/>}/>
+        <Route path='/Transport_fee' element={<Transport_fee/>}/>
       </Routes>
     </Router>
   );

@@ -125,7 +125,7 @@ class HomeProduct extends Controller
             'picture.link',
             'product.Price',
             'Picture_status'
-        ])
+        ])->where("picture.status",1)
         ->get();
     
         return response()->json($products, 200);

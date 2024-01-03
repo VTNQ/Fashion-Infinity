@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class order extends Model
 {
     protected $table='order';
-    protected $fillable=['Start_Order','status','FullName','Address','city','Postcode','id_Account','TotalPrice','Country','Phone'];
+    protected $fillable=['Start_Order','status','FullName','Address','city','Postcode','id_Account','TotalPrice','Country','Phone','payments','order_code'];
     public $timestamps=false;
 }

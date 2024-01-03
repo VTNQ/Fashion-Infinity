@@ -85,7 +85,7 @@ function CheckOut() {
         return (quanlity*Price).toFixed(2);
     }
     const [paypal,setpaypal]=useState(false);
-    const [delivery,setdelivery]=useState(false);
+    const [delivery,setdelivery]=useState(true);
     const buttondelivery=()=>{
         setdelivery(!delivery);
         setpaypal(false)
@@ -105,18 +105,36 @@ function CheckOut() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    id_Account: ID,
-                    Country: selectedItem,
-                    FullName: formData.FullName,
-                    City: formData.City,
-                    PostCode: formData.PostCode,
-                    Phone: formData.Phone,
-                    Address: formData.Address,
-                    TotalPrice: checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2),
-                    id_product: checkout.map(card => card.ID),
-                    Quality: checkout.map(card => card.TotalQuantity),
-                }),
+                
+                body: JSON.stringify(
+                    paypal
+                      ? {
+                          id_Account: ID,
+                          Country: selectedItem,
+                          FullName: formData.FullName,
+                          City: formData.City,
+                          PostCode: formData.PostCode,
+                          Phone: formData.Phone,
+                          Address: formData.Address,
+                          TotalPrice: checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2),
+                          id_product: checkout.map(card => card.ID),
+                          Quality: checkout.map(card => card.TotalQuantity),
+                          payments:'Paypal'
+                        }
+                      : {
+                          id_Account: ID,
+                          Country: selectedItem,
+                          FullName: formData.FullName,
+                          City: formData.City,
+                          PostCode: formData.PostCode,
+                          Phone: formData.Phone,
+                          Address: formData.Address,
+                          TotalPrice: checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2),
+                          id_product: checkout.map(card => card.ID),
+                          Quality: checkout.map(card => card.TotalQuantity),
+                          payments:'Payment on delivery'
+                        }
+                  ),
             });
             console.log(checkout.map(card => card.ID))
             const responseData=await response.json();
