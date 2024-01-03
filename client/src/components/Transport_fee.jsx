@@ -31,21 +31,75 @@ function Transport_fee() {
     const handleWard = (selectedward) => {
         setSelectedWard(selectedward)
     }
-
+    const [editingOrderIndex, setEditingOrderIndex] = useState(null);
     const [formData, setFormData] = useState({
-        Price: ''
+        Price: '',
+        updatePrice: ''
     });
+    const [Categories, setCategories] = useState([]);
+    const handlePriceChange = (index, value) => {
+        const updatedCategories = [...Categories];
+        updatedCategories[index] = {
+            ...updatedCategories[index],
+            Price: value,
+        };
+        setCategories(updatedCategories);
+    
+        // Assuming you want to update order.Price as well
+        const updatedDelivery = [...delivery];
+        updatedDelivery[index] = {
+            ...updatedDelivery[index],
+            Price: value,
+        };
+       setdelivery(updatedDelivery);
+    };
+    const handlePriceInputChange = (index, value) => {
+        const updatedCategories = [...Categories];
+        updatedCategories[index] = {
+            ...updatedCategories[index],
+            Price: value,
+        };
+        setCategories(updatedCategories);
+    };
+    const [isEditing, setIsEditing] = useState(false);
+    const handleUpdatePrice = async (orderID, updatedPrice) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/updatedelivery/${orderID}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedPrice),
+            });
+    
+            if (response.ok) {
+                console.log('Delivery charge updated successfully');
+              
+            }
+    
+            
+    
+           
+            // Perform any additional actions you need
+        } catch (error) {
+            console.error('Error updating delivery charge', error);
+        }
+    };
     useEffect(() => {
         const fetchdelivery = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:8000/api/displaydelivery');
                 setdelivery(response.data);
+              
+
+           
             } catch (error) {
                 console.error('Error fetching districts', error);
             }
         }
         fetchdelivery()
     }, [])
+ 
     useEffect(() => {
         const fetchDistricts = async () => {
             try {
@@ -425,7 +479,30 @@ function Transport_fee() {
                                                     <td>{order.Namecity}</td>
                                                     <td>{order.Namedistrict}</td>
                                                     <td>{order.NameWard}</td>
-                                                    <td>{order.Price}</td>
+                                                    <td>
+                        {editingOrderIndex === index ? (
+                            <input
+                                type="number"
+                                value={order.Price}
+                                className='form-control'
+                                onChange={(e) => handlePriceChange(index, e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleUpdatePrice(order.ID, { Update_Price: order.Price });
+                                        setEditingOrderIndex(null); // Switch back to label mode
+                                    }
+                                }}
+                                onBlur={() => {
+                                    handleUpdatePrice(order.ID, { Update_Price: order.Price });
+                                    setEditingOrderIndex(null); // Switch back to label mode
+                                }}
+                            />
+                        ) : (
+                            <label onClick={() => setEditingOrderIndex(index)}>
+                                {order.Price}
+                            </label>
+                        )}
+                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>

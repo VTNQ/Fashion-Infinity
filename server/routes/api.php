@@ -105,7 +105,7 @@ Route::get('/displaydistrict',[TransportfeeController::class,'displaydistrict'])
 Route::get('/displayward',[TransportfeeController::class,'displayward'])->name('displayward');
 Route::post('/Adddelivery_charges',[TransportfeeController::class,'Adddelivery_charges'])->name('Adddelivery_charges');
 Route::get('/displaydelivery',[TransportfeeController::class,'displaydelivery'])->name('displaydelivery');
-
+Route::post('/updatedelivery/{id}',[TransportfeeController::class,'updatedelivery'])->name('updatedelivery');
 
 
 

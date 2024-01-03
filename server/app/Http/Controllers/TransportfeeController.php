@@ -42,4 +42,14 @@ class TransportfeeController extends Controller
         
         }
     }
+    public function updatedelivery(Request $request,$ID){
+        try{
+            $update=DB::table('delivery_charges')->where("ID",$ID)->update(["Price"=>$request->input("Update_Price")]);
+            if($update>0){
+                return response()->json(['message' => 'Register successful', 'Cate'=>$update]);
+            }
+        }catch(\Exception $e){
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500); 
+        }
+    }
 }
