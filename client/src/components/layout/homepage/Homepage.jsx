@@ -389,9 +389,41 @@ useEffect(()=>{
 },[]);
   
 
+//lay truy cap
+// const [visitCount, setVisitCount] = useState(0);
+
+// useEffect(() => {
+//   const fetchVisitCount = async () => {
+//     try {
+//       const response = await axios.get('http://127.0.0.1:8000/api/visits-count');
+//       setVisitCount(response.data.visitsCount);
+//     } catch (error) {
+//       console.error('Lỗi khi tải số lượt truy cập:', error);
+//     }
+//   };
+  
+//   fetchVisitCount();
+// }, []);
+
+// // Sử dụng useEffect hook để gọi API một lần khi component được mount
+// useEffect(() => {
+//   axios.post('http://127.0.0.1:8000/api/record-visit', { path: window.location.pathname })
+//     .then(response => {
+//       console.log('Visit recorded:', response.data);
+//     })
+//     .catch(error => {
+//       console.error('Error recording visit:', error);
+//     });
+// }, []); // Rỗng dependencies array để đảm bảo chỉ chạy một lần
+
+
+
+
+
     //===============================================================================================================================
     return (
       <div>
+        
         <div className="slider-container h-[80vh] relative max-w-full overflow-hidden" onMouseEnter={() => setShowButtons(true)}
       onMouseLeave={() => setShowButtons(false)}>
         <div
@@ -491,12 +523,12 @@ useEffect(()=>{
                 <div className="border-[1px] mt-3  border-[#E5E5E5] mx-[5%]"></div>
 
 
-                <div className="slider-container mt-10 pl-[5%] pr-[2.9%]">
+                <div className="slider-containerrr mt-10 pl-[5%] pr-[2.9%]">
                 <Slider ref={sliderRef} {...settings}>
           
           {productArrival.map(productNewArrival => (
             <div key={productNewArrival.ID}>
-            <div className="relative border-[#E5E5E5] border-[1px]  w-[87%]  ">
+            <div className="relative card border-[#E5E5E5] border-[1px]  w-[87%]  ">
                     <img className="w-full h-[250px] object-cover lg-max:h-[200px] md-max:h-[150px]" src={`http://127.0.0.1:8000/${productNewArrival.link}`} alt="" />
                     
                     <div class="tag-container absolute  left-0">
@@ -575,7 +607,7 @@ useEffect(()=>{
                 <div className="border-[1px] mt-3 border-[#E5E5E5] mx-[5%]"></div>
 
 
-                <div className="relative slider-container mt-10 pl-[5%] pr-[2%]" >
+                <div className=" relative slider-container mt-10 pl-[5%] pr-[2%]" >
                 <div className="absolute top-[0%] px-[5%] z-30 inset-0 flex justify-between">
                     <button onClick={previousProduct}><img className="h-[40px]" src={imageArrowLeft} alt="" /></button>
                     <button onClick={nextProduct}><img className="h-[40px]" src={imageArrowRight} alt="" /></button>
@@ -583,14 +615,18 @@ useEffect(()=>{
 
 
 
-                <div>
+                <div className="slider-containerrr">
                 <Slider ref={productSliderRef} {...settings1}>
           
           {filterProducts.length > 0 && filterProducts.map((product) => (
             <div key={product.IDproduct}>
-            <div className="relative border-[#E5E5E5] border-[1px] w-[87%]  ">
+            <div className="relative card border-[#E5E5E5] border-[1px] w-[87%]  ">
+                    
                     <img className="w-full h-[250px] object-cover lg-max:h-[200px] md-max:h-[150px]" src={`http://127.0.0.1:8000/${product.link}`} alt="" />
                     
+                    
+                    
+                   
                     <div class="tag-container absolute  left-0">
                      <div class="tag">
                              <span style={{fontFamily: 'lato'}} class="tag-text">NEW</span>
@@ -682,7 +718,7 @@ useEffect(()=>{
           
           {filterProducts1.length > 0 && filterProducts1.map((product) => (
             <div key={products1.IDproduct}>
-            <div className="relative border-[#E5E5E5] border-[1px] w-[87%]  ">
+            <div className="card relative border-[#E5E5E5] border-[1px] w-[87%]  ">
                     <img className="w-full  object-cover" src={`http://127.0.0.1:8000/${product.link}`} alt="" />
                     
                     <div class="tag-container absolute  left-0">

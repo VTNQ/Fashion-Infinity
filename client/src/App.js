@@ -23,6 +23,8 @@ import Homepage from './components/layout/homepage/Homepage';
 import ProductUser from './components/User/ProductUser';
 import Menu from './components/menu/MenuHomepage';
 import WareHouse from './components/WareHouse';
+import WareHouseSuperadmin from './components/superadmin/WareHouse';
+import ProviderSuperadmin from './components/superadmin/Provider';
 function App() {
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -51,6 +53,8 @@ function App() {
             <Route path='CreateAdmin' element={<CreateAdmin/>}/>
             <Route path='ShowCustomer' element={<ShowCustomer/>}/>
             <Route path='ShowAdmin' element={<ShowAdmin/>}/>
+            <Route path='WareHouse' element={<WareHouseSuperadmin/>}/>
+            <Route path='Provider' element={<ProviderSuperadmin/>}/>
         </Route>
         <Route path='/layout' element={<Layout/>}>
             <Route index element={<Homepage/>}/>
@@ -60,6 +64,7 @@ function App() {
         <Route path='/HomeProduct' element={<ProductUser/>}/>
         <Route path='/menu' element={<Menu />}/>
         <Route path='/WareHouse' element={<WareHouse/>}/>
+        
       </Routes>
     </Router>
   );

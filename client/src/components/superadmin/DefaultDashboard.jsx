@@ -6,10 +6,45 @@ import '../../../src/components/admin.css';
 import Swal from 'sweetalert2';
 import image from '../../../src/images/user2-160x160.jpg';
 
+
+
+
 function DefaultDashboard(){
+
+
+  //lay truy cap
+// const [visitCount, setVisitCount] = useState(0);
+
+// useEffect(() => {
+//   const fetchVisitCount = async () => {
+//     try {
+//       const response = await axios.get('http://127.0.0.1:8000/api/visits-count');
+//       setVisitCount(response.data.visitsCount);
+//     } catch (error) {
+//       console.error('Lỗi khi tải số lượt truy cập:', error);
+//     }
+//   };
+  
+//   fetchVisitCount();
+// }, []);
+
+// // Sử dụng useEffect hook để gọi API một lần khi component được mount
+// useEffect(() => {
+//   axios.post('http://127.0.0.1:8000/api/record-visit', { path: window.location.pathname })
+//     .then(response => {
+//       console.log('Visit recorded:', response.data);
+//     })
+//     .catch(error => {
+//       console.error('Error recording visit:', error);
+//     });
+// }, []); // Rỗng dependencies array để đảm bảo chỉ chạy một lần
+
+
     return(
         
         <div className="content-wrapper">
+
+
  
         <section className="content-header">
           <h1>
@@ -21,6 +56,11 @@ function DefaultDashboard(){
             <li className="active">Dashboard</li>
           </ol>
         </section>
+        {/* <div>
+    
+    <p>Số lượt truy cập hôm nay: {visitCount}</p>
+    
+  </div> */}
 
      
         <section className="content">

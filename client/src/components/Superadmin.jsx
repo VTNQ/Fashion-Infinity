@@ -61,16 +61,12 @@ function Superadmin(){
              
               <li className="treeview text-white">
                 <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username } })}>
-                  <i className="fa fa-th"></i> <span>category</span> 
+                  <i className="fa fa-th"></i> <span>Category</span> 
                 </a>
               </li>
+              
               <li className="treeview text-white">
-                <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username } })}>
-                  <i className="fa fa-th"></i> <span>Picture</span> 
-                </a>
-              </li>
-              <li className="treeview text-white">
-                <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username } })}>
+                <a className='cursor-pointer' onClick={() => navigate('/superadmin/Provider', { state: { username: username } })}>
                   <i className="fa fa-th"></i> <span>Provider</span> 
                 </a>
               </li>
@@ -86,7 +82,7 @@ function Superadmin(){
                   <li><a href="pages/charts/inline.html"><i className="fa fa-circle-o"></i> Inline charts</a></li>
                 </ul>
               </li>
-              <li className="treeview">
+              {/* <li className="treeview">
                 <a href="#">
                   <i className="fa fa-laptop"></i>
                   <span>UI Elements</span>
@@ -100,6 +96,11 @@ function Superadmin(){
                   <li><a href="pages/UI/timeline.html"><i className="fa fa-circle-o"></i> Timeline</a></li>
                   <li><a href="pages/UI/modals.html"><i className="fa fa-circle-o"></i> Modals</a></li>
                 </ul>
+              </li> */}
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/superadmin/WareHouse', { state: { username: username } })}>
+                <i className="fa fa-laptop"></i> <span>Warehouse</span> 
+                </a>
               </li>
               <li className="treeview">
                 <a href="#">

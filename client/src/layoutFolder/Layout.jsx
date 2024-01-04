@@ -14,7 +14,7 @@ function Layout(){
      
 <div style={{ fontFamily: "'Bree Serif', serif" }}>
 
-<header className="block">
+{/* <header className="block">
             <div id="contact" style={{ border: '1px solid #e5e5e5' }}>
                 <div className="container">
                     <div className="row">
@@ -558,7 +558,7 @@ function Layout(){
                     </div>
                 </div>
             </div>
-        </header>
+        </header> */}
 
 <section id="header">
  <div class="container">

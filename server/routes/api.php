@@ -13,6 +13,7 @@ use App\Http\Controllers\Account;
 use App\Http\Controllers\cardController;
 use App\Http\Controllers\HomeProduct;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\VisitController;
 use App\Http\Controllers\WareHouseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -81,6 +82,16 @@ Route::get('/getProductWareHouse',[WareHouseController::class,'getProductWareHou
 Route::post('/AddWareHouse/{id}',[WareHouseController::class,'AddWareHouse'])->name('AddWareHouse');
 Route::get('/getWareHouse/{id}',[WareHouseController::class,'getWareHouse'])->name('getWareHouse');
 Route::post("/EditWareHouse/{id}",[WareHouseController::class,"EditWareHouse"])->name("EditWareHouse");
+
+Route::get('/visits-count', [VisitController::class, 'index'])->name("visits-count");
+
+Route::post('/record-visit', [VisitController::class, 'recordVisit'])->name("record-visit");
+
+
+
+
+
+
 
 
 
