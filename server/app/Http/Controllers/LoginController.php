@@ -24,20 +24,7 @@ class LoginController extends Controller
         }
     }
    
-    public function updateonline(Request $request){
-        try {
-            $userId = $request->input('ID');
-    
-            // Update the user status based on user ID
-            DB::table('account')
-                ->where('ID', $userId)
-                ->update(['is_online' => true]);
-    
-            return response()->json(['message' => 'User status updated']);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
-        }
-    }
+
     public function updateStatus(Request $request){
         try {
             $userId = $request->input('ID');

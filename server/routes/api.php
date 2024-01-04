@@ -11,6 +11,7 @@ use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Account;
 use App\Http\Controllers\cardController;
+use App\Http\Controllers\CategoryPostController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\HomeProduct;
 use App\Http\Controllers\MiniCartController;
@@ -92,7 +93,6 @@ Route::get('/getextra/{id}',[DetailController::class,'getextra'])->name('getextr
 Route::get('/detailProduct',[DetailController::class,"detailProduct"])->name("detailProduct");
 Route::get("/getNewProduct",[DetailController::class,"getNewProduct"])->name("getNewProduct");
 Route::post('/updateStatus', [LoginController::class, 'updateStatus'])->name("updateStatus");
-Route::post('/updateonline',[LoginController::class,'updateonline'])->name("updateonline");
 Route::get('/ShowMiniCart/{id}',[MiniCartController::class,'ShowMiniCart'])->name("ShowMiniCart");
 Route::post("/DeleteCard/{id}",[MiniCartController::class,"DeleteCard"])->name("DeleteCard");
 Route::post('/Addorder',[OrderController::class,'Addorder'])->name('Addorder');
@@ -106,8 +106,8 @@ Route::get('/displayward',[TransportfeeController::class,'displayward'])->name('
 Route::post('/Adddelivery_charges',[TransportfeeController::class,'Adddelivery_charges'])->name('Adddelivery_charges');
 Route::get('/displaydelivery',[TransportfeeController::class,'displaydelivery'])->name('displaydelivery');
 Route::post('/updatedelivery/{id}',[TransportfeeController::class,'updatedelivery'])->name('updatedelivery');
-
-
+Route::post('/AddCategoryPost',[CategoryPostController::class,'AddCategoryPost'])->name('AddCategoryPost');
+Route::get('/ListCategory',[CategoryPostController::class,'ListCategory'])->name('ListCategory');
 
 
 

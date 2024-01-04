@@ -18,62 +18,6 @@ if(featureEnabled){
 function Layout(){
 	const location = useLocation();
     const ID=location.state?.ID||'';
-	useEffect(() => {
-		let inactivityTimeout;
-	
-		const resetInactivityTimer = () => {
-			clearTimeout(inactivityTimeout);
-	
-			inactivityTimeout = setTimeout(() => {
-				// User is inactive, perform logout or update status
-				// Call your API endpoint to update user status to offline
-				fetch('http://127.0.0.1:8000/api/updateStatus', {
-					method: 'POST',
-					// Additional headers or credentials if needed
-					body: JSON.stringify({ ID: ID }),
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				});
-			}, 5 * 60 * 1000); // 1 minute (adjust as needed)
-	
-
-		};
-	
-		const updateOnlineStatus = () => {
-			// Call your API endpoint to update user status to online
-			fetch('http://127.0.0.1:8000/api/updateonline', {
-				method: 'POST',
-				// Additional headers or credentials if needed
-				body: JSON.stringify({ ID: ID }),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-		};
-	
-		const handleActivity = () => {
-			// Reset the inactivity timer on activity
-			resetInactivityTimer();
-	
-			// Update online status immediately
-			updateOnlineStatus();
-		};
-	
-		// Attach event listeners to detect user activity
-		document.addEventListener('mousemove', handleActivity);
-		document.addEventListener('keypress', handleActivity);
-	
-		// Initial setup
-		resetInactivityTimer();
-	
-		// Cleanup event listeners on component unmount
-		return () => {
-			document.removeEventListener('mousemove', handleActivity);
-			document.removeEventListener('keypress', handleActivity);
-		};
-	}, [ID]); 
-	
     return(
         
      
