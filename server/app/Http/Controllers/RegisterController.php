@@ -52,7 +52,7 @@ class RegisterController extends Controller
         $randomNumber = random_int($min, $max);
 
         try {
-            $existingAccount = Account::where('Username', $request->input('Username'))->orWhere('Email', $request->input('Email'))->orWhere('Password', md5($request->input('Password')))->first();
+            $existingAccount = Account::where('Username', $request->input('Username'))->orWhere('Email', $request->input('Email'));
 
             if ($existingAccount) {
                 return response()->json(['errorAll' => 'Username or Password or Email already exists'], 422);
