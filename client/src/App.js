@@ -31,6 +31,8 @@ import Order from './components/Order';
 import DetailOrder from './components/DetailOrder';
 import Transport_fee from './components/Transport_fee';
 import Category_Post from './components/Category_Post';
+import Blog from './components/Blog/Blog';
+import AdminBlog from './components/AdminBlog';
 function App() {
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -68,7 +70,7 @@ function App() {
         <Route path='/HomeProduct' element={<ProductUser/>}/>
         <Route path='/menu' element={<Menu />}/>
         <Route path='/WareHouse' element={<WareHouse/>}/>
-        <Route path='/DetailProduct' element={<DetailProduct/>}/>
+        <Route path='/DetailProduct/:id' element={<DetailProduct/>}/>
         <Route path='/MiniCart' element={<MiniCart/>}/>
         <Route path='/Customer' element={<Customer/>}/>
         <Route path='/footer' element={<Footer/>}/>
@@ -77,6 +79,8 @@ function App() {
         <Route path='/DetailOrder' element={<DetailOrder/>}/>
         <Route path='/Transport_fee' element={<Transport_fee/>}/>
         <Route path='/Category_Post' element={<Category_Post/>}/>
+        <Route path='/Blog' element={<Blog/>}/>
+        <Route path='/AdminBlog' element={<AdminBlog/>}/>
       </Routes>
     </Router>
   );

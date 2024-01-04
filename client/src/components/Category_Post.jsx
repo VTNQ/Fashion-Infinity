@@ -11,7 +11,7 @@ import 'react-quill/dist/quill.snow.css';
 import '../components/admin.css'
 
 function Category_Post() {
-
+    const [searchTerm, setSearchtem] = useState('');
     const [editorContent, setEditorContent] = useState('');
 
     const location = useLocation();
@@ -20,40 +20,57 @@ function Category_Post() {
     const [perPage, setperPage] = useState(5);
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(0);
-    const [categoryPage,setcategoryPage]=useState([]);
+    const [categoryPage, setcategoryPage] = useState([]);
     const [formData, setFormData] = useState({
-     NamePageCategory:'',
-     status:''
+        NamePageCategory: '',
+        status: ''
     });
-    useEffect(()=>{
-        const fetchCategoryProduct=async ()=>{
-            try{
-                const response=await axios.get("http://127.0.0.1:8000/api/ListCategory")
+    const handleToggleStatus = async (ID, currentStatus) => {
+        try {
+            const response = await axios.post(`http://127.0.0.1:8000/api/UpdateCategoryUpdate/${ID}`, {
+                status: currentStatus,
+            });
+            if (response.data.message === 'Change successful') {
+                setcategoryPage((prevOrders) =>
+                    prevOrders.map((order) =>
+                        order.ID === ID ? { ...order, status: currentStatus === 1 ? 0 : 1 } : order
+                    )
+                );
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchCategoryProduct = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/ListCategory")
                 setcategoryPage(response.data);
-            }catch(error){
+            } catch (error) {
                 console.error('Error fetching providers:', error);
             }
         }
         fetchCategoryProduct();
-    },[])
-    const handleSubmit=async (e)=>{
+    }, [])
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
-            const response=await fetch("http://127.0.0.1:8000/api/AddCategoryPost",{
-                method:'POST',
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/AddCategoryPost", {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    NamePageCategory:formData.NamePageCategory,
-                    status:formData.status,
-                    Content:editorContent
+                    NamePageCategory: formData.NamePageCategory,
+                    status: formData.status,
+                    Content: editorContent
                 }),
-              
+
             })
-            
+
             const responseData = await response.json();
-            if(response.ok){
+            if (response.ok) {
                 Swal.fire({
                     icon: "success",
                     title: "Add Page Category Successfully",
@@ -61,19 +78,28 @@ function Category_Post() {
                     timer: 1500
                 });
             }
-        }catch(error){
+        } catch (error) {
             console.error('Error submitting data:', error);
         }
     }
     const [content, setContent] = useState('');
+    const filteredCategories = categoryPage.filter(category =>
 
+        category.Name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
     const handleEditorChange = (content) => {
         setEditorContent(content);
     };
-    const [searchTerm, setSearchtem] = useState('');
+    const handlePageclick = (data) => {
+        setCurrentPage(data.selected);
+    };
+    
     const [categories, setCategories] = useState([]);
     const [IsClosingPopup, setIsClosingPopup] = useState(false);
-
+    
+    const indexOflastCategory = (currentPage + 1) * perPage;
+    const indexOfFirtCategory = indexOflastCategory - perPage;
+    const currentCategories = filteredCategories.slice(indexOfFirtCategory, indexOflastCategory)
 
     return (
         <div className="wrapper">
@@ -251,7 +277,7 @@ function Category_Post() {
                                     {/* Form fields go here */}
                                     <div className="form-group">
                                         <label >Name Category Page</label>
-                                        <input name='NameCategory' className="form-control"  onChange={(e) => setFormData({ ...formData, NamePageCategory: e.target.value })} value={formData.NamePageCategory}  id="exampleInputEmail1" placeholder="Enter Name Category Post" />
+                                        <input name='NameCategory' className="form-control" onChange={(e) => setFormData({ ...formData, NamePageCategory: e.target.value })} value={formData.NamePageCategory} id="exampleInputEmail1" placeholder="Enter Name Category Post" />
 
                                     </div>
                                     <div className="form-group">
@@ -264,11 +290,11 @@ function Category_Post() {
                                     </div>
                                     <div className='form-group'>
                                         <label htmlFor="">Status</label>
-                                        <select  value={formData.status}
-    onChange={(e) => {
+                                        <select value={formData.status}
+                                            onChange={(e) => {
 
-        setFormData({ ...formData, status: e.target.value });
-    }}
+                                                setFormData({ ...formData, status: e.target.value });
+                                            }}
                                             name="UpdateCategory"
                                             className="form-control"
 
@@ -307,27 +333,46 @@ function Category_Post() {
                                             <th>#</th>
                                             <th>Name</th>
                                             <th>status</th>
-                                        
+
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {categoryPage.map((order, index) => (
-                                        <tr>
-                                            <td>{index++}</td>
-                                            <td>{order.Name}</td>
-                                           <td>  <label className="switch">
-                              <input type="checkbox" id={`toggleSwitch`}
-                               
-                                checked={order.status === 1} />
-                              <span className="slider" ></span>
-                            </label></td>
-                                        </tr>
-        ))}
+                                        {currentCategories.map((order, index) => (
+                                            <tr>
+                                                <td>{index++}</td>
+                                                <td>{order.Name}</td>
+                                                <td>  <label className="switch">
+                                                    <input type="checkbox" id={`toggleSwitch-${order.ID}`}
+                                                        onChange={() => handleToggleStatus(order.ID, order.status)}
+                                                        checked={order.status === 1} />
+                                                    <span className="slider" ></span>
+                                                </label></td>
+                                            </tr>
+                                        ))}
 
                                     </tbody>
 
                                 </table>
+                                <Pagination
+                                    previousLabel={'previous'}
+                                    nextLabel={'next'}
+                                    breakLabel={'...'}
+                                    pageCount={Math.ceil(filteredCategories.length / perPage)}
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={5}
+                                    onPageChange={handlePageclick}
+                                    containerClassName={'pagination'}
+                                    activeClassName={'active'}
+                                    previousClassName={'page-item'}
+                                    previousLinkClassName={'page-link'}
+                                    nextClassName={'page-item'}
+                                    nextLinkClassName={'page-link'}
+                                    breakClassName={'page-item'}
+                                    breakLinkClassName={'page-link'}
+                                    pageClassName={'page-item'}
+                                    pageLinkClassName={'page-link'}
 
+                                />
                             </div>
                         </div>
                         {/* Additional boxes go here */}

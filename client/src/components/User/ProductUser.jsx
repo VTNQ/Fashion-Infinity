@@ -219,14 +219,10 @@ function ProductUser() {
 		Main: '',
 		IDProduct:'',
 		Quality:1,
+		WareHouseQuality:0
 		
 	});
-	const handleIncreaseQuality = () => {
-		setFormData((prevData) => ({
-		  ...prevData,
-		  Quality: prevData.Quality + 1,
-		}));
-	  };
+	
 	
 	  const handleDecreaseQuality = () => {
 		if (formData.Quality > 1) {
@@ -303,7 +299,14 @@ function ProductUser() {
 			const response = await axios.get(`http://127.0.0.1:8000/api/detailProduct/${Productid}`);
 			// Assuming response.data is an array of items
 			const Images = [];
-		
+			const totalQuality = response.data.TotalQuantity;
+			response.data.forEach((item) => {
+			
+				formData.WareHouseQuality=item.TotalQuantity
+				// Access the 'link' property immediately after processing each item
+			   
+			  });	
+			
 			response.data.forEach((item) => {
 			  const image = {
 				...item,
@@ -319,6 +322,7 @@ function ProductUser() {
 			formData.NameProduct = selectedProduct.ProductName;
 			formData.PriceProduct = selectedProduct.Price;
 			formData.IDProduct=selectedProduct.IDproduct;
+		
 			formData.Main = `http://127.0.0.1:8000/${selectedProduct.link}`;
 		
 			// Assuming 'images' is a state variable, set the state
@@ -513,6 +517,16 @@ function ProductUser() {
         console.error('Error adding card:', error);
     }
 };
+const handleIncreaseQuality = () => {
+	const totalQuantity = formData.WareHouseQuality || 0;
+	console.log(totalQuantity)
+	if (totalQuantity > formData.Quality ) {
+		setFormData((prevData) => ({
+		  ...prevData,
+		  Quality: prevData.Quality + 1,
+		}));
+	  }
+  };
 	return (
 
 
@@ -1180,7 +1194,7 @@ function ProductUser() {
 																<div className="col-sm-4 mb-3" key={index + rowIndex}>
 																	<div className="product_1r1 clearfix">
 																		<div className="clearfix mgt-center">
-																			<a onClick={()=>navigate('/DetailProduct',{state:{IDProduct:productInRow.IDproduct,ID:ID}})} className="product-link">
+																			<a onClick={()=>navigate(`/DetailProduct/${productInRow.IDproduct}`,{state:{IDProduct:productInRow.IDproduct,ID:ID}})} className="product-link">
 																				{/* Use the same image for each product */}
 																				<img
 																					src={`http://127.0.0.1:8000/${productInRow.link}`}

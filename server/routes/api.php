@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Account;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\cardController;
 use App\Http\Controllers\CategoryPostController;
 use App\Http\Controllers\DetailController;
@@ -108,11 +109,13 @@ Route::get('/displaydelivery',[TransportfeeController::class,'displaydelivery'])
 Route::post('/updatedelivery/{id}',[TransportfeeController::class,'updatedelivery'])->name('updatedelivery');
 Route::post('/AddCategoryPost',[CategoryPostController::class,'AddCategoryPost'])->name('AddCategoryPost');
 Route::get('/ListCategory',[CategoryPostController::class,'ListCategory'])->name('ListCategory');
-
-
-
-
-
+Route::post('/UpdateCategoryUpdate/{id}',[CategoryPostController::class,'UpdateCategoryUpdate'])->name('UpdateCategoryUpdate');
+Route::get('/getpostCategory',[BlogController::class,'getpostCategory'])->name('getpostCategory');
+Route::post('/AddBlog',[BlogController::class,'AddBlog'])->name('AddBlog');
+Route::get('/ViewBlog',[BlogController::class,'ViewBlog'])->name('ViewBlog');
+Route::post('/UpdateStatus/{id}',[BlogController::class,'UpdateStatus'])->name('UpdateStatus');
+Route::put('/deleteBlog/{id}',[BlogController::class,'deleteBlog'])->name('deleteBlog');
+Route::get('/getTopBlogcategory',[BlogController::class,'getBlog'])->name('getBlog');
 
 
 

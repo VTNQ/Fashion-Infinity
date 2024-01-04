@@ -17,6 +17,24 @@ class CategoryPostController extends Controller
         }
      
     }
+    public function UpdateCategoryUpdate($ID,Request $request){
+        try{
+            $CategoryPost=category_post::where("id",$ID)->first();
+            if( $CategoryPost->status==1){
+                $deleterows=category_post::where('id',$ID)->update(['status' => 0]);
+                if($deleterows>0){
+                    return response()->json(['message' => 'Change successful']);
+                }
+            }else{
+                $deleterows=category_post::where('id',$ID)->update(['status' => 1]);
+                if($deleterows>0){
+                    return response()->json(['message' => 'Change successful']);
+                }
+            }
+        }catch(\Exception $e){
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()]);
+        }
+    }
     public function ListCategory(){
         try{
             $category=category_post::all();

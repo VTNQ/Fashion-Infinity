@@ -47,10 +47,12 @@ function DetailProduct() {
         image:`http://127.0.0.1:8000/${item.link}`,
     })) 
     const handleIncreaseQuality = () => {
-		setFormData((prevData) => ({
-		  ...prevData,
-		  Quality: prevData.Quality + 1,
-		}));
+        const totalQuantity = detail?.TotalQuantity || 0; // Replace this with the actual property name
+
+        setFormData((prevData) => ({
+            ...prevData,
+            Quality: prevData.Quality + 1 <= totalQuantity ? prevData.Quality + 1 : prevData.Quality,
+        }));
 	  };
 	
 	  const handleDecreaseQuality = () => {
