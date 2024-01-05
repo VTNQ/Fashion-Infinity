@@ -116,12 +116,13 @@ Route::get('/ViewBlog',[BlogController::class,'ViewBlog'])->name('ViewBlog');
 Route::post('/UpdateStatus/{id}',[BlogController::class,'UpdateStatus'])->name('UpdateStatus');
 Route::put('/deleteBlog/{id}',[BlogController::class,'deleteBlog'])->name('deleteBlog');
 Route::get('/getTopBlogcategory',[BlogController::class,'getBlog'])->name('getBlog');
-
-
-
-
-
-
+Route::get('/diplayBlog',[BlogController::class,'diplayBlog'])->name('diplayBlog');
+Route::get('/detailBlog/{id}',[BlogController::class,'detailBlog'])->name('detailBlog');
+Route::get('/recentPost',[BlogController::class,'recentPost'])->name('recentPost');
+Route::get('/totalpricedisplay',[TransportfeeController::class,'totalpricedisplay'])->name('totalpricedisplay');
+Route::post("/UpdateCard/{id}",[cardController::class,'UpdateCard'])->name('UpdateCard');
+Route::get('/ship/{id}',[OrderController::class,'ship'])->name('ship');
+Route::post('/updateOrder/{id}',[OrderController::class,'updateOrder'])->name('updateOrder');
 
 
 

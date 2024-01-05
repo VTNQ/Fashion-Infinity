@@ -103,7 +103,10 @@ function DetailProduct() {
             
             }
         } catch (error) {
-            console.error('Error adding card:', error);
+            toast.error("product is out of stock", {
+                position: 'top-right',
+                autoClose: 3000,
+            });
         }
     };
     const handleAddCard = async () => {

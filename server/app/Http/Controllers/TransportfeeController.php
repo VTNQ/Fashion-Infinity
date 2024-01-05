@@ -42,6 +42,13 @@ class TransportfeeController extends Controller
         
         }
     }
+    public function totalpricedisplay(){
+        $display= DB::table('delivery_charges')->join('district',"delivery_charges.ID_district","=","district.ID")->
+        join("city","city.ID","=","delivery_charges.id_city")->join('ward',"ward.ID","=","delivery_charges.ID_Ward")->select(['delivery_charges.ID_district',"delivery_charges.ID_district","delivery_charges.id_city","delivery_charges.Price"])->
+        
+        groupBy(['delivery_charges.ID_district',"delivery_charges.ID_district","delivery_charges.id_city","delivery_charges.Price"])->get();
+        return response()->json($display,200);
+    }
     public function updatedelivery(Request $request,$ID){
         try{
             $update=DB::table('delivery_charges')->where("ID",$ID)->update(["Price"=>$request->input("Update_Price")]);
