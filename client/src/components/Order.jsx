@@ -54,6 +54,88 @@ function Order() {
         }
         fetchdata();
     }, [])
+    const Confirmdelivery=async (IDorder)=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/updateOrder/${IDorder}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    status: 3,
+                }),
+                
+            });
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  const response = await axios.get("http://127.0.0.1:8000/api/displayOrder");
+                  setorder(response.data);
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+    }
+    const Confirmpickup=async (IDorder)=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/updateOrder/${IDorder}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    status: 2,
+                }),
+                
+            });
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  const response = await axios.get("http://127.0.0.1:8000/api/displayOrder");
+                  setorder(response.data);
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+    }
+    const Orderconfirmation=async (IDorder)=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/updateOrder/${IDorder}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    status: 1,
+                }),
+                
+            });
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  const response = await axios.get("http://127.0.0.1:8000/api/displayOrder");
+                  setorder(response.data);
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+       
+    }
     const indexOflastCategory = (currentPage + 1) * perPage;
     const indexOfFirtCategory = indexOflastCategory - perPage;
     const currentCategories = filteredCategories.slice(indexOfFirtCategory, indexOflastCategory)
@@ -265,6 +347,7 @@ function Order() {
                                                 <th>#</th>
                                                 <th>Code orders</th>
                                                 <th>Status</th>
+                                                <th>Confirmation</th>
                                                 <th>View</th>
                                             </tr>
                                         </thead>
@@ -274,6 +357,20 @@ function Order() {
                                                     <td>{index + 1}</td>
                                                     <td>{order.order_code}</td>
                                                     <td>{getStatusText(order.status)}</td>
+                                                    <td>
+                                                {order.status===0 && (
+                                                    <button className='btn btn-primary' onClick={()=>Orderconfirmation(order.ID)}>Order confirmation</button>
+                                                )}
+                                                    {order.status===1 &&(
+                                                         <button className='btn btn-primary' onClick={()=>Confirmpickup(order.ID)}>Confirm pickup</button>
+                                                    )}
+                                                    {order.status===2 && (
+                                                          <button className='btn btn-primary' onClick={()=>Confirmdelivery(order.ID)}>Confirm delivery</button>
+                                                    )}
+                                                       {order.status===3 && (
+                                                         <span>Finish</span>
+                                                    )}
+                                                    </td>
                                                     <td><button className='btn btn-primary'  onClick={() => navigate('/DetailOrder', { state: { IDorder:order.ID } })}><i class="fa fa-eye " aria-hidden="true"></i></button></td>
                                                 </tr>
 

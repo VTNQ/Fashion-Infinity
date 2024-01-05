@@ -16,7 +16,7 @@ import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
 import './Blog.css';
 import axios from "axios";
-function MiniCart() {
+function DetailBlog() {
  
     const [perPage, setperPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(0);
@@ -33,13 +33,13 @@ function MiniCart() {
 
     const [singleproduct, setsingleproduct] = useState(false);
     const [Listview, setListView] = useState(false);
-	const [searchInput, setSearchInput] = useState('');
+
     const username = location.state?.username || 'Default Username';
+    const IDBlog=location.state?.IDBlog || "";
     const [Page, setPage] = useState(false);
     const [BlogPage,setBlogPage]=useState([]);
     const [Blogdetail, setblogDetail] = useState(false);
     const [BlogFormat, setBlogFormat] = useState(false);
-
     const [Grid, setGrid] = useState(false);
     const [userSetting, setuserSetting] = useState(false);
     const [detail, setDetail] = useState(null);
@@ -50,46 +50,23 @@ function MiniCart() {
     const [Minicart,setMiniCart]=useState([]);
     const [Blog,setBlog]=useState([]);
     const IDProduct = location.state?.IDProduct || '';
-    const [recent,setrecent]=useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const handleSearchButtonClick = () => {
-		setSearchTerm(searchInput);
-	}
-    useEffect(()=>{
-        const fetchrecent=async()=>{
-            try{
-                const response=await fetch(`http://127.0.0.1:8000/api/recentPost`);
-                if(response.ok){
-                    const data=await response.json();
-                    setrecent(data);
-                }else {
-                    console.error("Failed to fetch cart data");
-                }
-            }catch(error){
-                console.error('Error during fetch:', error);
+   
+   useEffect(()=>{
+    const fetchMinicart=async()=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/detailBlog/${IDBlog}`);
+            if(response.ok){
+                const data=await response.json();
+                setBlog(data);
+            }else {
+                console.error("Failed to fetch cart data");
             }
+        }catch(error){
+            console.error('Error during fetch:', error);
         }
-        fetchrecent();
-    },[])
-    useEffect(()=>{
-        const fetchBlog=async()=>{
-            try{
-                const response=await fetch(`http://127.0.0.1:8000/api/diplayBlog`);
-                if(response.ok){
-                    const data=await response.json();
-                    setBlogPage(data);
-                }else {
-                    console.error("Failed to fetch cart data");
-                }
-            }catch(error){
-                console.error('Error during fetch:', error);
-            }
-        }
-        fetchBlog();
-    },[])
-    const handlePageclick = (data) => {
-        setCurrentPage(data.selected);
-    };
+    }
+    fetchMinicart();
+   },[])
     useEffect(()=>{
         const fetchMinicart=async()=>{
             try{
@@ -249,26 +226,7 @@ function MiniCart() {
         display: IsExpaned ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s',// Default animation
     };
-    useEffect(()=>{
-        const fetchdata=async()=>{
-          try{
-            //gửi yêu cầu http để lấy dữ liệu từ api 
-            const response=await axios.get('http://127.0.0.1:8000/api/getTopBlogcategory');
-            setBlog(response.data);
-       
-          }catch(error){
-            console.error('error fetchinh categories:',error)
-          }
-        }
-        fetchdata();
-      },[]);
-      const filteredCategories = BlogPage.filter(category =>
-
-        category.Blog_tittle.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    const indexOflastCategory = (currentPage + 1) * perPage;
-	const indexOfFirtCategory = indexOflastCategory - perPage;
-	const currentCategories = filteredCategories.slice(indexOfFirtCategory, indexOflastCategory)
+  
     return (
 
         <div>
@@ -284,7 +242,7 @@ function MiniCart() {
                                         <ul>
                                             <li style={{ height: '40px', lineHeight: '35px' }}>
                                                 <span style={{ color: '#595959', fontFamily: 'Lato", sans-serif', fontSize: '15px' }}>Telephone Enquiry:</span>
-                                                <a href=""  style={{ transition: 'all 0.3s ease-in', color: '#595959', textDecoration: 'none', fontFamily: 'Lato", sans-serif', fontSize: '15px' }}>(+123) 123 321 345</a>
+                                                <a href="" style={{ transition: 'all 0.3s ease-in', color: '#595959', textDecoration: 'none', fontFamily: 'Lato", sans-serif', fontSize: '15px' }}>(+123) 123 321 345</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -377,9 +335,8 @@ function MiniCart() {
                                                 <li className="option selected">All</li>
                                             </ul>
                                         </div>
-                                        <input type="text" className="text-[13px] h-[45px] bg-transparent" style={{ border: 'none', width: '100%', padding: '0 60px 0 33px', outline: 'none' }} placeholder="Enter your search key ..."  
-												 />
-                                        <button className="li-btn" type="submit" >
+                                        <input type="text" className="text-[13px] h-[45px] bg-transparent" style={{ border: 'none', width: '100%', padding: '0 60px 0 33px', outline: 'none' }} placeholder="Enter your search key ..." />
+                                        <button className="li-btn" type="submit">
                                             <i className="fa fa-search"></i>
                                         </button>
                                     </form>
@@ -841,8 +798,8 @@ function MiniCart() {
                 <div className="hiraola-blog-sidebar">
                     <div className="hiraola-sidebar-search-form">
                         <form action="">
-                            <input type="text" className="hiraola-search-field" placeholder="search here" onChange={(e) => setSearchInput(e.target.value)}  value={searchInput}/>
-                            <button type="button" className="hiraola-search-btn" onClick={handleSearchButtonClick}>
+                            <input type="text" className="hiraola-search-field" placeholder="search here" />
+                            <button type="submit" className="hiraola-search-btn">
                                 <i className="fa fa-search" style={{color:'#fff'}}></i>
                             </button>
                         </form>
@@ -860,77 +817,22 @@ function MiniCart() {
                     </ul>
                 </div>
                 </div>
-                <div className="hiraola-blog-sidebar">
-                <div className="hiraola-blog-sidebar" id="tittle" >
-                    <h4 className="hiraola-blog-sidebar-title" style={{fontFamily:'"Lato", sans-serif',color:'#333333'}}>Recent Post</h4>
-                    <div className="hiraola-recent-post">
-                    {BlogPage.map((order, index) => (
-                        <div className="hiraola-recent-post-thumb " >
-                            <div className="hiraola-recent-post-thumb flex" >
-                               
-                                <div className="hiraola-recent-post-des flex">
-                                <span>
-                                    <a id="hover" style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'20px',fontWeight:'700',overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}} onClick={() => navigate('/DetailBlog', { state: { IDBlog:order.ID } })}  >{order.Blog_tittle}</a>
-                                </span>
-                            </div>
-                            </div>
-                         
-                        </div>
-                         ))}
-                    </div>
-                </div>
-                </div>
             </div>
         </div>
         <div className="col-lg-9 order-lg-2 order-1">
             <div className="row blog-item_wrap">
-            {currentCategories.map((order, index) => (
-                <div className="col-lg-6">
-                    <div className="blog-item">
-                        <div className="blog-img img-hover_effect">
-                            <a  onClick={() => navigate('/DetailBlog', { state: { IDBlog:order.ID } })} >
-                            <img src={`http://127.0.0.1:8000/${order.Blog_image}`} alt="" />
-                            </a>
-                        </div>
-                        <div className="blog-content">
-                            <div className="blog-heading">
-                                <h5>
-                                    <a id="hover"  style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'20px',fontWeight:'700'}} onClick={() => navigate('/DetailBlog', { state: { IDBlog:order.ID } })} >{order.Blog_tittle}</a>
-                                </h5>
-                            </div>
-                            <div style={{overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}} className="blog-short_desc">
-                                <p style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}} dangerouslySetInnerHTML={{ __html: order.Blog_desc }}/>
-                            </div>
-                            <div className="hiraola-read-more_area">
-                                <a href="" id="hover" style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'20px',fontWeight:'700'}} onClick={() => navigate('/DetailBlog', { state: { IDBlog:order.ID } })} className="hiraola-read_more">Read More</a>
-                            </div>
-                        </div>
-                    </div>
+          
+                <div className="col-lg-12">
+                {Blog.map((order, index) => (
+                     <div className="blog-item" key={index}>
+                     <div dangerouslySetInnerHTML={{ __html: order.Blog_content }} />
+                   </div>
+                      ))}
                 </div>
                 
-                ))}
+              
             </div>
-            <Pagination
-  previousLabel={'previous'}
-  nextLabel={'next'}
-  breakLabel={'...'}
-  pageCount={Math.ceil(filteredCategories.length / perPage)}
-  marginPagesDisplayed={2}
-  pageRangeDisplayed={5}
-  onPageChange={handlePageclick}
-  containerClassName={'pagination'}
-  activeClassName={'active'}
-  previousClassName={'page-item'}
-  previousLinkClassName={'page-link'}
-  nextClassName={'page-item'}
-  nextLinkClassName={'page-link'}
-  breakClassName={'page-item'}
-  breakLinkClassName={'page-link'}
-  pageClassName={'page-item'}
-  pageLinkClassName={'page-link'}
-  
- 
-/>
+            
         </div>
     </div>
 </div>
@@ -942,4 +844,4 @@ function MiniCart() {
 
     )
 }
-export default MiniCart;
+export default DetailBlog;

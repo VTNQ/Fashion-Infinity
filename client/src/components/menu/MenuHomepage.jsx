@@ -35,40 +35,7 @@ function MenuHomepage() {
         PostCode:'',
         Phone:''
       });
-      const deleteCard=async (IDProduct)=>{
-        try{
-            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`,{
-                method:'POST',
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-                body:JSON.stringify({
-                    id_Account: ID,
-                }),
-            });
-            if(!response.ok){
-                throw new Error('Failed to Delete card');
-            }
-            const data=await response.json();
-            if(data.message){
-                Swal.fire({
-                    icon: "success",
-                    title: "Delete Successfull",
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
-            }else{
-                Swal.fire({
-                    icon: "success",
-                    title: "Delete Successfull",
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
-            }
-        }catch(error){
-            console.error('Error adding card:', error);
-        }
-    }
+     
     const [cartData,setCardData]=useState([]);
     const [currency,setcurrency]=useState(false);
     const[language,setlanguage]=useState(false);
@@ -90,6 +57,45 @@ function MenuHomepage() {
 		}
 		fetchCardData();
 	},[]);
+    const deleteCard=async (IDProduct)=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    id_Account: ID,
+                }),
+            });
+            if(!response.ok){
+                throw new Error('Failed to Delete card');
+            }
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  const response=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+				if(response.ok){
+					const data=await response.json();
+					setCardData(data);
+				}
+            }else{
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+    }
     const popupopen={
         left: 'auto',
     right: '0',
@@ -209,6 +215,7 @@ function MenuHomepage() {
         display: IsExpaned ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s',// Default animation
     };
+    
     return (
         <header className="block">
             <div id="contact" style={{ border: '1px solid #e5e5e5' }}>
@@ -724,7 +731,7 @@ function MenuHomepage() {
                         <ul className="minicart-list" style={{maxHeight:'310px',position:'relative',overflow:'auto'}}>
                         {cartData.map((card,index)=>(
                                        <li className="minicart-product flex pb-[30px]">
-                                       <a href="" className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}}>
+                                       <a className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}} onClick={()=>deleteCard(card.ID)}>
                                           
                                        <i class="fa fa-times" aria-hidden="true"></i>
                                        </a>
@@ -732,7 +739,7 @@ function MenuHomepage() {
                                                    <img src={`http://127.0.0.1:8000/${card.link}`} alt="" />
                                                    </div>
                                                    <div className="product-item_content">
-                                           <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}}>{card.Name}</a>
+                                           <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}} onClick={()=>navigate(`/DetailProduct/${card.ID}`,{state:{IDProduct:card.ID,ID:ID}})}>{card.Name}</a>
                                            <span className="product-item_quantity" style={{display:'block',paddingTop:'10px',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>{card.Quality} x {card.Price}</span>
                                                    </div>
                                    </li>

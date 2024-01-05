@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import Select from 'react-select';
 import { Magnifier } from 'react-image-magnify';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import '../menu/menu.css';
@@ -20,6 +20,14 @@ import logo2 from '../menu/image/logorespon.png';
 import axios from "axios";
 
 function CheckOut() {
+    const [selectedWard, setSelectedWard] = useState(null);
+    const [ward, setward] = useState([]);
+    const [city, setCity] = useState([]);
+    const[del,setdel]=useState([]);
+
+    const [selectedCity, setSelectedCity] = useState(null);
+    const [Districts, setDistricts] = useState([]);
+    const [selecteddistrict, setselecteddistrict] = useState(null);
     const [Account,setAccount]=useState([]);
     const location = useLocation();
     const ID = location.state?.ID || '';
@@ -31,6 +39,74 @@ function CheckOut() {
         Phone:'',
         Email:''
     });
+    useEffect(() => {
+        const fetchdelivery = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/displaydelivery');
+                setdelivery(response.data);
+              
+
+           
+            } catch (error) {
+                console.error('Error fetching districts', error);
+            }
+        }
+        fetchdelivery()
+    }, [])
+ 
+    useEffect(() => {
+        const fetchDistricts = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/displaywardCity');
+                setCity(response.data);
+            } catch (error) {
+                console.error('Error fetching districts', error);
+            }
+        };
+
+        fetchDistricts();
+    }, []);
+
+
+    useEffect(() => {
+        const fetchDistricts = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/displaydistrict`);
+                const filteredDistricts = response.data.filter(district => district.id_city === selectedCity.value);
+                setDistricts(filteredDistricts);
+
+            } catch (error) {
+                console.error('Error fetching districts', error);
+            }
+        };
+
+        if (selectedCity) {
+            fetchDistricts();
+        }
+    }, [selectedCity]);
+    useEffect(() => {
+        const fetchDistricts = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/displayward`);
+                const filteredDistricts = response.data.filter(district => district.ID_district === selecteddistrict.value);
+                setward(filteredDistricts);
+
+            } catch (error) {
+                console.error('Error fetching districts', error);
+            }
+        };
+
+        if (selecteddistrict) {
+            fetchDistricts();
+        }
+    }, [selecteddistrict]);
+    const handleCityChange = (selectedCity) => {
+        // Update selected city when it changes
+        setSelectedCity(selectedCity);
+    };
+    const handledistrictChange = (selectedCity) => {
+        setselecteddistrict(selectedCity)
+    }
     useEffect(() => {
         const fetchMinicart = async () => {
             try {
@@ -47,7 +123,9 @@ function CheckOut() {
                         PostCode: data.PostCode || '',
                         Phone: data.Phone || ''
                     });
+                  
                     setselectedItem(data.Country || 'Bangladesh')
+              
                 } else {
                     console.error("Failed to fetch cart data");
                 }
@@ -57,6 +135,7 @@ function CheckOut() {
         };
         fetchMinicart();
     }, [ID]);
+    
     const [selectedItem,setselectedItem]=useState("Bangladesh");
     const [shipItem,setshipItem]=useState("Bangladesh");
     const [checkout,setcheckout]=useState([]);
@@ -67,6 +146,9 @@ function CheckOut() {
                 if(response.ok){
                     const data=await response.json();
                     setcheckout(data);
+                    const totalPrice = data.reduce((total, item) => total + item.TotalQuantity * item.Price, 0);
+                    setcouttotalPrice(totalPrice);
+                   
                 }else {
                     console.error("Failed to fetch cart data");
                 }
@@ -76,13 +158,14 @@ function CheckOut() {
         }
         fetchMinicart();
     },[])
-    
+
     const IDProduct = location.state?.IDProduct || '';
     const [isCouponVisible,setIsCouponVisible]=useState(false);
     const [combo,setcombo]=useState(false);
     const [ship,setship]=useState(false);
+    
     const caculateTotalPrice=(quanlity,Price)=>{
-        return (quanlity*Price).toFixed(2);
+        return (quanlity*Price);
     }
     const [paypal,setpaypal]=useState(false);
     const [delivery,setdelivery]=useState(true);
@@ -107,33 +190,23 @@ function CheckOut() {
                 },
                 
                 body: JSON.stringify(
-                    paypal
-                      ? {
-                          id_Account: ID,
-                          Country: selectedItem,
-                          FullName: formData.FullName,
-                          City: formData.City,
-                          PostCode: formData.PostCode,
-                          Phone: formData.Phone,
-                          Address: formData.Address,
-                          TotalPrice: checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2),
-                          id_product: checkout.map(card => card.ID),
-                          Quality: checkout.map(card => card.TotalQuantity),
-                          payments:'Paypal'
-                        }
-                      : {
-                          id_Account: ID,
-                          Country: selectedItem,
-                          FullName: formData.FullName,
-                          City: formData.City,
-                          PostCode: formData.PostCode,
-                          Phone: formData.Phone,
-                          Address: formData.Address,
-                          TotalPrice: checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2),
-                          id_product: checkout.map(card => card.ID),
-                          Quality: checkout.map(card => card.TotalQuantity),
-                          payments:'Payment on delivery'
-                        }
+                    {
+                        id_Account: ID,
+                        id_city: selectedCity.value,
+                        id_ward:selectedWard.value,
+                        id_district:selecteddistrict.value,
+                        FullName: formData.FullName,
+                        
+                        PostCode: formData.PostCode,
+                        Phone: formData.Phone,
+                        Address: formData.Address,
+                        TotalPrice: couttotalPrice,
+                        id_product: checkout.map(card => card.ID),
+                        Quality: checkout.map(card => card.TotalQuantity),
+                      
+                    }
+                          
+                     
                   ),
             });
             console.log(checkout.map(card => card.ID))
@@ -255,6 +328,7 @@ function CheckOut() {
         setselectedItem(value);
         setcombo(false)
     }
+   
     const popupopen = {
         left: 'auto',
         right: '0',
@@ -378,6 +452,41 @@ function CheckOut() {
         display: IsExpaned ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s',// Default animation
     };
+    const [couttotalPrice,setcouttotalPrice]=useState(0);
+
+   
+    const handleWard = (selectedward) => {
+        setSelectedWard(selectedward);
+    
+        const matchingCharge = del.find(charge =>
+            charge.ID_district === selecteddistrict.value && charge.id_city === selectedCity.value
+        );
+            console.log(totalprice())
+        // Calculate the total price directly and update the state
+        const updatedTotal =totalprice()+(matchingCharge ? matchingCharge.Price : 0);
+        
+        setcouttotalPrice(updatedTotal);
+    }
+    
+    const totalprice = () => {
+        // Calculate the total without updating the state here
+        return checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0);
+    }
+    useEffect(() => {
+        const fetchdelivery = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/totalpricedisplay');
+                setdel(response.data);
+              
+
+           
+            } catch (error) {
+                console.error('Error fetching districts', error);
+            }
+        }
+        fetchdelivery()
+    }, [])
+
     return (
         
         <div>
@@ -1007,7 +1116,42 @@ function CheckOut() {
                                                 <input type="text" value={formData.Address} onChange={(e)=>setFormData({...formData,Address:e.target.value})} placeholder="Street address" />
                                             </div>
                                         </div>
-  
+                                        <div className="col-md-12">
+                                            <div className="checkout-form-list">
+                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}> City 
+                                                <span className="required">*</span>
+                                                </label>
+                                                <Select
+                                                options={city.map(d => ({ value: d.ID, label: d.Name }))}
+                                                onChange={(selectedOption) => handleCityChange(selectedOption)}
+                                                value={selectedCity}
+                                            />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-12">
+                                            <div className="checkout-form-list">
+                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}> District
+                                                <span className="required">*</span>
+                                                </label>
+                                                <Select
+                                                options={Districts.map(d => ({ value: d.ID, label: d.Name }))}
+                                                onChange={(selectedOption) => handledistrictChange(selectedOption)}
+                                                value={selecteddistrict}
+                                            />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-12">
+                                            <div className="checkout-form-list">
+                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}> Ward
+                                                <span className="required">*</span>
+                                                </label>
+                                                <Select
+                                                options={ward.map(d => ({ value: d.ID, label: d.Name }))}
+                                                onChange={(selectedOption) => handleWard(selectedOption)}
+                                                value={selectedWard}
+                                            />
+                                            </div>
+                                        </div>
                                         <div className="col-md-12">
                                             <div className="checkout-form-list">
                                                 <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Town / City 
@@ -1068,14 +1212,14 @@ function CheckOut() {
                                             <tr className="cart-subtotal">
                                                 <th style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',color:'#212529',background:'#f4f4f4'}}>Cart Subtotal</th>
                                                 <td className="cart-product-total" style={{background:'#f4f4f4'}}>
-                                                    <span className="amount" style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',color:'#212529'}}>£{checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2)}</span>
+                                                    <span className="amount" style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',color:'#212529'}}>£{checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0)}</span>
                                                 </td>
                                             </tr>
                                             <tr className="order-total">
                                                 <th style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',color:'#212529',background:'#f4f4f4',borderBottom:'medium none'}}>Order Total</th>
                                                 <td className="cart-product-total" style={{background:'#f4f4f4',borderBottom:'medium none'}}>
                                                     <strong>
-                                                    <span className="amount" style={{fontFamily:'"Lato", sans-serif',fontSize:'20px',color:'#212529'}}>£{checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2)}</span>
+                                                    <span className="amount" style={{fontFamily:'"Lato", sans-serif',fontSize:'20px',color:'#212529'}}>£ {couttotalPrice}</span>
                                                     </strong>
                                                    
                                                 </td>

@@ -4,8 +4,8 @@ import payment from './payment.png';
 import './footer.css';
 function FooterHome(){
     return(
-        <div className="hiraola-footer_area">
-            <div className="footer-top_area" style={{backgroundColor:'#fff'}}>
+        <div className="hiraola-footer_area" style={{borderTop: '1px solid rgba(0, 0, 0, 0.07)',marginTop:'18px'}}>
+            <div className="footer-top_area" >
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-4">

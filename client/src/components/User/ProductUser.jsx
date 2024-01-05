@@ -506,6 +506,11 @@ function ProductUser() {
 				position: 'top-right',
 				autoClose: 3000,
 			});
+			const responsedata=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+				if(responsedata.ok){
+					const data=await responsedata.json();
+					setCardData(data);
+				}
         } else {
 			toast.success("Card added successfully", {
 				position: 'top-right',

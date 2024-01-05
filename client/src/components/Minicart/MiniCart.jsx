@@ -311,6 +311,32 @@ function MiniCart() {
         display: IsExpaned ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s',// Default animation
     };
+    const UpdateQuality=async (IDProduct,Quality)=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/UpdateCard/${IDProduct}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    UpdateQuality: Quality,
+                }),
+                
+            });
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+       
+    }
     return (
 
         <div>
@@ -889,6 +915,7 @@ function MiniCart() {
                                                 <th className="hiraola-product-price">Unit Price</th>
                                                 <th className="hiraola-product-quantity">Quantity</th>
                                                 <th className="hiraola-product-subtotal">Total Price</th>
+                                                <th className="hiraola-product-subtotal">Update</th>
                                             </tr>
                                         </thead>
                                         <tbody style={{ verticalAlign: 'inherit' }}>
@@ -931,6 +958,9 @@ function MiniCart() {
                                                 </td>
                                                 <td className="product-subtotal" style={{ fontSize: '16px', fontWeight: '700' }}>
                                                     <span className="amount" style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: '"Lato", sans-serif', color: '#212529' }}>${caculateTotalPrice(card.TotalQuantity,card.Price)}</span>
+                                                </td>
+                                                <td>
+                                                <a  id="checkout" onClick={()=>UpdateQuality(card.ID,card.TotalQuantity)} >Update Card</a>
                                                 </td>
                                             </tr>
                                          ))}
