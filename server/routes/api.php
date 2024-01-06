@@ -16,6 +16,7 @@ use App\Http\Controllers\CategoryPostController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\HomeProduct;
 use App\Http\Controllers\MiniCartController;
+use App\Http\Controllers\MyorderController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
@@ -123,11 +124,13 @@ Route::get('/totalpricedisplay',[TransportfeeController::class,'totalpricedispla
 Route::post("/UpdateCard/{id}",[cardController::class,'UpdateCard'])->name('UpdateCard');
 Route::get('/ship/{id}',[OrderController::class,'ship'])->name('ship');
 Route::post('/updateOrder/{id}',[OrderController::class,'updateOrder'])->name('updateOrder');
-
-
-
-
-
+Route::get('/AllMyorder/{id}',[MyorderController::class,'AllMyorder'])->name('AllMyorder');
+Route::get('/WaitingConfirmation/{id}',[MyorderController::class,'WaitingConfirmation'])->name('WaitingConfirmation');
+Route::get('/delivery/{id}',[MyorderController::class,'delivery'])->name('delivery');
+Route::get('/deliveried/{id}',[MyorderController::class,'deliveried'])->name('deliveried');
+Route::get('/AddressOrder/{id}',[MyorderController::class,'AddressOrder'])->name('AddressOrder');
+Route::get('/InformationCustomer/{id}',[MyorderController::class,'InformationCustomer'])->name('InformationCustomer');
+Route::get('/orderDetail/{id}/{idproduct}',[MyorderController::class,'orderDetail'])->name('orderDetail');
 
 
 
