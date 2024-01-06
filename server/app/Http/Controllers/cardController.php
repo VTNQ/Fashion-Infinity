@@ -77,11 +77,11 @@ class cardController extends Controller
                 }
               
             }else{
-                $productexist=detailcard::where("id_product", $ID)->first();
+                $productexist=detailcard::where("id_product", $ID)->where("id_card",$cardProduct->ID)->first();
                 if($wareSum>0){
                     if($productexist){
                     
-                        $detail = detailcard::where("id_product", $ID)->update(['Quality' => DB::raw('Quality + 1')]);
+                        $detail = detailcard::where("id_product", $ID)->where("id_card",$cardProduct->ID)->update(['Quality' => DB::raw('Quality + 1')]);
 
                         return response()->json(['message' => 'Card added successfully', 'Cate' => $detail]);
                     

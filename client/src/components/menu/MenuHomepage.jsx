@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from "react";
-import { useLocation,useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
 import './menu.css';
 import Swal from 'sweetalert2';
 import us from './image/us.png';
@@ -14,11 +14,11 @@ function MenuHomepage() {
     const [IsExpaned, setIsExpanded] = useState(false);
     const [Issubmenu, setIsubmenu] = useState(false);
     const [isBlog, setisblod] = useState(false);
-    const [cartPopup,setcartPopup]=useState(false);
+    const [cartPopup, setcartPopup] = useState(false);
     const [secondmenu, SetSecondmenu] = useState(false);
     const location = useLocation();
-    const navigate=useNavigate();
-    const ID=location.state?.ID||'';
+    const navigate = useNavigate();
+    const ID = location.state?.ID || '';
     const [singleproduct, setsingleproduct] = useState(false);
     const [Listview, setListView] = useState(false);
 
@@ -27,117 +27,117 @@ function MenuHomepage() {
     const [Blogdetail, setblogDetail] = useState(false);
     const [BlogFormat, setBlogFormat] = useState(false);
     const [Grid, setGrid] = useState(false);
-    const [userSetting,setuserSetting]=useState(false);
+    const [userSetting, setuserSetting] = useState(false);
     const [formData, setFormData] = useState({
         Country: '',
-        FullName:'',
-        City:'',
-        PostCode:'',
-        Phone:''
-      });
-     
-    const [cartData,setCardData]=useState([]);
-    const [currency,setcurrency]=useState(false);
-    const[language,setlanguage]=useState(false);
-    const[open,isopen]=useState(false);
-    useEffect(()=>{
-		const fetchCardData=async()=>{
-			try{
-				const response=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-				if(response.ok){
-					const data=await response.json();
-					setCardData(data);
-				}else{
-					console.error("Failed to fetch cart data");
-				}
-			}catch(error){
-				console.error('Error during fetch:', error);
-			}
-			
-		}
-		fetchCardData();
-	},[]);
-    const deleteCard=async (IDProduct)=>{
-        try{
-            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`,{
-                method:'POST',
-                headers:{
+        FullName: '',
+        City: '',
+        PostCode: '',
+        Phone: ''
+    });
+
+    const [cartData, setCardData] = useState([]);
+    const [currency, setcurrency] = useState(false);
+    const [language, setlanguage] = useState(false);
+    const [open, isopen] = useState(false);
+    useEffect(() => {
+        const fetchCardData = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setCardData(data);
+                } else {
+                    console.error("Failed to fetch cart data");
+                }
+            } catch (error) {
+                console.error('Error during fetch:', error);
+            }
+
+        }
+        fetchCardData();
+    }, []);
+    const deleteCard = async (IDProduct) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`, {
+                method: 'POST',
+                headers: {
                     'Content-Type': 'application/json',
                 },
-                body:JSON.stringify({
+                body: JSON.stringify({
                     id_Account: ID,
                 }),
             });
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error('Failed to Delete card');
             }
-            const data=await response.json();
-            if(data.message){
+            const data = await response.json();
+            if (data.message) {
                 Swal.fire({
                     icon: "success",
                     title: "Delete Successfull",
                     showConfirmButton: false,
                     timer: 1500
-                  });
-                  const response=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-				if(response.ok){
-					const data=await response.json();
-					setCardData(data);
-				}
-            }else{
+                });
+                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setCardData(data);
+                }
+            } else {
                 Swal.fire({
                     icon: "success",
                     title: "Delete Successfull",
                     showConfirmButton: false,
                     timer: 1500
-                  });
+                });
             }
-        }catch(error){
+        } catch (error) {
             console.error('Error adding card:', error);
         }
     }
-    const popupopen={
+    const popupopen = {
         left: 'auto',
-    right: '0',
-    visibility: 'visible',
-    opacity: '1',
-    padding: '105px 29px 0px',
-   
+        right: '0',
+        visibility: 'visible',
+        opacity: '1',
+        padding: '105px 29px 0px',
+
     }
-    const closepopup={
+    const closepopup = {
         left: 'auto',
         right: '0',
         visibility: 'hidden',
         opacity: '0',
         padding: '105px 0 0',
-        transition:'all ease 0.5s',
-       
+        transition: 'all ease 0.5s',
+
     }
-    const handleLanguage=()=>{
+    const handleLanguage = () => {
         setlanguage(!language);
     }
-    const handleCurrency=()=>{
+    const handleCurrency = () => {
         setcurrency(!currency);
     }
     const handleBlogFormat = () => {
         setBlogFormat(!BlogFormat);
     }
-    const handleuserSetting=()=>{
+    const handleuserSetting = () => {
         setuserSetting(!userSetting)
     }
-    const popupCurrency={
-        display:currency?'block':'none',
+    const popupCurrency = {
+        display: currency ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s'
     }
-    const popuplanguage={
-        display:language?'block':'none',
-        animation:'cloudAnimation 0.5s'
+    const popuplanguage = {
+        display: language ? 'block' : 'none',
+        animation: 'cloudAnimation 0.5s'
     }
     const handlePage = () => {
         setPage(!Page);
     }
-    const popupUsersetting={
-        display:userSetting?'block':'none',
+    const popupUsersetting = {
+        display: userSetting ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s'
     }
     const popupPage = {
@@ -215,7 +215,7 @@ function MenuHomepage() {
         display: IsExpaned ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s',// Default animation
     };
-    
+
     return (
         <header className="block">
             <div id="contact" style={{ border: '1px solid #e5e5e5' }}>
@@ -285,6 +285,11 @@ function MenuHomepage() {
                                                 <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
                                                     <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>Register</a>
                                                 </li>
+                                                {username !== 'Default Username' ? (
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                        <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/Myorder', { state: { username: username, ID: ID } })}>My order</a>
+                                                    </li>
+                                                ) : null}
 
                                             </ul>
                                         </li>
@@ -343,14 +348,14 @@ function MenuHomepage() {
                                         <li className="inline-block pr-[30px]">
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Product</a>
                                             <ul className="hm-dropdown">
-                                                <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }} onClick={() => navigate('/HomeProduct', { state: { username: username,ID:ID } })} >Product</a>
-                                                  
+                                                <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }} onClick={() => navigate('/HomeProduct', { state: { username: username, ID: ID } })} >Product</a>
+
                                                 </li>
-                                                <li className="relative">   <a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Detail Product</a>
-                                                    
+                                                <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Detail Product</a>
+
                                                 </li>
-                                               
-                                               
+
+
 
                                             </ul>
                                         </li>
@@ -443,13 +448,13 @@ function MenuHomepage() {
                                         </a>
                                     </li>
                                     <li className="inline-block hidden navcon limenu" >
-                                        <a onClick={()=>isopen(true)} className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
+                                        <a onClick={() => isopen(true)} className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
                                             <i class="fa fa-navicon" style={{ borderColor: 'white' }}></i>
                                         </a>
                                     </li>
                                     <li className="inline-block limenu" >
-                                        <a  className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
-                                            <i class="fa-solid fa-bag-shopping" onClick={()=>setcartPopup(true)} style={{ color: 'white' }}></i>
+                                        <a className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
+                                            <i class="fa-solid fa-bag-shopping" onClick={() => setcartPopup(true)} style={{ color: 'white' }}></i>
                                         </a>
                                     </li>
                                 </ul>
@@ -459,9 +464,9 @@ function MenuHomepage() {
                 </div>
             </div>
             <div className="left-auto right-0 mobile-menu_wrapper" >
-                <div className="offcanvas-menu-inner" style={open ? {...closepopup,...popupopen}:closepopup}>
+                <div className="offcanvas-menu-inner" style={open ? { ...closepopup, ...popupopen } : closepopup}>
                     <div className="container">
-                        <a  className="btnclose" onClick={()=>isopen(false)}>
+                        <a className="btnclose" onClick={() => isopen(false)}>
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
                         <div className="offcanvas-inner_search">
@@ -651,15 +656,15 @@ function MenuHomepage() {
                                         <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={handlePage}>Pages</span>
                                     </a>
                                     <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupPage }}>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Wishlist</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Cart</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>CheckOut</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Compare</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>FAQ</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Error 404</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Comming Soon</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Wishlist</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Cart</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>CheckOut</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Compare</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>FAQ</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Error 404</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Comming Soon</span></a></li>
                                     </ul>
                                 </li>
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
@@ -671,11 +676,11 @@ function MenuHomepage() {
                                         )}
                                     </span>
                                     <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif',cursor:'pointer' }} onClick={handleuserSetting}>User Setting</span>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleuserSetting}>User Setting</span>
                                     </a>
                                     <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupUsersetting }}>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
                                     </ul>
                                 </li>
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
@@ -687,11 +692,11 @@ function MenuHomepage() {
                                         )}
                                     </span>
                                     <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif',cursor:'pointer' }} onClick={handleCurrency}>Currency</span>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleCurrency}>Currency</span>
                                     </a>
                                     <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupCurrency }}>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>EUR €</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>USD $</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>EUR €</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>USD $</span></a></li>
                                     </ul>
                                 </li>
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
@@ -703,13 +708,13 @@ function MenuHomepage() {
                                         )}
                                     </span>
                                     <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif',cursor:'pointer' }} onClick={handleLanguage}>language</span>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleLanguage}>language</span>
                                     </a>
-                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popuplanguage}}>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>English</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Français</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Romanian</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Japanese</span></a></li>
+                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popuplanguage }}>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>English</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Français</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Romanian</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Japanese</span></a></li>
                                     </ul>
                                 </li>
 
@@ -720,44 +725,44 @@ function MenuHomepage() {
 
             </div>
             <div id="miniCart">
-                <div className="offcanvas-menu-inner" style={cartPopup ? {...closepopup,...popupopen}:closepopup} >
-                    <a  className="btn-close"  onClick={()=>setcartPopup(false)} style={{background:'transparent',color:'#595959',top:'0',right:'0',left:'auto'}}>
-                    <i class="fa fa-times" aria-hidden="true"></i>
+                <div className="offcanvas-menu-inner" style={cartPopup ? { ...closepopup, ...popupopen } : closepopup} >
+                    <a className="btn-close" onClick={() => setcartPopup(false)} style={{ background: 'transparent', color: '#595959', top: '0', right: '0', left: 'auto' }}>
+                        <i class="fa fa-times" aria-hidden="true"></i>
                     </a>
                     <div className="minicart-content">
                         <div className="minicart-heading">
-                            <h4 style={{marginBottom:'0',paddingBottom:'25px',fontFamily:'"Lato", sans-serif',color:'#333333',lineHeight:'1',fontWeight:'bold',fontSize:'24px'}}>Shopping Cart</h4>
+                            <h4 style={{ marginBottom: '0', paddingBottom: '25px', fontFamily: '"Lato", sans-serif', color: '#333333', lineHeight: '1', fontWeight: 'bold', fontSize: '24px' }}>Shopping Cart</h4>
                         </div>
-                        <ul className="minicart-list" style={{maxHeight:'310px',position:'relative',overflow:'auto'}}>
-                        {cartData.map((card,index)=>(
-                                       <li className="minicart-product flex pb-[30px]">
-                                       <a className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}} onClick={()=>deleteCard(card.ID)}>
-                                          
-                                       <i class="fa fa-times" aria-hidden="true"></i>
-                                       </a>
-                                                   <div className="product-item_img" style={{flexBasis:'65px',maxWidth:'65px'}}>
-                                                   <img src={`http://127.0.0.1:8000/${card.link}`} alt="" />
-                                                   </div>
-                                                   <div className="product-item_content">
-                                           <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}} onClick={()=>navigate(`/DetailProduct/${card.ID}`,{state:{IDProduct:card.ID,ID:ID}})}>{card.Name}</a>
-                                           <span className="product-item_quantity" style={{display:'block',paddingTop:'10px',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>{card.Quality} x {card.Price}</span>
-                                                   </div>
-                                   </li>
-                                   
-                                        ))}
-                           
-                          
+                        <ul className="minicart-list" style={{ maxHeight: '310px', position: 'relative', overflow: 'auto' }}>
+                            {cartData.map((card, index) => (
+                                <li className="minicart-product flex pb-[30px]">
+                                    <a className="product-item_remove absolute " style={{ right: '15px', color: '#595959', textDecoration: 'none' }} onClick={() => deleteCard(card.ID)}>
+
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                    <div className="product-item_img" style={{ flexBasis: '65px', maxWidth: '65px' }}>
+                                        <img src={`http://127.0.0.1:8000/${card.link}`} alt="" />
+                                    </div>
+                                    <div className="product-item_content">
+                                        <a href="" style={{ color: '#595959', textDecoration: 'none', fontFamily: '"Lato", sans-serif', fontSize: '16px' }} onClick={() => navigate(`/DetailProduct/${card.ID}`, { state: { IDProduct: card.ID, ID: ID } })}>{card.Name}</a>
+                                        <span className="product-item_quantity" style={{ display: 'block', paddingTop: '10px', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>{card.Quality} x {card.Price}</span>
+                                    </div>
+                                </li>
+
+                            ))}
+
+
                         </ul>
                     </div>
                     <div className="minicart-item_total">
-                        <span style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Subtotal</span>
-                        <span style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
+                        <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Subtotal</span>
+                        <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                     </div>
                     <div className="minicart-btn_area  pb-[15px]">
                         <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>Minicart</a>
                     </div>
                     <div className="minicart-btn_area pb-[15px]">
-                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>
+                        <a href="" style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>
                     </div>
                 </div>
             </div>

@@ -38,6 +38,8 @@ import AdminBlog from './components/AdminBlog';
 import Voucher from './components/Voucher/Voucher';
 import VoucherSuperadmin from './components/superadmin/VoucherSuperadmin';
 import DetailBlog from './components/Blog/DetailBlog';
+import Myorder from './components/MyOrder/Myorder';
+import OrderDetail from './components/MyOrderDetail/OrderDetail';
 function App() {
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -92,6 +94,8 @@ function App() {
         <Route path='/Blog' element={<Blog/>}/>
         <Route path='/AdminBlog' element={<AdminBlog/>}/>
         <Route path='/DetailBlog' element={<DetailBlog/>}/>
+        <Route path='/Myorder' element={<Myorder/>}/>
+        <Route path='/OrderDetail' element={<OrderDetail/>}/>
       </Routes>
     </Router>
   );

@@ -312,22 +312,22 @@ function DetailOrder() {
 
                                                 </tr>
                                             ))}
-                          { shipprice.Price !== null && shipprice.Price !== undefined && shipprice.Price !== "" && (
-    <tr>
-        <td>Ship price: {shipprice.Price}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
+                                            {shipprice.Price !== null && shipprice.Price !== undefined && shipprice.Price !== "" && (
+                                                <tr>
+                                                    <td>Ship price: {shipprice.Price}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
 
-)}
+                                            )}
                                             <tr>
-                                            {uniqueTotalPrices.map((totalPrice, index) => (
-                                                  <td>Total pay:${totalPrice}</td>
-  
-    ))}
-                                              
+                                                {uniqueTotalPrices.map((totalPrice, index) => (
+                                                    <td>Total pay:${totalPrice}</td>
+
+                                                ))}
+
                                                 <td></td>
                                             </tr>
                                         </tbody>

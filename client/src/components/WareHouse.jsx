@@ -185,6 +185,8 @@ function WareHouse() {
                     showConfirmButton: false,
                     timer: 1500,
                 });
+                formData.iDProduct='';
+                formData.Quality='';
                 const response = await axios.get('http://127.0.0.1:8000/api/getProductWareHouse');
                 setProduct(response.data);
                 formData.iDProduct='';
@@ -454,8 +456,8 @@ function WareHouse() {
                                                 <th>#</th>
                                                 <th>Product</th>
 
+                                                <th>Quality</th>
                                                 <th>Provider</th>
-                                                <th>Category</th>
 
                                                 <th>Update</th>
                                                 <th>Delete</th>
@@ -463,7 +465,7 @@ function WareHouse() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {currentCategories.map((warehouse, index) => (
+                                            {currentCategories && currentCategories.map((warehouse, index) => (
                                                 <tr key={warehouse.ID}>
                                                     <td>{index + 1}</td>
                                                     <td>{warehouse.ProductName}</td>
