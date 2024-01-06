@@ -16,40 +16,51 @@ function DetailOrder() {
     const [customer, setCustomer] = useState(null);
     const [Picture, setPicture] = useState([]);
     const location = useLocation();
-    const [Product,setProduct]=useState([]);
- 
+    const [Product, setProduct] = useState([]);
+    const [shipprice, setshipprice] = useState([]);
     const username = location.state?.username || 'Default Username';
     const ID = location.state?.ID || '';
-    const IDorder=location.state?.IDorder||'';
-    const caculateTotalPrice=(quanlity,Price)=>{
-        return (quanlity*Price);
+    const IDorder = location.state?.IDorder || '';
+    const caculateTotalPrice = (quanlity, Price) => {
+        return (quanlity * Price);
     }
-    useEffect(()=>{
-        const fetchdata=async()=>{
-            try{
-                const response=await axios.get(`http://127.0.0.1:8000/api/detailProductOrder/${IDorder}`);
+    useEffect(() => {
+        const fetchdata = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/detailProductOrder/${IDorder}`);
                 setProduct(response.data);
-            }catch(error){
-                console.error("error fetching product",error)
+            } catch (error) {
+                console.error("error fetching product", error)
             }
 
         }
         fetchdata();
-    },[IDorder])
-    useEffect(()=>{
-        const fetchdata=async ()=>{
-            try{
-                const response=await axios.get(`http://127.0.0.1:8000/api/detailCustomer/${IDorder}`);
-                setCustomer(response.data);
-            }catch(error){
-                console.error("error fetching customer",error)
+    }, [IDorder])
+    useEffect(() => {
+        const fetchdata = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/ship/${IDorder}`);
+                setshipprice(response.data);
+            } catch (error) {
+                console.error("error fetching customer", error)
             }
         }
         fetchdata();
-    },[IDorder])
+    }, [IDorder])
+    useEffect(() => {
+        const fetchdata = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/detailCustomer/${IDorder}`);
+                setCustomer(response.data);
+            } catch (error) {
+                console.error("error fetching customer", error)
+            }
+        }
+        fetchdata();
+    }, [IDorder])
     const navigate = useNavigate();
 
-  
+    const uniqueTotalPrices = [...new Set(Product.map((card) => card.TotalPrice))];
     return (
         <div>
             {loading && (
@@ -234,8 +245,8 @@ function DetailOrder() {
                                 <div className="box-header">
                                     <h3 className="box-title">Customer information</h3>
                                 </div>
-                              
-                                
+
+
                                 <div className="box-body">
                                     <table id="example1" className="table table-bordered table-striped">
                                         <thead>
@@ -245,24 +256,28 @@ function DetailOrder() {
                                                 <th>Phone</th>
                                                 <th>Address</th>
                                                 <th>City</th>
+                                                <th>Ward</th>
+                                                <th>District</th>
                                                 <th>Postcode</th>
-                                                <th>Country</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
-                                         <tr>
-                                            <td>{customer ? customer.FullName : ""}</td>
-                                            <td>{customer ? new Date(customer.Start_Order).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'numeric'}) : ""}</td>
-                                            <td>{customer? customer.Phone:""}</td>
-                                            <td>{customer? customer.Address:""}</td>
-                                            <td>{customer? customer.city:""}</td>
-                                            <td>{customer? customer.Postcode:""}</td>
-                                            <td>{customer? customer.Country:""}</td>
-                                         </tr>
+                                            <tr>
+                                                <td>{customer ? customer.FullName : ""}</td>
+                                                <td>{customer ? new Date(customer.Start_Order).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric' }) : ""}</td>
+                                                <td>{customer ? customer.Phone : ""}</td>
+                                                <td>{customer ? customer.Address : ""}</td>
+                                                <td>{customer ? customer.Namecity : ""}</td>
+                                                <td>{customer ? customer.Namedistrict : ""}</td>
+                                                <td>{customer ? customer.NameWard : ""}</td>
+                                                <td>{customer ? customer.Postcode : ""}</td>
+
+                                            </tr>
                                         </tbody>
 
                                     </table>
-                               
+
 
                                 </div>
                             </div>
@@ -270,8 +285,8 @@ function DetailOrder() {
                                 <div className="box-header">
                                     <h3 className="box-title">List order details</h3>
                                 </div>
-                              
-                                
+
+
                                 <div className="box-body">
                                     <table id="example1" className="table table-bordered table-striped">
                                         <thead>
@@ -281,29 +296,44 @@ function DetailOrder() {
                                                 <th>Quality</th>
                                                 <th>Price</th>
                                                 <th>Total Price</th>
-                                               
+
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {Product.map((product, index) => (
-                                         <tr>
-                                      
-                                            <td>{index+1}</td>
-                                            <td>{product.Name}</td>
-                                            <td>{product.Quality}</td>
-                                            <td>${product.Price}</td>
-                                            <td>${caculateTotalPrice(product.Quality,product.Price)}</td>
-                                           
-                                          
-                                         </tr>
-                                         ))}
-                                         <tr>
-                                            <td>Total pay:${Product.reduce((total, card) => total + card.Quality * card.Price, 0)}</td>
-                                         </tr>
+                                            {Product.map((product, index) => (
+                                                <tr>
+
+                                                    <td>{index + 1}</td>
+                                                    <td>{product.Name}</td>
+                                                    <td>{product.Quality}</td>
+                                                    <td>${product.Price}</td>
+                                                    <td>${caculateTotalPrice(product.Quality, product.Price)}</td>
+
+
+                                                </tr>
+                                            ))}
+                          { shipprice.Price !== null && shipprice.Price !== undefined && shipprice.Price !== "" && (
+    <tr>
+        <td>Ship price: {shipprice.Price}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+
+)}
+                                            <tr>
+                                            {uniqueTotalPrices.map((totalPrice, index) => (
+                                                  <td>Total pay:${totalPrice}</td>
+  
+    ))}
+                                              
+                                                <td></td>
+                                            </tr>
                                         </tbody>
 
                                     </table>
-                               
+
 
                                 </div>
                             </div>

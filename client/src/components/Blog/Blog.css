@@ -33,6 +33,28 @@
     border-color: #cda557;
     transition: all ease 0.5s;
 }
+
+.img-full {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    display: block;
+}
+.hiraola-blog-sidebar-wrapper .hiraola-blog-sidebar .hiraola-recent-post .hiraola-recent-post-des {
+    padding-left: 10px;
+}
+.hiraola-blog-sidebar-wrapper .hiraola-blog-sidebar .hiraola-recent-post .hiraola-recent-post-des span {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+.hiraola-blog-sidebar-wrapper .hiraola-blog-sidebar .hiraola-recent-post .hiraola-recent-post-thumb {
+    width: 65px;
+   
+    height: 100%;
+    margin-bottom: 30px;
+}
 .hiraola-blog-sidebar-wrapper .hiraola-blog-sidebar .hiraola-blog-sidebar-title {
     font-size: 14px;
     font-weight: 600;
@@ -59,7 +81,84 @@
 .hiraola-blog-sidebar-wrapper .hiraola-blog-sidebar .hiraola-blog-archive li a {
     font-size: 14px;
 }
-a:hover {
+#hover:hover {
     color: #cda557 !important;
-    text-decoration: none;
+
+}
+.blog-grid-view_area .blog-item_wrap [class*=col-]:nth-child(-n+4) .blog-item {
+    padding-bottom: 30px;
+}
+.blog-item .blog-img {
+    position: relative;
+}
+.img-hover_effect {
+    position: relative;
+    display: block;
+}
+.img-hover_effect a {
+    overflow: hidden;
+    display: block;
+}
+.img-hover_effect a:before {
+    bottom: 0;
+    content: "";
+    left: 50%;
+    position: absolute;
+    right: 51%;
+    top: 0;
+    opacity: 0.6;
+    background: #cda557;
+}
+.img-hover_effect a:after {
+    background: #cda557;
+}
+.img-hover_effect a:after {
+    bottom: 50%;
+    content: "";
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    opacity: 0.6;
+}
+.hiraola-blog_area .blog-item .blog-img a img {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+}
+.blog-item .blog-content {
+    background-color: #ffffff;
+    padding: 25px;
+}
+.hiraola-blog_area .blog-item .blog-content .blog-heading {
+    padding-top: 25px;
+}
+.hiraola-blog_area .blog-item .blog-content .blog-heading > h5 {
+    margin-bottom: 0;
+}
+.hiraola-blog_area .blog-item .blog-content .blog-short_desc {
+    padding-top: 10px;
+}
+.img-hover_effect:hover a:before {
+    left: 0;
+    right: 0;
+    opacity: 0;
+    -webkit-transition: all 900ms ease-in;
+    -o-transition: all 900ms ease-in;
+    transition: all 900ms ease-in;
+}
+.template-color-1 a:hover {
+    color: #cda557 !important;
+}
+
+.img-hover_effect:hover a:after {
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    -webkit-transition: all 900ms ease-in;
+    -o-transition: all 900ms ease-in;
+    transition: all 900ms ease-in;
+}
+.hiraola-blog_area .blog-item .blog-content .hiraola-read-more_area {
+    padding-top: 10px;
 }

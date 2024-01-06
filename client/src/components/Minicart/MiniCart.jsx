@@ -311,6 +311,57 @@ function MiniCart() {
         display: IsExpaned ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s',// Default animation
     };
+    const UpdateQuality=async (IDProduct,Quality)=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/UpdateCard/${IDProduct}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    UpdateQuality: Quality,
+                }),
+                
+            });
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+
+        
+          
+       
+    }
+    const [voucherCode, setVoucherCode] = useState('');
+    const handleApplyVoucher = async () => {
+        try {
+          
+          const response = await axios.post('http://127.0.0.1:8000/api/checkVoucher', { voucherCode });
+          if (response.data.isValid) {
+            alert(response.data.message || 'ma voucher hop le');
+            
+            const discountValue = response.data.discountValue; 
+            
+          } else {
+            
+            alert(response.data.message || 'Mã voucher không hợp lệ');
+          }
+        } catch (error) {
+          console.error('Lỗi khi áp dụng voucher:', error);
+          
+          const errorMessage = error.response?.data?.message || error.message;
+          alert(`Có lỗi xảy ra khi kiểm tra mã voucher: ${errorMessage}`);
+        }
+      };
+      
     return (
 
         <div>
@@ -889,6 +940,7 @@ function MiniCart() {
                                                 <th className="hiraola-product-price">Unit Price</th>
                                                 <th className="hiraola-product-quantity">Quantity</th>
                                                 <th className="hiraola-product-subtotal">Total Price</th>
+                                                <th className="hiraola-product-subtotal">Update</th>
                                             </tr>
                                         </thead>
                                         <tbody style={{ verticalAlign: 'inherit' }}>
@@ -932,6 +984,9 @@ function MiniCart() {
                                                 <td className="product-subtotal" style={{ fontSize: '16px', fontWeight: '700' }}>
                                                     <span className="amount" style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: '"Lato", sans-serif', color: '#212529' }}>${caculateTotalPrice(card.TotalQuantity,card.Price)}</span>
                                                 </td>
+                                                <td>
+                                                <a  id="checkout" onClick={()=>UpdateQuality(card.ID,card.TotalQuantity)} >Update Card</a>
+                                                </td>
                                             </tr>
                                          ))}
                                         </tbody>
@@ -941,8 +996,24 @@ function MiniCart() {
                                     <div className="col-12">
                                         <div className="coupon-all">
                                             <div className="coupon">
-                                                <input type="text" id="coupon_code" className="input-text" placeholder="Coupon code" />
-                                                <input type="submit" className="button" name="apply_coupon" value={"Apply coupon"}/>
+                                            <input 
+                                            name="voucherCode"
+                                            type="text" 
+                                            id="coupon_code" 
+                                            value={voucherCode} 
+                                            onChange={(e) => setVoucherCode(e.target.value)} 
+                                            className="input-text" 
+                                            placeholder="Coupon code" 
+                                                            />
+                                                <input type="button" className="button" name="apply_coupon" onClick={handleApplyVoucher} value={"Apply coupon"}/>
+                                                {/* <button 
+                                                    type="button" 
+                                                    className="button" 
+                                                    name="apply_coupon" 
+                                                    onClick={handleApplyVoucher}
+                                                    >
+                                                    Apply coupon
+                                            </button> */}
                                             </div>
                                         </div>
                                     </div>

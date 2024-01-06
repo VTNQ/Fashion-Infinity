@@ -18,7 +18,7 @@ class cardController extends Controller
         join('picture','picture.ID','=','category_product.id_Picture')->
         where('card.id_Account',$ID)->
         where("picture.status",1)->
-        select(["picture.link","product.Name","detailcard.Quality","product.Price"])->get();
+        select(["picture.link","product.Name","detailcard.Quality","product.Price",'product.ID'])->get();
         return response()->json($card, 200);
     }
     public function AddCardDetail(Request $request,$ID){
@@ -50,6 +50,13 @@ class cardController extends Controller
             }
         }catch(\Exception $error){
             return response()->json(['error' => 'Failed to add card'], 500);
+        }
+    }
+    public function UpdateCard(Request $request,$ID){
+        $Updaterow=detailcard::where("id_product",$ID)->update(["Quality"=>$request->input('UpdateQuality')]);
+        if($Updaterow>0){
+            return response()->json(['message' => 'Category updated successfully']);
+        
         }
     }
     public function addCard(Request $request, $ID)

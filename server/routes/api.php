@@ -21,6 +21,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\TransportfeeController;
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\WareHouseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -91,8 +92,11 @@ Route::get('/getWareHouse/{id}',[WareHouseController::class,'getWareHouse'])->na
 Route::post("/EditWareHouse/{id}",[WareHouseController::class,"EditWareHouse"])->name("EditWareHouse");
 
 // Route::get('/visits-count', [VisitController::class, 'index'])->name("visits-count");
-
 // Route::post('/record-visit', [VisitController::class, 'recordVisit'])->name("record-visit");
+Route::post('/createVoucher', [VoucherController::class, 'createVoucher'])->name("createVoucher");
+Route::post('/checkVoucher', [VoucherController::class, 'checkVoucher'])->name("checkVoucher");
+
+
 
 
 
@@ -124,12 +128,13 @@ Route::get('/ViewBlog',[BlogController::class,'ViewBlog'])->name('ViewBlog');
 Route::post('/UpdateStatus/{id}',[BlogController::class,'UpdateStatus'])->name('UpdateStatus');
 Route::put('/deleteBlog/{id}',[BlogController::class,'deleteBlog'])->name('deleteBlog');
 Route::get('/getTopBlogcategory',[BlogController::class,'getBlog'])->name('getBlog');
-
-
-
-
-
-
+Route::get('/diplayBlog',[BlogController::class,'diplayBlog'])->name('diplayBlog');
+Route::get('/detailBlog/{id}',[BlogController::class,'detailBlog'])->name('detailBlog');
+Route::get('/recentPost',[BlogController::class,'recentPost'])->name('recentPost');
+Route::get('/totalpricedisplay',[TransportfeeController::class,'totalpricedisplay'])->name('totalpricedisplay');
+Route::post("/UpdateCard/{id}",[cardController::class,'UpdateCard'])->name('UpdateCard');
+Route::get('/ship/{id}',[OrderController::class,'ship'])->name('ship');
+Route::post('/updateOrder/{id}',[OrderController::class,'updateOrder'])->name('updateOrder');
 
 
 

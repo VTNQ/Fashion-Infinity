@@ -35,40 +35,7 @@ function MenuHomepage() {
         PostCode:'',
         Phone:''
       });
-      const deleteCard=async (IDProduct)=>{
-        try{
-            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`,{
-                method:'POST',
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-                body:JSON.stringify({
-                    id_Account: ID,
-                }),
-            });
-            if(!response.ok){
-                throw new Error('Failed to Delete card');
-            }
-            const data=await response.json();
-            if(data.message){
-                Swal.fire({
-                    icon: "success",
-                    title: "Delete Successfull",
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
-            }else{
-                Swal.fire({
-                    icon: "success",
-                    title: "Delete Successfull",
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
-            }
-        }catch(error){
-            console.error('Error adding card:', error);
-        }
-    }
+     
     const [cartData,setCardData]=useState([]);
     const [currency,setcurrency]=useState(false);
     const[language,setlanguage]=useState(false);
@@ -90,6 +57,45 @@ function MenuHomepage() {
 		}
 		fetchCardData();
 	},[]);
+    const deleteCard=async (IDProduct)=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    id_Account: ID,
+                }),
+            });
+            if(!response.ok){
+                throw new Error('Failed to Delete card');
+            }
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  const response=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+				if(response.ok){
+					const data=await response.json();
+					setCardData(data);
+				}
+            }else{
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+    }
     const popupopen={
         left: 'auto',
     right: '0',
@@ -209,6 +215,7 @@ function MenuHomepage() {
         display: IsExpaned ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s',// Default animation
     };
+    
     return (
         <header className="block">
             <div id="contact" style={{ border: '1px solid #e5e5e5' }}>
@@ -331,7 +338,7 @@ function MenuHomepage() {
                                 <nav>
                                     <ul id="menu"  >
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Home</a>
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Product</a>
@@ -339,7 +346,7 @@ function MenuHomepage() {
                                                 <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }} onClick={() => navigate('/HomeProduct', { state: { username: username,ID:ID } })} >Product</a>
                                                   
                                                 </li>
-                                                <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Detail Product</a>
+                                                <li className="relative">   <a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Detail Product</a>
                                                     
                                                 </li>
                                                
@@ -470,7 +477,7 @@ function MenuHomepage() {
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
 
                                     <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Home</span>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</span>
                                     </a>
                                 </li>
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
@@ -724,7 +731,7 @@ function MenuHomepage() {
                         <ul className="minicart-list" style={{maxHeight:'310px',position:'relative',overflow:'auto'}}>
                         {cartData.map((card,index)=>(
                                        <li className="minicart-product flex pb-[30px]">
-                                       <a href="" className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}}>
+                                       <a className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}} onClick={()=>deleteCard(card.ID)}>
                                           
                                        <i class="fa fa-times" aria-hidden="true"></i>
                                        </a>
@@ -732,7 +739,7 @@ function MenuHomepage() {
                                                    <img src={`http://127.0.0.1:8000/${card.link}`} alt="" />
                                                    </div>
                                                    <div className="product-item_content">
-                                           <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}}>{card.Name}</a>
+                                           <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}} onClick={()=>navigate(`/DetailProduct/${card.ID}`,{state:{IDProduct:card.ID,ID:ID}})}>{card.Name}</a>
                                            <span className="product-item_quantity" style={{display:'block',paddingTop:'10px',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>{card.Quality} x {card.Price}</span>
                                                    </div>
                                    </li>
@@ -747,7 +754,7 @@ function MenuHomepage() {
                         <span style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                     </div>
                     <div className="minicart-btn_area  pb-[15px]">
-                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Minicart</a>
+                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>Minicart</a>
                     </div>
                     <div className="minicart-btn_area pb-[15px]">
                         <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>

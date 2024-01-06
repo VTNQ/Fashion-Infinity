@@ -116,13 +116,12 @@ function Superadmin(){
               
               <TreeviewMenu title="Tables">
               <li><a href="#" onClick={()=> navigate('/superadmin/ShowCustomer',{state: {username:username}})}><i className="fa fa-circle-o text-info"></i> All Customer</a></li>
-                  <li><a href="#" onClick={()=>navigate('/superadmin/ShowAdmin',{state: {username:username}})}><i className="fa fa-circle-o"></i> All Admin</a></li>
+              <li><a href="#" onClick={()=>navigate('/superadmin/ShowAdmin',{state: {username:username}})}><i className="fa fa-circle-o"></i> All Admin</a></li>
                </TreeviewMenu>
               
-              <li>
-                <a href="pages/calendar.html">
-                  <i className="fa fa-calendar"></i> <span>Calendar</span>
-                  <small className="label pull-right bg-red">3</small>
+               <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/superadmin/VoucherSuperadmin', { state: { username: username } })}>
+                <i className="fa fa-calendar"></i> <span>Voucher</span> 
                 </a>
               </li>
               <li>

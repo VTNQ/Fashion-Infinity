@@ -39,6 +39,34 @@ class BlogController extends Controller
         ->orderBy('category_post.ID', 'desc')->select(['category_post.ID','category_post.Name', DB::raw("Count(blog.ID) as TotalProduct")])->groupBy('category_post.ID','category_post.Name')->get();
         return response()->json($categories,200);
     }
+    public function detailBlog($ID){
+        try{
+            $Blog=DB::table('blog')->where("ID",$ID)->get();
+            return response()->json($Blog, 200);
+        }catch(\Exception $e){
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()]);
+        }
+    }
+    public function recentPost(){
+        try{
+            $categories = DB::table('blog')
+            ->orderBy('ID', 'blog')
+            ->take(3)
+            ->get();
+            return response()->json($categories, 200);
+        }catch(\Exception $e){
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()]);
+        }
+       
+    }
+    public function diplayBlog(){
+        try{
+            $blog=DB::table("blog")->join('category_post',"category_post.ID","=","blog.Blog_category")->select(['blog.ID','blog.Blog_tittle','blog.Blog_desc','blog.Blog_image'])->groupBy(['blog.ID','blog.Blog_tittle','blog.Blog_desc','blog.Blog_image'])->get();
+            return response()->json($blog, 200);
+        }catch(\Exception $e){
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()]);
+        }
+    }
     public function AddBlog(Request $request){
         try{
             if($request->hasFile('image')){

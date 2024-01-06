@@ -15,13 +15,39 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     //
+    public function updateOrder(Request $request,$ID){
+        $updateRow=order::where("ID",$ID)->update(['status'=>$request->input('status')]);
+        if($updateRow>0){
+            return response()->json(['message' => 'Category updated successfully']);
+        }
+    }
     public function detailCustomer($ID){
-        $Customer=DB::table("order")->where("ID",$ID)->first();
+        $Customer=DB::table("order")->join("city","city.ID","=","order.id_city")->join("district","district.ID","=","order.id_district")->join("ward","ward.ID","=","order.id_ward")->select(["order.FullName","order.Start_Order","order.Phone","order.Address","city.Name as Namecity","district.Name as Namedistrict","ward.Name as NameWard","order.Postcode"])->groupBy(["order.FullName","order.Start_Order","order.Phone","order.Address","city.Name","district.Name","ward.Name","order.Postcode"])
+        ->where("order.ID",$ID)->first();
         return response()->json($Customer,200);
     }
     public function detailProductOrder($ID){
         $ProductOrder=DB::table('order')->join("detailorder","order.ID","=","detailorder.id_order")->join
-        ("product","detailorder.id_product","=","product.ID")->where("order.ID",$ID)->get();
+        ("product","detailorder.id_product","=","product.ID")->join("city","city.ID","=","order.id_city")->join("district","district.ID","=","order.id_district")->join("ward","ward.ID","=","order.id_ward")->where("order.ID",$ID)->get();
+        return response()->json($ProductOrder,200);
+    }
+    public function ship($ID){
+        $ProductOrder = DB::table('order')
+        ->join('detailorder', 'order.ID', '=', 'detailorder.id_order')
+        ->join('product', 'detailorder.id_product', '=', 'product.ID')
+        ->join('city', 'city.ID', '=', 'order.id_city')
+        ->join('district', 'district.ID', '=', 'order.id_district')
+        ->join('ward', 'ward.ID', '=', 'order.id_ward')
+        ->join('delivery_charges as district_charges', 'district.ID', '=', 'district_charges.ID_district')
+        ->join('delivery_charges as ward_charges', 'ward.ID', '=', 'ward_charges.ID_Ward')
+        ->join('city as charges_city', 'charges_city.ID', '=', 'ward_charges.id_city')
+        ->where('order.ID', $ID)
+        ->select([
+         
+            'district_charges.Price',
+            
+        ])
+        ->first();
         return response()->json($ProductOrder,200);
     }
     public function displayOrder(){
@@ -42,9 +68,11 @@ class OrderController extends Controller
         $cardProduct = card::where("id_Account", $request->input('id_Account'))->first();
         try {
             $account = Account::where('ID', $request->input('id_Account'))
-                ->whereNull('Country')
+            ->whereNull('id_city')
+            ->whereNull('id_district')
+            ->whereNull("id_ward")
                 ->whereNull('FullName')
-                ->whereNull('City')
+            
                 ->whereNull('PostCode')
                 ->whereNull('Phone')
                 ->whereNull('Address')
@@ -53,9 +81,10 @@ class OrderController extends Controller
             if ($account) {
                 $updatedAccount = Account::where('ID', $request->input('id_Account'))
                     ->update([
-                        'Country' => $request->input('Country'),
+                       'id_city'=>$request->input('id_city'),
                         'FullName' => $request->input('FullName'),
-                        'City' => $request->input('City'),
+                        'id_district'=>$request->input('id_district'),
+                        'id_ward'=>$request->input('id_ward'),
                         'PostCode' => $request->input('PostCode'),
                         'Phone' => $request->input('Phone'),
                         'Address' => $request->input('Address')
@@ -67,12 +96,14 @@ class OrderController extends Controller
                     'status' => 0,
                     'FullName' => $request->input('FullName'),
                     'Address' => $request->input('Address'),
-                    'city' => $request->input('City'),
+                    'id_city'=>$request->input('id_city'),
+                    'id_ward'=>$request->input('id_ward'),
+                    'id_district'=>$request->input('id_district'),
                     'Postcode' => $request->input('PostCode'),
                     'id_Account' => $request->input('id_Account'),
                     'TotalPrice' => $request->input('TotalPrice'),
-                    'Country' => $request->input('Country'),
-                    'payments'=>$request->input('payments'),
+                    
+                 
                     'order_code'=>bin2hex(random_bytes(4))
                 ]);
                 $idProducts = $request->input('id_product');
@@ -144,12 +175,14 @@ class OrderController extends Controller
                     'status' => 0,
                     'FullName' => $request->input('FullName'),
                     'Address' => $request->input('Address'),
-                    'city' => $request->input('City'),
+                    'id_city'=>$request->input('id_city'),
+                    'id_ward'=>$request->input('id_ward'),
+                    'id_district'=>$request->input('id_district'),
                     'Postcode' => $request->input('PostCode'),
                     'id_Account' => $request->input('id_Account'),
                     'TotalPrice' => $request->input('TotalPrice'),
-                    'Country' => $request->input('Country'),
-                    'payments'=>$request->input('payments'),
+                   
+      
                     'order_code'=>bin2hex(random_bytes(4))
                 ]);
                 $idProducts = $request->input('id_product');

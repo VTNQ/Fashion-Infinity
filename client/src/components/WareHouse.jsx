@@ -187,11 +187,9 @@ function WareHouse() {
                 });
                 const response = await axios.get('http://127.0.0.1:8000/api/getProductWareHouse');
                 setProduct(response.data);
-                setFormData({
-                    iDProduct: '',
-                    Quality: '',
-                    
-                })
+                formData.iDProduct='';
+                formData.Quality='';
+                
             } else {
                 Swal.fire({
                     icon: "success",

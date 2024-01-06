@@ -23,7 +23,7 @@ function Transport_fee() {
     const [ward, setward] = useState([]);
     const [city, setCity] = useState([]);
 
-
+   
     const [selectedCity, setSelectedCity] = useState(null);
     const [Districts, setDistricts] = useState([]);
     const [selecteddistrict, setselecteddistrict] = useState(null);
@@ -404,7 +404,7 @@ function Transport_fee() {
                                             />
                                         </div>
                                         <div className="form-group">
-                                            <label>Ward</label>
+                                            <label>District</label>
                                             <Select
                                                 options={Districts.map(d => ({ value: d.ID, label: d.Name }))}
                                                 onChange={(selectedOption) => handledistrictChange(selectedOption)}

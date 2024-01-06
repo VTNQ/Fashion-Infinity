@@ -103,7 +103,10 @@ function DetailProduct() {
             
             }
         } catch (error) {
-            console.error('Error adding card:', error);
+            toast.error("product is out of stock", {
+                position: 'top-right',
+                autoClose: 3000,
+            });
         }
     };
     const handleAddCard = async () => {
@@ -661,7 +664,7 @@ function DetailProduct() {
                                     <nav>
                                         <ul id="menu"  >
                                             <li className="inline-block pr-[30px]">
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '15px', textDecoration: 'none' }}>Home</a>
+                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '15px', textDecoration: 'none' }} onClick={() => navigate('/layout')}>Home</a>
                                             </li>
                                             <li className="inline-block pr-[30px]">
                                                 <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '15px', textDecoration: 'none' }}>Product</a>
