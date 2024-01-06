@@ -36,6 +36,7 @@ import AdminBlog from './components/AdminBlog';
 import DetailBlog from './components/Blog/DetailBlog';
 import Myorder from './components/MyOrder/Myorder';
 import OrderDetail from './components/MyOrderDetail/OrderDetail';
+import Event from './components/Event';
 function App() {
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -87,6 +88,7 @@ function App() {
         <Route path='/DetailBlog' element={<DetailBlog/>}/>
         <Route path='/Myorder' element={<Myorder/>}/>
         <Route path='/OrderDetail' element={<OrderDetail/>}/>
+        <Route path='/Event' element={<Event/>}/>
       </Routes>
     </Router>
   );
