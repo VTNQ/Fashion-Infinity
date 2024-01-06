@@ -24,6 +24,8 @@ import ProductUser from './components/User/ProductUser';
 import Customer from './components/Customer';
 import Menu from './components/menu/MenuHomepage';
 import WareHouse from './components/WareHouse';
+import WareHouseSuperadmin from './components/superadmin/WareHouse';
+import ProviderSuperadmin from './components/superadmin/Provider';
 import Footer from './components/footer/FooterHome';
 import DetailProduct from './components/DetailProdutct/DetailProduct';
 import CheckOut from './components/Checkout/CheckOut';
@@ -33,6 +35,8 @@ import Transport_fee from './components/Transport_fee';
 import Category_Post from './components/Category_Post';
 import Blog from './components/Blog/Blog';
 import AdminBlog from './components/AdminBlog';
+import Voucher from './components/Voucher/Voucher';
+import VoucherSuperadmin from './components/superadmin/VoucherSuperadmin';
 import DetailBlog from './components/Blog/DetailBlog';
 import Myorder from './components/MyOrder/Myorder';
 import OrderDetail from './components/MyOrderDetail/OrderDetail';
@@ -65,15 +69,20 @@ function App() {
             <Route path='CreateAdmin' element={<CreateAdmin/>}/>
             <Route path='ShowCustomer' element={<ShowCustomer/>}/>
             <Route path='ShowAdmin' element={<ShowAdmin/>}/>
+            <Route path='WareHouse' element={<WareHouseSuperadmin/>}/>
+            <Route path='Provider' element={<ProviderSuperadmin/>}/>
+            <Route path='VoucherSuperadmin' element={<VoucherSuperadmin/>}/>
         </Route>
-        <Route path='/layout' element={<Layout/>}>
+        <Route path='/layout/' element={<Layout/>}>
             <Route index element={<Homepage/>}/>
+            <Route path='voucher' element={<Voucher/>}/>
         </Route>
         <Route path='/Product' element={<Product/>}/>
         <Route path='/Edit' element={<EditProfile/>}/>
         <Route path='/HomeProduct' element={<ProductUser/>}/>
         <Route path='/menu' element={<Menu />}/>
         <Route path='/WareHouse' element={<WareHouse/>}/>
+        
         <Route path='/DetailProduct/:id' element={<DetailProduct/>}/>
         <Route path='/MiniCart' element={<MiniCart/>}/>
         <Route path='/Customer' element={<Customer/>}/>

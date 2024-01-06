@@ -21,7 +21,9 @@ use App\Http\Controllers\MyorderController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\VisitController;
 use App\Http\Controllers\TransportfeeController;
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\WareHouseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -90,6 +92,16 @@ Route::get('/getProductWareHouse',[WareHouseController::class,'getProductWareHou
 Route::post('/AddWareHouse/{id}',[WareHouseController::class,'AddWareHouse'])->name('AddWareHouse');
 Route::get('/getWareHouse/{id}',[WareHouseController::class,'getWareHouse'])->name('getWareHouse');
 Route::post("/EditWareHouse/{id}",[WareHouseController::class,"EditWareHouse"])->name("EditWareHouse");
+
+// Route::get('/visits-count', [VisitController::class, 'index'])->name("visits-count");
+// Route::post('/record-visit', [VisitController::class, 'recordVisit'])->name("record-visit");
+Route::post('/createVoucher', [VoucherController::class, 'createVoucher'])->name("createVoucher");
+Route::post('/checkVoucher', [VoucherController::class, 'checkVoucher'])->name("checkVoucher");
+
+
+
+
+
 Route::post("/removeWareHouse/{id}",[WareHouseController::class,"removeWareHouse"])->name("removeWareHouse");
 Route::get('/getDetail/{id}',[DetailController::class,'getDetail'])->name('getDetail');
 Route::get('/getextra/{id}',[DetailController::class,'getextra'])->name('getextra');

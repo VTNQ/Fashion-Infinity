@@ -81,11 +81,103 @@ function ShowCustomer(){
       const indexOflastCustomers=(currentPage+1)*perPage;
         const indexOfFirtCustomers=indexOflastCustomers-perPage;
         const currentCustomers=filteredCustomers.slice(indexOfFirtCustomers,indexOflastCustomers)
+
+    const[totalCustomer,SetTotalCustomer] = useState();
+    useEffect(()=>{
+      const fetchdata=async()=>{
+          try {
+              const response = await axios.get('http://127.0.0.1:8000/api/getCustomers');
+              const countCustomer = response.data.filter(customer => customer.Accounttype === 1).length;
+             SetTotalCustomer(countCustomer);
+              
+          } catch (error) {
+              console.error('error fetching customers',error)
+          }
+      }
+      fetchdata();
+  },[])
+    // useEffect = (()=> {
+    //   const fetchData = async()=>{
+    //       try {
+    //         const response = await axios.get('http://127.0.0.1:8000/api/getCustomers');
+    //         const countCustomer = response.data.filter(customer => customer.status===1).length;
+    //         SetTotalCustomer(countCustomer);
+    //       } catch (error) {
+    //         console.error('error fetching data from total customer',error);
+    //       }
+    //   }
+    //   fetchData();
+    // },[]);
+
+    
     return(
 
         <div class="content-wrapper">
+
+<section class="content">
+          
+          <div class="row">
+            <div class="col-lg-3 col-xs-6">
+              
+              <div class="small-box bg-aqua">
+                <div class="inner">
+                  <h3>{totalCustomer}</h3>
+                  <p>Total Customer</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+              
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <h3>53<sup style={{ fontSize: '20px' }}>%</sup></h3>
+                  <p>Bounce Rate</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+             
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>44</h3>
+                  <p>User Registrations</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-person-add"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+              
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3>65</h3>
+                  <p>Unique Visitors</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+          </div>
+          
+
+        </section>
         
         <section class="content-header">
+
+
+
           <h1>
             Simple Tables
             <small>preview of simple tables</small>

@@ -343,7 +343,7 @@ function MenuHomepage() {
                                 <nav>
                                     <ul id="menu"  >
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Home</a>
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Product</a>
@@ -482,7 +482,7 @@ function MenuHomepage() {
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
 
                                     <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Home</span>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</span>
                                     </a>
                                 </li>
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
@@ -759,7 +759,7 @@ function MenuHomepage() {
                         <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                     </div>
                     <div className="minicart-btn_area  pb-[15px]">
-                        <a href="" style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Minicart</a>
+                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>Minicart</a>
                     </div>
                     <div className="minicart-btn_area pb-[15px]">
                         <a href="" style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>

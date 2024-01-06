@@ -335,8 +335,33 @@ function MiniCart() {
         }catch(error){
             console.error('Error adding card:', error);
         }
+
+        
+          
        
     }
+    const [voucherCode, setVoucherCode] = useState('');
+    const handleApplyVoucher = async () => {
+        try {
+          
+          const response = await axios.post('http://127.0.0.1:8000/api/checkVoucher', { voucherCode });
+          if (response.data.isValid) {
+            alert(response.data.message || 'ma voucher hop le');
+            
+            const discountValue = response.data.discountValue; 
+            
+          } else {
+            
+            alert(response.data.message || 'Mã voucher không hợp lệ');
+          }
+        } catch (error) {
+          console.error('Lỗi khi áp dụng voucher:', error);
+          
+          const errorMessage = error.response?.data?.message || error.message;
+          alert(`Có lỗi xảy ra khi kiểm tra mã voucher: ${errorMessage}`);
+        }
+      };
+      
     return (
 
         <div>
@@ -971,8 +996,24 @@ function MiniCart() {
                                     <div className="col-12">
                                         <div className="coupon-all">
                                             <div className="coupon">
-                                                <input type="text" id="coupon_code" className="input-text" placeholder="Coupon code" />
-                                                <input type="submit" className="button" name="apply_coupon" value={"Apply coupon"}/>
+                                            <input 
+                                            name="voucherCode"
+                                            type="text" 
+                                            id="coupon_code" 
+                                            value={voucherCode} 
+                                            onChange={(e) => setVoucherCode(e.target.value)} 
+                                            className="input-text" 
+                                            placeholder="Coupon code" 
+                                                            />
+                                                <input type="button" className="button" name="apply_coupon" onClick={handleApplyVoucher} value={"Apply coupon"}/>
+                                                {/* <button 
+                                                    type="button" 
+                                                    className="button" 
+                                                    name="apply_coupon" 
+                                                    onClick={handleApplyVoucher}
+                                                    >
+                                                    Apply coupon
+                                            </button> */}
                                             </div>
                                         </div>
                                     </div>
