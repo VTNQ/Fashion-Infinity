@@ -15,6 +15,35 @@ class WareHouseController extends Controller
         ->get();
         return response()->json($product,200);
     }
+    public function removeWareHouse(Request $request,$ID){
+        $DeleteQualities = $request->input("DeleteQualities");
+    
+        try {
+            foreach ($DeleteQualities as $index => $DeleteQuality) {
+                $WareHouse = DetailWareHouse::where("ID_Product", $ID)
+                    ->orderBy("Quality", 'desc')
+                    ->offset($index) // Offset to the specific row
+                    ->first();
+    
+                if ($WareHouse) {
+                    $updateWareHouse = DetailWareHouse::where("ID_Product", $WareHouse->ID_Product)
+                        ->where("Quality", $WareHouse->Quality)
+                        ->where("ID_WareHouse", $WareHouse->ID_WareHouse)
+                        ->update(["Quality" => DB::raw('Quality -' . $DeleteQuality)]);
+    
+                    if ($updateWareHouse === 0) {
+                        return response()->json(['error' => 'Failed to update Quality'], 500);
+                    }
+                } else {
+                    return response()->json(['error' => 'Warehouse not found'], 404);
+                }
+            }
+    
+            return response()->json(['message' => 'Update Quality successfully']);
+        } catch (\Exception $error) {
+            return response()->json(['error' => 'Failed to update Warehouse'], 500);
+        }
+    }
     public function EditWareHouse(Request $request, $ID)
     {
         $UpdateQualities = $request->input("UpdateQualities");

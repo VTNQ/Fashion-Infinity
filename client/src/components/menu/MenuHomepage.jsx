@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import { useLocation,useNavigate } from 'react-router-dom';
 import './menu.css';
+import Swal from 'sweetalert2';
 import us from './image/us.png';
 import France from './image/France.png';
 import logo from './image/logo.png';
@@ -27,7 +28,47 @@ function MenuHomepage() {
     const [BlogFormat, setBlogFormat] = useState(false);
     const [Grid, setGrid] = useState(false);
     const [userSetting,setuserSetting]=useState(false);
-    
+    const [formData, setFormData] = useState({
+        Country: '',
+        FullName:'',
+        City:'',
+        PostCode:'',
+        Phone:''
+      });
+      const deleteCard=async (IDProduct)=>{
+        try{
+            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    id_Account: ID,
+                }),
+            });
+            if(!response.ok){
+                throw new Error('Failed to Delete card');
+            }
+            const data=await response.json();
+            if(data.message){
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }else{
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+            }
+        }catch(error){
+            console.error('Error adding card:', error);
+        }
+    }
     const [cartData,setCardData]=useState([]);
     const [currency,setcurrency]=useState(false);
     const[language,setlanguage]=useState(false);
@@ -353,7 +394,7 @@ function MenuHomepage() {
                                                 <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Compare</a></li>
                                                 <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>FAQ</a></li>
                                                 <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>404 Error</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Comming soon</a></li>
+
                                             </ul>
                                         </li>
                                         <li className="inline-block pr-[30px]">

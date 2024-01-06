@@ -10,10 +10,17 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Account;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\cardController;
+use App\Http\Controllers\CategoryPostController;
+use App\Http\Controllers\DetailController;
 use App\Http\Controllers\HomeProduct;
+use App\Http\Controllers\MiniCartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VisitController;
+use App\Http\Controllers\TransportfeeController;
 use App\Http\Controllers\WareHouseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -83,31 +90,40 @@ Route::post('/AddWareHouse/{id}',[WareHouseController::class,'AddWareHouse'])->n
 Route::get('/getWareHouse/{id}',[WareHouseController::class,'getWareHouse'])->name('getWareHouse');
 Route::post("/EditWareHouse/{id}",[WareHouseController::class,"EditWareHouse"])->name("EditWareHouse");
 
-Route::get('/visits-count', [VisitController::class, 'index'])->name("visits-count");
+// Route::get('/visits-count', [VisitController::class, 'index'])->name("visits-count");
 
-Route::post('/record-visit', [VisitController::class, 'recordVisit'])->name("record-visit");
-
-
+// Route::post('/record-visit', [VisitController::class, 'recordVisit'])->name("record-visit");
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Route::post("/removeWareHouse/{id}",[WareHouseController::class,"removeWareHouse"])->name("removeWareHouse");
+Route::get('/getDetail/{id}',[DetailController::class,'getDetail'])->name('getDetail');
+Route::get('/getextra/{id}',[DetailController::class,'getextra'])->name('getextra');
+Route::get('/detailProduct',[DetailController::class,"detailProduct"])->name("detailProduct");
+Route::get("/getNewProduct",[DetailController::class,"getNewProduct"])->name("getNewProduct");
+Route::post('/updateStatus', [LoginController::class, 'updateStatus'])->name("updateStatus");
+Route::get('/ShowMiniCart/{id}',[MiniCartController::class,'ShowMiniCart'])->name("ShowMiniCart");
+Route::post("/DeleteCard/{id}",[MiniCartController::class,"DeleteCard"])->name("DeleteCard");
+Route::post('/Addorder',[OrderController::class,'Addorder'])->name('Addorder');
+Route::get('/DefaultOrder/{id}',[OrderController::class,'DefaultOrder'])->name('DefaultOrder');
+Route::get('/displayOrder',[OrderController::class,'displayOrder'])->name('displayOrder');
+Route::get('/detailCustomer/{id}',[OrderController::class,'detailCustomer'])->name('detailCustomer');
+Route::get('/detailProductOrder/{id}',[OrderController::class,'detailProductOrder'])->name('detailProductOrder');
+Route::get('/displaywardCity',[TransportfeeController::class,'displaywardCity'])->name('displaywardCity');
+Route::get('/displaydistrict',[TransportfeeController::class,'displaydistrict'])->name('displaydistrict');
+Route::get('/displayward',[TransportfeeController::class,'displayward'])->name('displayward');
+Route::post('/Adddelivery_charges',[TransportfeeController::class,'Adddelivery_charges'])->name('Adddelivery_charges');
+Route::get('/displaydelivery',[TransportfeeController::class,'displaydelivery'])->name('displaydelivery');
+Route::post('/updatedelivery/{id}',[TransportfeeController::class,'updatedelivery'])->name('updatedelivery');
+Route::post('/AddCategoryPost',[CategoryPostController::class,'AddCategoryPost'])->name('AddCategoryPost');
+Route::get('/ListCategory',[CategoryPostController::class,'ListCategory'])->name('ListCategory');
+Route::post('/UpdateCategoryUpdate/{id}',[CategoryPostController::class,'UpdateCategoryUpdate'])->name('UpdateCategoryUpdate');
+Route::get('/getpostCategory',[BlogController::class,'getpostCategory'])->name('getpostCategory');
+Route::post('/AddBlog',[BlogController::class,'AddBlog'])->name('AddBlog');
+Route::get('/ViewBlog',[BlogController::class,'ViewBlog'])->name('ViewBlog');
+Route::post('/UpdateStatus/{id}',[BlogController::class,'UpdateStatus'])->name('UpdateStatus');
+Route::put('/deleteBlog/{id}',[BlogController::class,'deleteBlog'])->name('deleteBlog');
+Route::get('/getTopBlogcategory',[BlogController::class,'getBlog'])->name('getBlog');
 
 
 

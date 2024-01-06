@@ -19,12 +19,24 @@ import ShowCustomer from './components/superadmin/ShowCustomer';
 import ShowAdmin  from './components/superadmin/ShowAdmin';
 import Layout from './components/Layout';
 import Homepage from './components/layout/homepage/Homepage';
-
+import MiniCart from './components/Minicart/MiniCart';
 import ProductUser from './components/User/ProductUser';
+import Customer from './components/Customer';
 import Menu from './components/menu/MenuHomepage';
 import WareHouse from './components/WareHouse';
 import WareHouseSuperadmin from './components/superadmin/WareHouse';
 import ProviderSuperadmin from './components/superadmin/Provider';
+import Footer from './components/footer/FooterHome';
+import DetailProduct from './components/DetailProdutct/DetailProduct';
+import CheckOut from './components/Checkout/CheckOut';
+import Order from './components/Order';
+import DetailOrder from './components/DetailOrder';
+import Transport_fee from './components/Transport_fee';
+import Category_Post from './components/Category_Post';
+import Blog from './components/Blog/Blog';
+import AdminBlog from './components/AdminBlog';
+import Voucher from './components/Voucher/Voucher';
+import VoucherSuperadmin from './components/superadmin/VoucherSuperadmin';
 function App() {
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -55,9 +67,11 @@ function App() {
             <Route path='ShowAdmin' element={<ShowAdmin/>}/>
             <Route path='WareHouse' element={<WareHouseSuperadmin/>}/>
             <Route path='Provider' element={<ProviderSuperadmin/>}/>
+            <Route path='VoucherSuperadmin' element={<VoucherSuperadmin/>}/>
         </Route>
-        <Route path='/layout' element={<Layout/>}>
+        <Route path='/layout/' element={<Layout/>}>
             <Route index element={<Homepage/>}/>
+            <Route path='voucher' element={<Voucher/>}/>
         </Route>
         <Route path='/Product' element={<Product/>}/>
         <Route path='/Edit' element={<EditProfile/>}/>
@@ -65,6 +79,17 @@ function App() {
         <Route path='/menu' element={<Menu />}/>
         <Route path='/WareHouse' element={<WareHouse/>}/>
         
+        <Route path='/DetailProduct/:id' element={<DetailProduct/>}/>
+        <Route path='/MiniCart' element={<MiniCart/>}/>
+        <Route path='/Customer' element={<Customer/>}/>
+        <Route path='/footer' element={<Footer/>}/>
+        <Route path='/Check' element={<CheckOut/>}/>
+        <Route path='/order' element={<Order/>}/>
+        <Route path='/DetailOrder' element={<DetailOrder/>}/>
+        <Route path='/Transport_fee' element={<Transport_fee/>}/>
+        <Route path='/Category_Post' element={<Category_Post/>}/>
+        <Route path='/Blog' element={<Blog/>}/>
+        <Route path='/AdminBlog' element={<AdminBlog/>}/>
       </Routes>
     </Router>
   );

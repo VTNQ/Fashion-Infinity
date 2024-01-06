@@ -13,6 +13,7 @@
     z-index: 99;
     transition: all 0.3s ease-in;
 }
+
 li:hover .ht-dropdown{
     transform: scaleY(1);
 }

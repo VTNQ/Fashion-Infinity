@@ -1,0 +1,65 @@
+.blog-grid-view_area {
+    padding-bottom: 80px;
+}
+.hiraola-blog_area-2 {
+    padding: 80px 0 0;
+    background-color: #ffffff;
+}
+.hiraola-blog-sidebar-wrapper .hiraola-blog-sidebar:first-child {
+    padding-top: 0;
+}
+.hiraola-sidebar-search-form .hiraola-search-field {
+    width: calc(100% - 50px);
+    border: 1px solid #e5e5e5;
+    padding: 0 10px;
+    font-size: 14px;
+    height: 50px;
+    float: left;
+    text-transform: capitalize;
+    outline: none;
+    color: #888888;
+}
+.hiraola-sidebar-search-form .hiraola-search-btn {
+    width: 50px;
+    height: 50px;
+    margin-left: -4px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #595959;
+    border: 1px solid #595959;
+}
+.hiraola-sidebar-search-form .hiraola-search-btn:hover {
+    background: #cda557;
+    border-color: #cda557;
+    transition: all ease 0.5s;
+}
+.hiraola-blog-sidebar-wrapper .hiraola-blog-sidebar .hiraola-blog-sidebar-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    text-transform: uppercase;
+    position: relative;
+    margin-bottom: 55px;
+}
+.hiraola-blog-sidebar-wrapper .hiraola-blog-sidebar .hiraola-blog-sidebar-title:before {
+    width: 55px;
+    height: 2px;
+    bottom: -26px;
+    left: 0;
+    background-color: #cda557;
+    content: "";
+    position: absolute;
+}
+#tittle{
+    padding-top: 30px;
+}
+.hiraola-blog-sidebar-wrapper .hiraola-blog-sidebar .hiraola-blog-archive li {
+    margin-bottom: 10px;
+}
+.hiraola-blog-sidebar-wrapper .hiraola-blog-sidebar .hiraola-blog-archive li a {
+    font-size: 14px;
+}
+a:hover {
+    color: #cda557 !important;
+    text-decoration: none;
+}

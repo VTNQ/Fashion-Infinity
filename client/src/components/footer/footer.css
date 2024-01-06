@@ -1,0 +1,118 @@
+.hiraola-footer_area {
+    background-color: #f7f7f7;
+}.hiraola-footer_area .footer-top_area {
+    padding: 80px 0 80px;
+}
+.hiraola-footer_area .footer-top_area .footer-widgets_info .footer-widgets_logo {
+    padding-bottom: 25px;
+}
+.hiraola-footer_area .footer-top_area .footer-widgets_info .widget-short_desc > p {
+    margin-bottom: 0;
+}
+.hiraola-social_link {
+    padding-top: 25px;
+}
+.hiraola-social_link > ul > li {
+    display: inline-block;
+    padding-right: 10px;
+}
+.hiraola-social_link > ul > li > a {
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    font-size: 16px;
+    display: block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+#icon:hover,#icon:hover i{
+    background-color: #cda557;
+    color: white !important;
+    transition: all ease 0.5s;
+}
+.hiraola-footer_area .footer-top_area .footer-widgets_title h6 {
+    text-transform: uppercase;
+    padding-bottom: 20px;
+    font-size: 16px;
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+.hiraola-footer_area .footer-top_area .footer-widgets > ul > li {
+    padding-bottom: 10px;
+}
+.hiraola-footer_area .footer-top_area .footer-widgets_info .widgets-essential_stuff > ul > li {
+    padding-bottom: 15px;
+}
+.hiraola-footer_area .footer-top_area .footer-widgets_info .widgets-essential_stuff > ul > li > i {
+    font-size: 21px;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+.instagram-container {
+    position: relative;
+    overflow: hidden;
+}
+.hiraola-footer_area .footer-top_area .footer-widgets_title h6 {
+    text-transform: uppercase;
+    padding-bottom: 20px;
+    font-size: 16px;
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+.newsletter-form_wrap .subscribe-form {
+    position: relative;
+}
+.newsletter-form_wrap .subscribe-form .newsletter-input {
+    border: 1px solid #e5e5e5;
+    height: 50px;
+    width: 100%;
+    padding: 0 70px 0 20px;
+}
+ .subscribe-form .newsletter-btn {
+    background-color: #cda557;
+}
+.newsletter-form_wrap .subscribe-form .newsletter-btn {
+    color: #ffffff;
+    position: absolute;
+    font-size: 21px;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+.footer-bottom_area .footer-bottom_nav {
+    border-top: 1px solid #e5e5e5;
+    padding: 30px 0 35px;
+}
+.footer-bottom_area .footer-bottom_nav .footer-links {
+    padding: 0 40px 20px;
+}
+.footer-bottom_area .footer-bottom_nav .footer-links > ul {
+    text-align: center;
+}
+.footer-bottom_area .footer-bottom_nav .footer-links > ul > li {
+    display: inline-block;
+    position: relative;
+}
+.footer-bottom_area .footer-bottom_nav .footer-links > ul > li > a {
+    color: #888;
+    line-height: 24px;
+    letter-spacing: 0.3px;
+    font-family: "Lato", sans-serif;
+}
+.footer-bottom_area .footer-bottom_nav .payment {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+
+}
+.footer-bottom_area .footer-bottom_nav .footer-links > ul > li::after {
+    content: "/";
+    color: #888;
+}
+.footer-bottom_area .footer-bottom_nav .copyright {
+    padding-top: 25px;
+    text-align: center;
+}

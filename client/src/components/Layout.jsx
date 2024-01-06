@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import image from '../images/user2-160x160.jpg';
 import { useLocation, Outlet, Route,Routes, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,8 @@ if(featureEnabled){
 
 
 function Layout(){
+	const location = useLocation();
+    const ID=location.state?.ID||'';
     return(
         
      

@@ -72,7 +72,7 @@ class ProductController extends Controller
             'product.Price',
             'Product_Picture'
         ])
-        ->where('picture.status',1)
+       
         ->get();
     
         return response()->json($products, 200);

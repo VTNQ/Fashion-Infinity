@@ -49,6 +49,7 @@ class HomeProduct extends Controller
         ->join('category', 'category_product.id_Category', '=', 'category.ID')
         ->join('provider', 'product.id_provider', '=', 'provider.ID')
         ->join('picture','category_product.id_Picture','=','picture.ID')
+        ->join('detail_warehouse','product.ID',"=","detail_warehouse.ID_Product")
         ->select([
           
             'product.Name as ProductName',
@@ -61,7 +62,7 @@ class HomeProduct extends Controller
             'category_product.id_Category',
             'category.ID as ID_category',
             'provider.ID as ID_provider',
-            
+            DB::raw("SUM(detail_warehouse.Quality) as TotalQuantity"),
             'picture.link',
             'product.Price',
             'picture.status as Picture_status'
@@ -125,7 +126,7 @@ class HomeProduct extends Controller
             'picture.link',
             'product.Price',
             'Picture_status'
-        ])
+        ])->where("picture.status",1)
         ->get();
     
         return response()->json($products, 200);

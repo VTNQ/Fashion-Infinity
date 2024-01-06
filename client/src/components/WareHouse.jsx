@@ -12,16 +12,25 @@ import '../components/admin.css'
 function WareHouse() {
     const location = useLocation();
     const navigate = useNavigate();
+    const [searchTerm, setSearchtem] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+    const [perPage, setperPage] = useState(5);
     const [WareHouse, setWareHouse] = useState([]);
     const [Product, setProduct] = useState([]);
     const username = location.state?.username || 'Default Username';
     const ID = location.state?.ID || '';
+    const handlePageclick = (data) => {
+        setCurrentPage(data.selected);
+    };
     const [formData, setFormData] = useState({
         iDProduct: '',
         Quality: '',
-        UpdateQualities: []
+        UpdateQualities: [],
+        DeleteQualities:[]
     });
-
+    const filterWareHouse=WareHouse.filter(warehouse=>
+        warehouse.ProductName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
     useEffect(() => {
         const fetchWareHouseData = async () => {
             try {
@@ -38,9 +47,62 @@ function WareHouse() {
         }
         fetchWareHouseData();
     }, []);
-    const handleUpdateQualityChange = (e) => {
-        setFormData({ ...formData, UpdateQuality: e.target.value });
-    };
+  const handleDeleteWareHouse=async (idProduct)=>{
+    try{
+        const response=await fetch(`http://127.0.0.1:8000/api/removeWareHouse/${idProduct}`,{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({
+                DeleteQualities:formData.DeleteQualities
+            })
+        });
+        if(!response.ok){
+            throw new Error('Failed to Remove WareHouse');
+        }
+        const data=await response.json();
+        if(data.message){
+            Swal.fire({
+                icon: "success",
+                title: "remove quality product Successfully",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
+            if (response.ok) {
+                const data = await response.json();
+                setWareHouse(data);
+            }
+            setFormData({
+                iDProduct: '',
+                Quality: '',
+                UpdateQualities: [],
+                DeleteQualities:[]
+            })
+        }else{
+            Swal.fire({
+                icon: "success",
+                title: "remove quality product Successfully",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
+            if (response.ok) {
+                const data = await response.json();
+                setWareHouse(data);
+            }
+            setFormData({
+                iDProduct: '',
+                Quality: '',
+                UpdateQualities: [],
+                DeleteQualities:[]
+            })
+        }
+    }catch(error){
+        console.error('Error Remove WareHouse:', error);
+    }
+  }
     const updateWarehouse = async (idProduct) => {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/EditWareHouse/${idProduct}`, {
@@ -64,6 +126,17 @@ function WareHouse() {
                     showConfirmButton: false,
                     timer: 1500,
                 });
+                const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setWareHouse(data);
+                }
+                setFormData({
+                    iDProduct: '',
+                    Quality: '',
+                    UpdateQualities: [],
+                    DeleteQualities:[]
+                })
             } else {
                 Swal.fire({
                     icon: "success",
@@ -71,6 +144,18 @@ function WareHouse() {
                     showConfirmButton: false,
                     timer: 1500,
                 });
+                const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setWareHouse(data);
+                }
+                setProduct(response.data);
+                setFormData({
+                    iDProduct: '',
+                    Quality: '',
+                    UpdateQualities: [],
+                    DeleteQualities:[]
+                })
             }
         } catch (error) {
             console.error('Error Add WareHouse:', error);
@@ -100,6 +185,13 @@ function WareHouse() {
                     showConfirmButton: false,
                     timer: 1500,
                 });
+                const response = await axios.get('http://127.0.0.1:8000/api/getProductWareHouse');
+                setProduct(response.data);
+                setFormData({
+                    iDProduct: '',
+                    Quality: '',
+                    
+                })
             } else {
                 Swal.fire({
                     icon: "success",
@@ -107,6 +199,14 @@ function WareHouse() {
                     showConfirmButton: false,
                     timer: 1500,
                 });
+                const response = await axios.get('http://127.0.0.1:8000/api/getProductWareHouse');
+                setProduct(response.data);
+                setFormData({
+                    iDProduct: '',
+                    Quality: '',
+                    UpdateQualities: [],
+                    DeleteQualities:[]
+                })
             }
         } catch (error) {
             console.error('Error Add WareHouse:', error);
@@ -123,6 +223,9 @@ function WareHouse() {
         }
         fetchdata();
     }, [])
+    const indexOflastCategory = (currentPage + 1) * perPage;
+    const indexOfFirtCategory = indexOflastCategory - perPage;
+    const currentCategories = filterWareHouse.slice(indexOfFirtCategory, indexOflastCategory)
     return (
         <div>
             <div className="wrapper">
@@ -342,7 +445,7 @@ function WareHouse() {
                                 </div>
                                 <div className="flex items-center space-x-4 float-left flex-1 mb-2 ml-2">
                                     <label for="search" className="text-gray-600">Search</label>
-                                    <input type="text" id="search" name="search" placeholder="Enter your search term" className="border border-gray-300 px-3 py-1 rounded-md focus:outline-none focus:border-blue-500" />
+                                    <input type="text" id="search" name="search" placeholder="Enter your search term" className="border border-gray-300 px-3 py-1 rounded-md focus:outline-none focus:border-blue-500" value={searchTerm} onChange={(e)=>setSearchtem(e.target.value)} />
 
                                 </div>
 
@@ -358,11 +461,11 @@ function WareHouse() {
 
                                                 <th>Update</th>
                                                 <th>Delete</th>
-                                                <th>Detail</th>
+                                           
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {WareHouse.map((warehouse, index) => (
+                                            {currentCategories.map((warehouse, index) => (
                                                 <tr key={warehouse.ID}>
                                                     <td>{index + 1}</td>
                                                     <td>{warehouse.ProductName}</td>
@@ -398,6 +501,36 @@ function WareHouse() {
                                                             </button>
                                                         </div>
                                                     </td>
+                                                    <td>
+                                                        <div className="flex items-center">
+                                                            <div className="flex items-center mr-2">
+
+
+
+                                                                <input
+                                                                     key={warehouse.ID}
+                                                                     name={`DeleteQuality-${index}`}
+                                                                     value={formData.DeleteQualities[index] || ''}
+                                                                     onChange={(e) => {
+                                                                         const DeleteQualities = [...formData.DeleteQualities];
+                                                                         DeleteQualities[index] = e.target.value;
+                                                                         setFormData({ ...formData, DeleteQualities: DeleteQualities });
+                                                                     }}
+                                                                    type="text"
+                                                                    className="border rounded p-2"
+                                                                    style={{ outline: 'none' }}
+                                                                />
+
+
+                                                            </div>
+                                                            <button
+                                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                                                onClick={() => handleDeleteWareHouse(warehouse.ID)}
+                                                            >
+                                                                Delete Quality
+                                                            </button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             ))}
 
@@ -405,6 +538,26 @@ function WareHouse() {
                                         </tbody>
 
                                     </table>
+                                    <Pagination
+                                        previousLabel={'previous'}
+                                        nextLabel={'next'}
+                                        breakLabel={'...'}
+                                        pageCount={Math.ceil(filterWareHouse.length / perPage)}
+                                        marginPagesDisplayed={2}
+                                        pageRangeDisplayed={5}
+                                        onPageChange={handlePageclick}
+                                        containerClassName={'pagination'}
+                                        activeClassName={'active'}
+                                        previousClassName={'page-item'}
+                                        previousLinkClassName={'page-link'}
+                                        nextClassName={'page-item'}
+                                        nextLinkClassName={'page-link'}
+                                        breakClassName={'page-item'}
+                                        breakLinkClassName={'page-link'}
+                                        pageClassName={'page-item'}
+                                        pageLinkClassName={'page-link'}
+
+                                    />
 
                                 </div>
                             </div>
