@@ -14,6 +14,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\cardController;
 use App\Http\Controllers\CategoryPostController;
 use App\Http\Controllers\DetailController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeProduct;
 use App\Http\Controllers\MiniCartController;
 use App\Http\Controllers\MyorderController;
@@ -131,6 +132,7 @@ Route::get('/deliveried/{id}',[MyorderController::class,'deliveried'])->name('de
 Route::get('/AddressOrder/{id}',[MyorderController::class,'AddressOrder'])->name('AddressOrder');
 Route::get('/InformationCustomer/{id}',[MyorderController::class,'InformationCustomer'])->name('InformationCustomer');
 Route::get('/orderDetail/{id}/{idproduct}',[MyorderController::class,'orderDetail'])->name('orderDetail');
-
+Route::post('/AddEvent',[EventController::class,'AddEvent'])->name('AddEvent');
+Route::get('/getEvent',[EventController::class,'getEvent'])->name('getEvent');
 
 

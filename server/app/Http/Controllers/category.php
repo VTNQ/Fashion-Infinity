@@ -32,13 +32,6 @@ class category extends Controller
                 return response()->json(['message' => 'Category updated successfully']);
             }
             }
-
-        
-            
-          
-            
-        
-            
         }catch(\Exception $e){
             return response()->json(['error' => 'Failed to update category'], 500);
         }
