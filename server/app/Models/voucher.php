@@ -10,7 +10,7 @@ class voucher extends Model
 {
     protected $table='voucher';
     protected $primaryKey = 'ID';
-    protected $fillable = ['voucherCode','value','startDate','endDate','quantity','status','nameVoucher'];
+    protected $fillable = ['voucherCode','value','startDate','endDate','quantity','status','nameVoucher','minPrice'];
     public $timestamps=false;
 
     public function getStatusAttribute()

@@ -95,7 +95,11 @@ Route::post("/EditWareHouse/{id}",[WareHouseController::class,"EditWareHouse"])-
 // Route::get('/visits-count', [VisitController::class, 'index'])->name("visits-count");
 // Route::post('/record-visit', [VisitController::class, 'recordVisit'])->name("record-visit");
 Route::post('/createVoucher', [VoucherController::class, 'createVoucher'])->name("createVoucher");
+Route::post('/createVoucherFreeship', [VoucherController::class, 'createVoucherFreeship'])->name("createVoucherFreeship");
 Route::post('/checkVoucher', [VoucherController::class, 'checkVoucher'])->name("checkVoucher");
+Route::get('/getVoucher', [VoucherController::class, 'getVoucher'])->name("getVoucher");
+Route::delete('deleteVoucher/{voucherCode}',[VoucherController::class,'deleteVoucher'])->name('deleteVoucher');
+Route::get('/getInfomationWareHouse', [WareHouseController::class, 'getInfomationWareHouse'])->name("getInfomationWareHouse");
 
 
 
