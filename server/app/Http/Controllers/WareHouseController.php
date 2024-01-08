@@ -117,4 +117,30 @@ class WareHouseController extends Controller
             return response()->json(['error' => 'Failed to add WareHouse'], 500);
         }
     }
+    public function getInfomationWareHouse() {
+        try {
+            $products = DB::table('detail_warehouse')
+            ->join("product", "product.ID", "=", "detail_warehouse.ID_Product")
+            ->join("warehouse", "detail_warehouse.ID_Warehouse", "=", "warehouse.ID")
+            ->join("account", "account.ID", "=", "warehouse.IDAccount")
+            ->select([
+                "account.Username as username",
+                "product.Name as product_name",
+                "detail_warehouse.Quality as quality",
+                "detail_warehouse.CreateTime as created_at"
+            ])->orderBy('detail_warehouse.CreateTime','desc')
+            ->get();
+    
+            return response()->json([
+                'success' => true,
+                'data' => $products
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi khi lấy thông tin: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
 }

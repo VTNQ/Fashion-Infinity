@@ -33,10 +33,39 @@ class VoucherController extends Controller{
             ]);
     
         
-            return response()->json(['message' => 'Voucher created successfully', 'voucher' => $voucher]);
+            return response()->json(['success' => true,'message' => 'Voucher created successfully', 'voucher' => $voucher]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json(['message' => 'Failed to create voucher', 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false,'message' => 'Failed to create voucher', 'error' => $e->getMessage()], 500);
+        }
+    }
+    public function createVoucherFreeship(Request $request) {
+        
+        $existingVoucher = Voucher::where('voucherCode', $request->input('voucherCode'))->first();
+    
+        if ($existingVoucher) {
+            
+            return response()->json(['message' => 'Voucher code already exists'], 409); // Mã lỗi 409 Conflict
+        }
+    
+        try {
+            
+            $voucher = Voucher::create([
+                
+                'voucherCode' => $request->input('voucherCode'),
+                
+                'startDate' => $request->input('startDate'),
+                'endDate' => $request->input('endDate'),
+                'quantity' => $request->input('quantity'),
+                'minPrice' => $request->input('minPrice')
+                
+            ]);
+    
+        
+            return response()->json(['success' => true,'message' => 'Voucher created successfully', 'voucher' => $voucher]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['success' => false,'message' => 'Failed to create voucher', 'error' => $e->getMessage()], 500);
         }
     }
     public function VoucherFreeship() {
@@ -89,6 +118,35 @@ class VoucherController extends Controller{
             return response()->json(['isValid' => false, 'message' => 'Có lỗi xảy ra khi kiểm tra mã voucher.'], 500);
         }
     }
+    public function getVoucher() {
+        try {
+            $vouchers = DB::table('voucher')->get(); // Sử dụng get() thay vì all()
+    
+            if($vouchers->isEmpty()) { // Kiểm tra xem collection có rỗng không
+                return response()->json(['success' => false, 'message' => 'Không có voucher nào.'], 404); // Nên trả về mã trạng thái HTTP thích hợp
+            }
+    
+            return response()->json(['success' => true, 'data' => $vouchers]); // Trả về dữ liệu thành công
+    
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Có lỗi xảy ra khi lấy dữ liệu.'], 500); // Trả về lỗi server
+        }
+    }
+    public function deleteVoucher(Request $request, $voucherCode){
+        try {
+            $vouchers = Voucher::where('voucherCode', $voucherCode)->delete();
+    
+            if ($vouchers) {
+                
+                return response()->json(['success' => true,'message' => 'Voucher deleted succesfull'], 200); 
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['success'=>false,'message'=>'co loi khi xoa du lieu'],500);
+        }
+    }
+    
 
     
 }
