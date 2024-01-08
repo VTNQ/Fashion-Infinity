@@ -42,11 +42,23 @@ class TransportfeeController extends Controller
         
         }
     }
+    public function totaldistrict(){
+        $district=district::count();
+        return response()->json(['cityDistrict' => $district], 200);
+    }
+    public function totalCity(){
+        $city=city::count();
+        return response()->json(['cityCount' => $city], 200);
+    }
+    public function totalward(){
+        $Ward=ward::count();
+        return response()->json(['cityward' => $Ward], 200);
+    }
     public function totalpricedisplay(){
         $display= DB::table('delivery_charges')->join('district',"delivery_charges.ID_district","=","district.ID")->
-        join("city","city.ID","=","delivery_charges.id_city")->join('ward',"ward.ID","=","delivery_charges.ID_Ward")->select(['delivery_charges.ID_district',"delivery_charges.ID_district","delivery_charges.id_city","delivery_charges.Price"])->
+        join("city","city.ID","=","delivery_charges.id_city")->join('ward',"ward.ID","=","delivery_charges.ID_Ward")->select(['delivery_charges.ID_district',"delivery_charges.ID_district","delivery_charges.id_city","delivery_charges.Price","delivery_charges.ID_Ward"])->
         
-        groupBy(['delivery_charges.ID_district',"delivery_charges.ID_district","delivery_charges.id_city","delivery_charges.Price"])->get();
+        groupBy(['delivery_charges.ID_district',"delivery_charges.ID_district","delivery_charges.id_city","delivery_charges.Price","delivery_charges.ID_Ward"])->get();
         return response()->json($display,200);
     }
     public function updatedelivery(Request $request,$ID){

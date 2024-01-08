@@ -8,6 +8,7 @@ use App\Models\card;
 use App\Models\detailcard;
 use App\Models\DetailOrder;
 use App\Models\DetailWareHouse;
+use App\Models\voucher;
 use App\Models\WareHouse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -56,11 +57,24 @@ class OrderController extends Controller
         )->get();
         return response()->json($Order,200);
     }
+    public function getOrderCountsByDay($month) {
+        $orderCounts = DB::table("order")
+            ->whereMonth('order.Start_Order', $month)
+            ->select(DB::raw('DATE(order.Start_Order) as order_date'), DB::raw('COUNT(DISTINCT order.ID) as order_count'))
+            ->groupBy('order_date')
+            ->get();
+    
+        return response()->json($orderCounts, 200);
+    }
     public function DefaultOrder($ID)
     {
         $Account = DB::table('account')->where('ID', $ID)->first();
         
         return response()->json($Account, 200);
+    }
+    public function countOrder(){
+        $order=order::count();
+        return response()->json(['orderCount' => $order], 200);
     }
     public function addOrder(Request $request)
     {
@@ -106,6 +120,7 @@ class OrderController extends Controller
                  
                     'order_code'=>bin2hex(random_bytes(4))
                 ]);
+              
                 $idProducts = $request->input('id_product');
                 $qualities = $request->input('Quality');
 

@@ -16,16 +16,18 @@ import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
 import jewry from './2-2.png';
 import axios from "axios";
+
 function MiniCart() {
+
     const [paymentUrl, setPaymentUrl] = useState('');
 
     const [selectedBank, setSelectedBank] = useState('NCB'); // Default to NCB
 
     const handleBankSelection = (event) => {
-      setSelectedBank(event.target.value);
+        setSelectedBank(event.target.value);
     };
-    
-  
+
+
     const location = useLocation();
     const ID = location.state?.ID || '';
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -51,58 +53,85 @@ function MiniCart() {
     const [currency, setcurrency] = useState(false);
     const [language, setlanguage] = useState(false);
     const [open, isopen] = useState(false);
-    const [Minicart,setMiniCart]=useState([]);
-    const caculateTotalPrice=(quanlity,Price)=>{
-        return (quanlity*Price).toFixed(2);
+    const [Minicart, setMiniCart] = useState([]);
+    const caculateTotalPrice = (quanlity, Price) => {
+        return (quanlity * Price).toFixed(2);
     }
     const IDProduct = location.state?.IDProduct || '';
-    useEffect(()=>{
-        const fetchMinicart=async()=>{
-            try{
-                const response=await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
-                if(response.ok){
-                    const data=await response.json();
+
+    useEffect(() => {
+        const fetchMinicart = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
+                if (response.ok) {
+                    const data = await response.json();
                     setMiniCart(data);
-                }else {
+                } else {
                     console.error("Failed to fetch cart data");
                 }
-            }catch(error){
+            } catch (error) {
                 console.error('Error during fetch:', error);
             }
         }
         fetchMinicart();
-    },[])
-    const deleteCard=async (IDProduct)=>{
-        try{
-            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`,{
-                method:'POST',
-                headers:{
+    }, [])
+    const handleCheckboxChange = async (cardID, IDproduct) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/updateCard/${cardID}/${IDproduct}`, {
+                method: 'POST',
+                headers: {
                     'Content-Type': 'application/json',
                 },
-                body:JSON.stringify({
+                body: JSON.stringify({}),
+            });
+
+            if (response.ok) {
+                const miniCartResponse = await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
+                if (miniCartResponse.ok) {
+                    const data = await miniCartResponse.json();
+                    setMiniCart(data);
+                } else {
+                    console.error('Failed to fetch mini cart:', miniCartResponse.status, miniCartResponse.statusText);
+                }
+            } else {
+                console.error('Failed to update card status:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error updating card status:', error);
+        }
+    };
+
+    const deleteCard = async (IDProduct) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
                     id_Account: ID,
                 }),
             });
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error('Failed to Delete card');
             }
-            const data=await response.json();
-            if(data.message){
+            const data = await response.json();
+            if (data.message) {
                 Swal.fire({
                     icon: "success",
                     title: "Delete Successfull",
                     showConfirmButton: false,
                     timer: 1500
-                  });
-            }else{
+                });
+            } else {
                 Swal.fire({
                     icon: "success",
                     title: "Delete Successfull",
                     showConfirmButton: false,
                     timer: 1500
-                  });
+                });
             }
-        }catch(error){
+        } catch (error) {
             console.error('Error adding card:', error);
         }
     }
@@ -156,68 +185,68 @@ function MiniCart() {
     const handleIncrement = (index) => {
         // Clone the Minicart array to avoid mutating state directly
         const updatedMinicart = [...Minicart];
-  // Convert the quantity to a number and increment it
-  updatedMinicart[index].TotalQuantity = Number(updatedMinicart[index].TotalQuantity) + 1;
-  // Update the state with the new Minicart array
-  setMiniCart(updatedMinicart);
-      };
-    
-      const handleDecrement = async (index,IDproduct) => {
+        // Convert the quantity to a number and increment it
+        updatedMinicart[index].TotalQuantity = Number(updatedMinicart[index].TotalQuantity) + 1;
+        // Update the state with the new Minicart array
+        setMiniCart(updatedMinicart);
+    };
+
+    const handleDecrement = async (index, IDproduct) => {
         // Clone the Minicart array to avoid mutating state directly
         const updatedMinicart = [...Minicart];
-  // Calculate the updated quantity
-  const newQuantity = Math.max(0, updatedMinicart[index].TotalQuantity - 1);
-  updatedMinicart[index].TotalQuantity = newQuantity;
- 
-  // Show a confirmation dialog before updating the state
-  if (newQuantity <= 0 ) {
-    const confirmation = await Swal.fire({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-      });
-    if(confirmation.isConfirmed){
-        try{
-            const response=await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDproduct}`,{
-                method:'POST',
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-                body:JSON.stringify({
-                    id_Account: ID,
-                }),
+        // Calculate the updated quantity
+        const newQuantity = Math.max(0, updatedMinicart[index].TotalQuantity - 1);
+        updatedMinicart[index].TotalQuantity = newQuantity;
+
+        // Show a confirmation dialog before updating the state
+        if (newQuantity <= 0) {
+            const confirmation = await Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
             });
-            if(!response.ok){
-                throw new Error('Failed to Delete card');
+            if (confirmation.isConfirmed) {
+                try {
+                    const response = await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDproduct}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id_Account: ID,
+                        }),
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to Delete card');
+                    }
+                    const data = await response.json();
+                    if (data.message) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Delete Successfull",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Delete Successfull",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error adding card:', error);
+                }
             }
-            const data=await response.json();
-            if(data.message){
-                Swal.fire({
-                    icon: "success",
-                    title: "Delete Successfull",
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
-            }else{
-                Swal.fire({
-                    icon: "success",
-                    title: "Delete Successfull",
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
-            }
-        }catch(error){
-            console.error('Error adding card:', error);
+        } else {
+            setMiniCart(updatedMinicart);
         }
-    }
-  }else{
-    setMiniCart(updatedMinicart);
-  }
-      };
+    };
     const popupCurrency = {
         display: currency ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s'
@@ -311,57 +340,57 @@ function MiniCart() {
         display: IsExpaned ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s',// Default animation
     };
-    const UpdateQuality=async (IDProduct,Quality)=>{
-        try{
-            const response=await fetch(`http://127.0.0.1:8000/api/UpdateCard/${IDProduct}`,{
-                method:'POST',
-                headers:{
+    const UpdateQuality = async (IDProduct, Quality) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/UpdateCard/${IDProduct}`, {
+                method: 'POST',
+                headers: {
                     'Content-Type': 'application/json',
                 },
-                body:JSON.stringify({
+                body: JSON.stringify({
                     UpdateQuality: Quality,
                 }),
-                
+
             });
-            const data=await response.json();
-            if(data.message){
+            const data = await response.json();
+            if (data.message) {
                 Swal.fire({
                     icon: "success",
                     title: "Delete Successfull",
                     showConfirmButton: false,
                     timer: 1500
-                  });
+                });
             }
-        }catch(error){
+        } catch (error) {
             console.error('Error adding card:', error);
         }
 
-        
-          
-       
+
+
+
     }
     const [voucherCode, setVoucherCode] = useState('');
     const handleApplyVoucher = async () => {
         try {
-          
-          const response = await axios.post('http://127.0.0.1:8000/api/checkVoucher', { voucherCode });
-          if (response.data.isValid) {
-            alert(response.data.message || 'ma voucher hop le');
-            
-            const discountValue = response.data.discountValue; 
-            
-          } else {
-            
-            alert(response.data.message || 'Mã voucher không hợp lệ');
-          }
+
+            const response = await axios.post('http://127.0.0.1:8000/api/checkVoucher', { voucherCode });
+            if (response.data.isValid) {
+                alert(response.data.message || 'ma voucher hop le');
+
+                const discountValue = response.data.discountValue;
+
+            } else {
+
+                alert(response.data.message || 'Mã voucher không hợp lệ');
+            }
         } catch (error) {
-          console.error('Lỗi khi áp dụng voucher:', error);
-          
-          const errorMessage = error.response?.data?.message || error.message;
-          alert(`Có lỗi xảy ra khi kiểm tra mã voucher: ${errorMessage}`);
+            console.error('Lỗi khi áp dụng voucher:', error);
+
+            const errorMessage = error.response?.data?.message || error.message;
+            alert(`Có lỗi xảy ra khi kiểm tra mã voucher: ${errorMessage}`);
         }
-      };
-      
+    };
+
     return (
 
         <div>
@@ -941,54 +970,78 @@ function MiniCart() {
                                                 <th className="hiraola-product-quantity">Quantity</th>
                                                 <th className="hiraola-product-subtotal">Total Price</th>
                                                 <th className="hiraola-product-subtotal">Update</th>
+                                                <th className="hiraola-product-subtotal">choose product</th>
+
                                             </tr>
                                         </thead>
                                         <tbody style={{ verticalAlign: 'inherit' }}>
-                                        {Minicart.map((card, index) => (
-                                            <tr>
-                                                <td className="hiraola-product-remove">
-                                                    <a  id="trash" onClick={()=>deleteCard(card.ID)} style={{ color: "#595959" }}>
-                                                        <i className="fa fa-trash" title="Remove"></i>
-                                                    </a>
-                                                </td>
-                                                <td className="hiraola-product-thumbnail">
-                                                    <a href="" className="flex justify-center">
-                                                        <img src={`http://127.0.0.1:8000/${card.link}`} style={{ objectFit: 'cover' }} width={90} height={115} alt="" />
-                                                    </a>
-                                                </td>
-                                                <td className="hiraola-product-name">
-                                                    <a href="" id="productName" style={{ fontSize: '16px', fontWeight: '500', textTransform: 'capitalize', fontFamily: '"Lato", sans-serif', color: "#595959" }}>{card.Name}</a>
-                                                </td>
-                                                <td className="hiraola-product-price" style={{ fontSize: '16px', fontWeight: 'bold' }}>
-                                                    <span className="amount" style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: '"Lato", sans-serif', color: '#212529' }}>${card.Price}</span>
-                                                </td>
-                                                <td className="quantity">
-                                                    <label htmlFor="" style={{ marginBottom: '0', fontFamily: '"Lato", sans-serif', color: '#212529', fontSize: '13px' }}>Quanlity</label>
-                                                    <br />
-                                                    <div className="cart-plus-minus" style={{ margin: '6px 0' }}>
-                                                        <input type="text" value={card.TotalQuantity} className="cart-plus-minus-box" style={{ color: '#888888' }} />
-                                                        <div className="dec qtybutton">
-                                                            <i className="fa fa-angle-down"></i>
+                                            {Minicart.map((card, index) => (
+                                                <tr>
+                                                    <td className="hiraola-product-remove">
+                                                        <a id="trash" onClick={() => deleteCard(card.ID)} style={{ color: "#595959" }}>
+                                                            <i className="fa fa-trash" title="Remove"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td className="hiraola-product-thumbnail">
+                                                        <a href="" className="flex justify-center">
+                                                            <img src={`http://127.0.0.1:8000/${card.link}`} style={{ objectFit: 'cover' }} width={90} height={115} alt="" />
+                                                        </a>
+                                                    </td>
+                                                    <td className="hiraola-product-name">
+                                                        <a href="" id="productName" style={{ fontSize: '16px', fontWeight: '500', textTransform: 'capitalize', fontFamily: '"Lato", sans-serif', color: "#595959" }}>{card.Name}</a>
+                                                    </td>
+                                                    <td className="hiraola-product-price" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                                                        <span className="amount" style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: '"Lato", sans-serif', color: '#212529' }}>${card.Price}</span>
+                                                    </td>
+                                                    <td className="quantity">
+                                                        <label htmlFor="" style={{ marginBottom: '0', fontFamily: '"Lato", sans-serif', color: '#212529', fontSize: '13px' }}>Quanlity</label>
+                                                        <br />
+                                                        <div className="cart-plus-minus" style={{ margin: '6px 0' }}>
+                                                            <input type="text" value={card.TotalQuantity} className="cart-plus-minus-box" style={{ color: '#888888' }} />
+                                                            <div className="dec qtybutton">
+                                                                <i className="fa fa-angle-down"></i>
+                                                            </div>
+                                                            <div className="inc qtybutton">
+                                                                <i className="fa fa-angle-up"></i>
+                                                            </div>
+                                                            <div className="dec qtybutton">
+                                                                <i className="fa fa-angle-down" onClick={() => handleDecrement(index, card.ID)}></i>
+                                                            </div>
+                                                            <div className="inc qtybutton" onClick={() => handleIncrement(index)}>
+                                                                <i className="fa fa-angle-up"></i>
+                                                            </div>
                                                         </div>
-                                                        <div className="inc qtybutton">
-                                                            <i className="fa fa-angle-up"></i>
-                                                        </div>
-                                                        <div className="dec qtybutton">
-                                                            <i className="fa fa-angle-down" onClick={() => handleDecrement(index,card.ID)}></i>
-                                                        </div>
-                                                        <div className="inc qtybutton" onClick={() => handleIncrement(index)}>
-                                                            <i className="fa fa-angle-up"></i>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="product-subtotal" style={{ fontSize: '16px', fontWeight: '700' }}>
-                                                    <span className="amount" style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: '"Lato", sans-serif', color: '#212529' }}>${caculateTotalPrice(card.TotalQuantity,card.Price)}</span>
-                                                </td>
-                                                <td>
-                                                <a  id="checkout" onClick={()=>UpdateQuality(card.ID,card.TotalQuantity)} >Update Card</a>
-                                                </td>
-                                            </tr>
-                                         ))}
+                                                    </td>
+                                                    <td className="product-subtotal" style={{ fontSize: '16px', fontWeight: '700' }}>
+                                                        <span className="amount" style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: '"Lato", sans-serif', color: '#212529' }}>${caculateTotalPrice(card.TotalQuantity, card.Price)}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a id="checkout" onClick={() => UpdateQuality(card.ID, card.TotalQuantity)} >Update Card</a>
+                                                    </td>
+                                                    <td className="hiraola-product-checkbox">
+                                                        <input
+                                                            type="checkbox"
+                                                            style={{
+                                                                appearance: 'none',
+                                                                width: '20px',
+                                                                height: '20px',
+                                                                borderRadius: '5px',
+                                                                border: '2px solid #595959',
+                                                                backgroundColor: card.status === 1 ? '#4CAF50' : '#ffffff',
+                                                                backgroundImage: card.status === 1
+                                                                    ? 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'%23ffffff\' viewBox=\'0 0 24 24\'%3e%3cpath d=\'M9 16.17L4.83 12l-1.42 1.41L9 18 21 6l-1.41-1.41z\'/%3e%3c/svg%3e")'
+                                                                    : '',
+                                                                backgroundRepeat: 'no-repeat',
+                                                                backgroundPosition: 'center',
+                                                                cursor: 'pointer',
+                                                                outline: 'none',
+                                                            }}
+                                                            checked={card.status === 1}
+                                                            onChange={() => handleCheckboxChange(card.IDcard, card.ID)}
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>
@@ -996,16 +1049,16 @@ function MiniCart() {
                                     <div className="col-12">
                                         <div className="coupon-all">
                                             <div className="coupon">
-                                            <input 
-                                            name="voucherCode"
-                                            type="text" 
-                                            id="coupon_code" 
-                                            value={voucherCode} 
-                                            onChange={(e) => setVoucherCode(e.target.value)} 
-                                            className="input-text" 
-                                            placeholder="Coupon code" 
-                                                            />
-                                                <input type="button" className="button" name="apply_coupon" onClick={handleApplyVoucher} value={"Apply coupon"}/>
+                                                <input
+                                                    name="voucherCode"
+                                                    type="text"
+                                                    id="coupon_code"
+                                                    value={voucherCode}
+                                                    onChange={(e) => setVoucherCode(e.target.value)}
+                                                    className="input-text"
+                                                    placeholder="Coupon code"
+                                                />
+                                                <input type="button" className="button" name="apply_coupon" onClick={handleApplyVoucher} value={"Apply coupon"} />
                                                 {/* <button 
                                                     type="button" 
                                                     className="button" 
@@ -1019,21 +1072,28 @@ function MiniCart() {
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-md-5    " style={{paddingTop:"30px"}}>
+                                    <div className="col-md-5    " style={{ paddingTop: "30px" }}>
                                         <div className="cart-page-total">
-                                        <h2 style={{fontFamily:'"Lato", sans-serif',color:'#333333'}}>Cart totals</h2>
-                                        <ul>
-                                            <li style={{fontFamily:'"Lato", sans-serif',color:'#595959'}}>Subtotal 
-                                                <span>${Minicart.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2)}</span>
-                                            </li>
-                                            <li style={{fontFamily:'"Lato", sans-serif',color:'#595959'}}>
-                                            Total 
-                                            <span>${Minicart.reduce((total, card) => total + card.TotalQuantity * card.Price, 0).toFixed(2)}</span>
-                                            </li>
-                                        </ul>
-                                        <a  id="checkout" onClick={() => navigate('/Check', { state: { username: username, ID: ID,IDProduct:IDProduct } })}>Proceed to checkout</a>
+                                            <h2 style={{ fontFamily: '"Lato", sans-serif', color: '#333333' }}>Cart totals</h2>
+                                            <ul>
+                                                <li style={{ fontFamily: '"Lato", sans-serif', color: '#595959' }}>Subtotal
+                                                    <span>${Minicart
+                                                        .filter(card => card.status === 1)
+                                                        .reduce((total, card) => total + card.TotalQuantity * card.Price, 0)
+                                                        .toFixed(2)}
+                                                    </span>
+                                                </li>
+                                                <li style={{ fontFamily: '"Lato", sans-serif', color: '#595959' }}>
+                                                    Total
+                                                    <span>${Minicart
+                                                        .filter(card => card.status === 1)
+                                                        .reduce((total, card) => total + card.TotalQuantity * card.Price, 0)
+                                                        .toFixed(2)}</span>
+                                                </li>
+                                            </ul>
+                                            <a id="checkout" onClick={() => navigate('/Check', { state: { username: username, ID: ID, IDProduct: IDProduct } })}>Proceed to checkout</a>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </form>
@@ -1041,8 +1101,8 @@ function MiniCart() {
                     </div>
                 </div>
             </div>
-        
-    
+
+
         </div>
 
 

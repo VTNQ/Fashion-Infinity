@@ -75,7 +75,7 @@ function App() {
         </Route>
         <Route path='/layout/' element={<Layout/>}>
             <Route index element={<Homepage/>}/>
-            <Route path='voucher' element={<Voucher/>}/>
+           
         </Route>
         <Route path='/Product' element={<Product/>}/>
         <Route path='/Edit' element={<EditProfile/>}/>
@@ -98,6 +98,7 @@ function App() {
         <Route path='/Myorder' element={<Myorder/>}/>
         <Route path='/OrderDetail' element={<OrderDetail/>}/>
         <Route path='/Event' element={<Event/>}/>
+        <Route path='/voucher' element={<Voucher/>}/>
       </Routes>
     </Router>
   );

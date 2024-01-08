@@ -10,6 +10,7 @@ import 'react-paginate/theme/basic/react-paginate.css';
 import '../components/admin.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { start } from '@popperjs/core';
 function Event() {
     const location = useLocation();
     const username = location.state?.username || 'Default Username';
@@ -18,11 +19,61 @@ function Event() {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(0);
     const [startDate, setStartDate] = useState(null);
+    const [updatestartDate,setupdatestartDate]=useState(null);
+    const [updateEndDate,setupdateEndDate]=useState(null);
     const [EndDate, setEndDate] = useState(null);
     const [formData, setFormData] = useState({
         Description: '',
         Name: '',
+        updateDescription:'',
+        updateName:'',
+        ID:'',
+        image: null,
     });
+    const handleSubmit = async (e) => {
+  e.preventDefault();
+  const formattedStartDate = format(startDate, 'yyyy-MM-dd');
+  const formattedEndDate = format(EndDate, 'yyyy-MM-dd');
+  const formDataApi = new FormData();
+  formDataApi.append('Name', formData.Name);
+  formDataApi.append('Description', formData.Description);
+  formDataApi.append('StartDate', formattedStartDate);
+  formDataApi.append('EndDate', formattedEndDate);
+  formDataApi.append('image', formData.image);
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/AddEvent', {
+      method: 'POST',
+      body: formDataApi,
+    });
+    if(response.ok){
+        Swal.fire({
+            icon: 'success',
+            title: 'Add successful',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          formData.Name='';
+          formData.Description='';
+          setStartDate(null);
+          setEndDate(null);
+          formData.image=null;
+          document.getElementById('imageInput').value = '';
+          const responsedata = await axios.get("http://127.0.0.1:8000/api/getEvent");
+          setEvent(responsedata.data);
+    }
+    
+    // Xử lý response
+  } catch (error) {
+    console.error('Add error:' + error);
+  }
+};
+    const handleImageChange = (e) => {
+        setFormData((prevData) => ({
+          ...prevData,
+          image: e.target.files[0],
+        }));
+      };
     const [searchTerm, setSearchtem] = useState('');
     const [Event, setEvent] = useState([]);
     const [IsClosingPopup, setIsClosingPopup] = useState(false);
@@ -46,7 +97,19 @@ function Event() {
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
         animation: 'flipleft 0.5s', // Default animation
     };
+    const handleEditClick = (Productid) => {
+        const selectedProduct = Event.find(Product => Product.ID == Productid)
 
+        if (selectedProduct) {
+formData.ID=Productid;
+formData.updateDescription=selectedProduct.Description;
+formData.updateName=selectedProduct.Title;
+
+        }
+
+
+        setPopupVisibility(true);
+    }
     const closingAnimation = {
         animation: 'flipright 0.5s',
     };
@@ -74,48 +137,68 @@ function Event() {
     const handlePageclick = (data) => {
         setCurrentPage(data.selected);
     };
-    const handleSubmit = async (e) => {
+    const DeleteSubmit=async (idEvent)=>{
+        const confirmation = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+          });
+          if(confirmation.isConfirmed){
+            const response = await axios.put(`http://127.0.0.1:8000/api/DeleteEvent/${idEvent}`, {
+        
+        });
+        if(response.data.message){
+            Swal.fire({
+              icon: 'success',
+              title: 'Deletion successful',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            const response = await axios.get("http://127.0.0.1:8000/api/getEvent");
+            setEvent(response.data);
+        }
+          }
+    }
+    const updateSubmit=async (e)=>{
         e.preventDefault();
-        const formattedStartDate = format(startDate, 'yyyy-MM-dd');
-        const formattedEndDate = format(EndDate, 'yyyy-MM-dd');
-        if (formData.Description === '' || formData.Name == '' || startDate == null || EndDate == null) {
+
+        if(formData.updateDescription==='' || formData.updateName==='' ){
             Swal.fire({
                 icon: "error",
-                title: "Description and Title And start Date And End Date is required",
+                title: "Description and Title  is required",
                 showConfirmButton: false,
                 timer: 1500
             });
-        } else {
-            try {
-                const response = await fetch('http://127.0.0.1:8000/api/AddEvent', {
+        }else{
+            try{
+                 
+                const response = await fetch(`http://127.0.0.1:8000/api/UpdateEvent/${formData.ID}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        Name: formData.Name,
-                        Description: formData.Description,
-                        StartDate: formattedStartDate,
-                        EndDate: formattedEndDate
+                        UpdateName: formData.updateName,
+                        updateDescription: formData.updateDescription,
+                    
                     }),
                 });
-
                 const responseData = await response.json();
-                if (response.ok) {
-
+                if(response.ok){
                     Swal.fire({
                         icon: "success",
                         title: responseData.message,
                         showConfirmButton: false,
                         timer: 1500
                     });
+                    
                     const response = await axios.get("http://127.0.0.1:8000/api/getEvent");
                     setEvent(response.data);
-                    formData.Description = '';
-                    formData.Name = '';
-                    setStartDate(null);
-                    setEndDate(null);
-                } else {
+                }else{
                     if (responseData.errorEvent) {
 
                         Swal.fire({
@@ -126,13 +209,12 @@ function Event() {
                         });
                     }
                 }
-            } catch (error) {
+            }catch(error){
                 console.error('Add error:' + error);
             }
         }
-
-
     }
+   
 
 
     const indexOflastCategory = (currentPage + 1) * perPage;
@@ -305,7 +387,7 @@ function Event() {
                 </section>
                 <section className="content">
                     <div className="row">
-                        <div className="box box-primary" style={{ maxHeight: '400px' }}>
+                        <div className="box box-primary" style={{ maxHeight: '423px' }}>
                             <div className="box-header">
                                 <h3 className="box-title">Quick Example</h3>
                             </div>
@@ -337,6 +419,11 @@ function Event() {
                                         />
 
                                     </div>
+                                    <div className='form-group'>
+                                            <label htmlFor="">Banner Event</label>
+                                            <input type='file' name="image" className="form-control" id="imageInput" onChange={handleImageChange} />
+
+                                        </div>
                                     <div className="form-group">
                                         <label >Description</label>
                                         <textarea name="Description" value={formData.Description} onChange={(e) => setFormData({ ...formData, Description: e.target.value })} className="form-control" id="exampleTextarea" placeholder="Enter Content"></textarea>
@@ -371,6 +458,7 @@ function Event() {
                                             <th>Description</th>
                                             <th>Start Date</th>
                                             <th>End Date</th>
+                                            <th>Banner</th>
                                             <th>Update</th>
                                             <th>Delete</th>
                                         </tr>
@@ -383,8 +471,9 @@ function Event() {
                                                 <td>{category.Description}</td>
                                                 <td>{new Date(category.StartDate).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric' })}</td>
                                                 <td>{new Date(category.EndDate).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric' })}</td>
-                                                <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >Edit</button></td>
-                                                <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" >Remove</button></td>
+                                                <td><img src={`http://127.0.0.1:8000/${category.BannerUrl}`} width="100" height="100" style={{ objectFit: 'cover' }} alt="" /></td>
+                                                <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEditClick(category.ID)}>Edit</button></td>
+                                                <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={()=>DeleteSubmit(category.ID)}>Remove</button></td>
                                             </tr>
                                         ))}
 
@@ -424,7 +513,50 @@ function Event() {
                 </div>
                 <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
             </footer>
+            {isPopupVisible && (
+    <div className="popup-container">
 
+        <div className="popup-content" style={IsClosingPopup ? { ...popupContentStyle, ...closingAnimation } : popupContentStyle}>
+            <div className='flex justify-end'>
+                <button onClick={handleClosepopup} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded float-right "><i className="fas fa-times"></i></button>
+            </div>
+
+            <div >
+
+                <h3 className="box-title">Edit Product</h3>
+            </div>
+            <form role="form" onSubmit={updateSubmit}>
+                <div className="box-body">
+                    {/* Form fields go here */}
+                    <div className="form-group">
+                                        <label >Title</label>
+                                        <input name='Name' className="form-control" id="exampleInputEmail1" value={formData.updateName} onChange={(e) => setFormData({ ...formData, updateName: e.target.value })} placeholder="Enter Name Category" />
+
+                                    </div>
+                                    
+                                    <div className="form-group">
+                                        <label >Description</label>
+                                        <textarea name="Description" value={formData.updateDescription} onChange={(e) => setFormData({ ...formData, updateDescription: e.target.value })} className="form-control" id="exampleTextarea" placeholder="Enter Content"></textarea>
+
+
+                                    </div>
+
+
+
+
+                </div>
+
+                <div className="box-footer">
+                    <button type="submit" className="btn btn-primary">
+                        Update
+                    </button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+)}
         </div>
 
     )

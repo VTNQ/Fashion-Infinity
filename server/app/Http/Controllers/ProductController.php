@@ -34,6 +34,10 @@ class ProductController extends Controller
         ->get();
         return response()->json($products, 200);
     }
+        public function countproduct(){
+            $product=Product::count();
+            return response()->json(['productCount' => $product], 200);
+        }
     public function getProduct()
     {$products = DB::table('product')
         ->join('category_product', 'product.ID', '=', 'category_product.id_Product')

@@ -7,17 +7,23 @@ import Pagination from 'react-paginate';
 import Swal from 'sweetalert2';
 import us from '../menu/image/us.png';
 import France from '../menu/image/France.png';
-import 'slick-carousel/slick/slick.css';
+import './Blog.css'
 import logo from '../menu/image/logo.png';
 import s from '../menu/image/s.png';
 import product from '../menu/image/product.png';
 import product2 from '../menu/image/product2.png';
 import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
-import './Blog.css';
+
+
 import axios from "axios";
 function MiniCart() {
- 
+    const featureEnabled = window.location.pathname.includes("/Blog");
+
+    if (featureEnabled) {
+        require('./Blog.css');
+     
+    }
     const [perPage, setperPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(0);
     const location = useLocation();

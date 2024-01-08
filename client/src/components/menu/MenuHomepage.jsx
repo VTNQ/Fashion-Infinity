@@ -19,9 +19,34 @@ function MenuHomepage() {
     const location = useLocation();
     const navigate = useNavigate();
     const ID = location.state?.ID || '';
+    const [loading, setLoading] = useState(false);
     const [singleproduct, setsingleproduct] = useState(false);
     const [Listview, setListView] = useState(false);
 
+    const handleClick = async (routeString) => {
+        try {
+          setLoading(true);
+    
+          // Simulate an asynchronous task, like data fetching
+          await someAsyncTask();
+    
+          // After the task is completed, navigate to the dynamic route
+          navigate(routeString, { state: { username, ID } });
+        } catch (error) {
+          console.error('Error during async operation:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      const someAsyncTask = () => {
+        return new Promise((resolve) => {
+          // Simulate an asynchronous task
+          setTimeout(() => {
+            console.log('Async task completed');
+            resolve();
+          }, 2000); // Simulate a delay of 2 seconds
+        });
+      };
     const username = location.state?.username || 'Default Username';
     const [Page, setPage] = useState(false);
     const [Blogdetail, setblogDetail] = useState(false);
@@ -35,7 +60,7 @@ function MenuHomepage() {
         PostCode: '',
         Phone: ''
     });
-
+   
     const [cartData, setCardData] = useState([]);
     const [currency, setcurrency] = useState(false);
     const [language, setlanguage] = useState(false);
@@ -218,6 +243,12 @@ function MenuHomepage() {
 
     return (
         <header className="block">
+            {loading && (
+                <div
+                    className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600"></div>
+                </div>
+            )}
             <div id="contact" style={{ border: '1px solid #e5e5e5' }}>
                 <div className="container">
                     <div className="row">
@@ -279,12 +310,28 @@ function MenuHomepage() {
                                                 <i className="fa fa-chevron-down" style={{ paddingLeft: '5px', fontSize: '11px' }}></i>
                                             </a>
                                             <ul className="ht-dropdown ht-currency">
-                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                    <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>Login</a>
-                                                </li>
-                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                    <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>Register</a>
-                                                </li>
+                                                {username==='Default Username' && (
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                        <a href="/login"  className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}  >Login</a>
+                                                    </li>
+                                                )}
+                                                {username==='Default Username' && (
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                        <a href="/register" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={()=>navigate('/register')}>Register</a>
+                                                    </li>
+                                                )}
+
+                                                    {username!=='Default Username' &&(
+                                                         <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                         <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>{username}</a>
+                                                     </li>
+                                                    )}
+                                                    {username!=='Default Username' && (
+                                                          <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                          <a href="/layout" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={()=>navigate('/layout')}>log out</a>
+                                                      </li>
+                                                    )}
+
                                                 {username !== 'Default Username' ? (
                                                     <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
                                                         <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/Myorder', { state: { username: username, ID: ID } })}>My order</a>
@@ -306,7 +353,7 @@ function MenuHomepage() {
                     <div className="row">
                         <div className="col-lg-3">
                             <div className="header-logo">
-                                <a href="">
+                                <a href="" onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>
                                     <img src={logo} />
                                 </a>
                             </div>
@@ -346,69 +393,13 @@ function MenuHomepage() {
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Product</a>
-                                            <ul className="hm-dropdown">
-                                                <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }} onClick={() => navigate('/HomeProduct', { state: { username: username, ID: ID } })} >Product</a>
-
-                                                </li>
-                                                <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Detail Product</a>
-
-                                                </li>
-
-
-
-                                            </ul>
+                                            <a  id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={()=>handleClick('/HomeProduct')}>Product</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Blog</a>
-                                            <ul className="hm-dropdown">
-                                                <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Grid View</a>
-                                                    <ul className="hm-dropdown hm-sub_dropdown">
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Column Two</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Column Three</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Left Sidebar</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Right Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List View</a>
-                                                    <ul className="hm-dropdown hm-sub_dropdown">
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Fullwidth</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Left Sidebar</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Right Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Blog Details</a>
-                                                    <ul className="hm-dropdown hm-sub_dropdown">
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Left Sidebar</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Right Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Blog Format</a>
-                                                    <ul className="hm-dropdown hm-sub_last">
-                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Gallery Format</a></li>
-                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Audio Format</a></li>
-                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Video Format</a></li>
-                                                    </ul>
-                                                </li>
+                                            <a href=""  id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={()=>handleClick('/blog')} >Blog</a>
 
-                                            </ul>
                                         </li>
-                                        <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Pages
 
-                                            </a>
-                                            <ul className="hm-dropdown">
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>{username}</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Login|Register</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Wishlist</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Cart</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Checkout</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Compare</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>FAQ</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>404 Error</a></li>
-
-                                            </ul>
-                                        </li>
                                         <li className="inline-block pr-[30px]">
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>About US
 
@@ -442,11 +433,7 @@ function MenuHomepage() {
                         <div className="col-lg-3 col-md-8 col-sm-8">
                             <div className="flex justify-end" id="reponmenu">
                                 <ul style={{ display: 'inline-flex' }}>
-                                    <li className="inline-block limenu" >
-                                        <a href="" className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
-                                            <i class="fa-solid fa-heart" style={{ borderColor: 'white' }}></i>
-                                        </a>
-                                    </li>
+                                   
                                     <li className="inline-block hidden navcon limenu" >
                                         <a onClick={() => isopen(true)} className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
                                             <i class="fa fa-navicon" style={{ borderColor: 'white' }}></i>
@@ -758,11 +745,8 @@ function MenuHomepage() {
                         <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Subtotal</span>
                         <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                     </div>
-                    <div className="minicart-btn_area  pb-[15px]">
-                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>Minicart</a>
-                    </div>
-                    <div className="minicart-btn_area pb-[15px]">
-                        <a href="" style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>
+                    <div className="minicart-btn_area  pb-[15px]" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>
+                        <a style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" >Minicart</a>
                     </div>
                 </div>
             </div>

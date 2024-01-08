@@ -15,6 +15,7 @@ use App\Http\Controllers\cardController;
 use App\Http\Controllers\CategoryPostController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\FeedbackProductController;
 use App\Http\Controllers\HomeProduct;
 use App\Http\Controllers\MiniCartController;
 use App\Http\Controllers\MyorderController;
@@ -146,5 +147,24 @@ Route::get('/InformationCustomer/{id}',[MyorderController::class,'InformationCus
 Route::get('/orderDetail/{id}/{idproduct}',[MyorderController::class,'orderDetail'])->name('orderDetail');
 Route::post('/AddEvent',[EventController::class,'AddEvent'])->name('AddEvent');
 Route::get('/getEvent',[EventController::class,'getEvent'])->name('getEvent');
-
-
+Route::post("/UpdateEvent/{id}",[EventController::class,'UpdateEvent'])->name('UpdateEvent');
+Route::put('/DeleteEvent/{id}',[EventController::class,'DeleteEvent'])->name('DeleteEvent');
+Route::get('/VoucherCheck',[VoucherController::class,'VoucherCheck'])->name('VoucherCheck');
+Route::get('/VoucherFreeship',[VoucherController::class,'VoucherFreeship'])->name("VoucherFreeship");
+Route::get('/getOrderCountsByDay/{month}',[OrderController::class,'getOrderCountsByDay'])->name('getOrderCountsByDay');
+Route::get('/getWareHouseCountsOrder/{month}',[WareHouseController::class,'getWareHouseCountsOrder'])->name('getWareHouseCountsOrder');
+Route::get('/countproduct',[ProductController::class,'countproduct'])->name('countproduct');
+Route::get('/totalCategory',[category::class,'totalCategory'])->name('totalCategory');
+Route::get('/totalPicture',[PictureController::class,'totalPicture'])->name('totalPicture');
+Route::get('/countuser',[Account::class,'countuser'])->name('countuser');
+Route::get('/totalCity',[TransportfeeController::class,'totalCity'])->name('totalCity');
+Route::get('/totaldistrict',[TransportfeeController::class,'totaldistrict'])->name('totaldistrict');
+Route::get('/totalward',[TransportfeeController::class,'totalward'])->name('totalward');
+Route::post('/updateCard/{id}/{idproduct}',[MiniCartController::class,'updateCard'])->name('updateCard');
+Route::get('/Email/{id}',[FeedbackProductController::class,'Email'])->name('Email');
+Route::post('/AddFeedback/{id}/{idProduct}',[FeedbackProductController::class,'AddFeedback'])->name('AddFeedback');
+Route::get('/ListFeedback',[FeedbackProductController::class,'ListFeedback'])->name('ListFeedback');
+Route::get('/coutBlog',[BlogController::class,'coutBlog'])->name('coutBlog');
+Route::get('/countOrder',[OrderController::class,'countOrder'])->name('countOrder');
+Route::get('/coutEvent',[EventController::class,'coutEvent'])->name('coutEvent');
+Route::get('/showfeedback',[FeedbackProductController::class,'showfeedback'])->name('showfeedback');
