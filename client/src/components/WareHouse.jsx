@@ -8,13 +8,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
-import '../components/admin.css'
+import './admin/admin.css';
 function WareHouse() {
     const location = useLocation();
     const navigate = useNavigate();
     const [searchTerm, setSearchtem] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [perPage, setperPage] = useState(5);
+    const [loading, setloading] = useState(true);
     const [WareHouse, setWareHouse] = useState([]);
     const [Product, setProduct] = useState([]);
     const username = location.state?.username || 'Default Username';
@@ -26,11 +27,12 @@ function WareHouse() {
         iDProduct: '',
         Quality: '',
         UpdateQualities: [],
-        DeleteQualities:[]
+        DeleteQualities: []
     });
-    const filterWareHouse=WareHouse.filter(warehouse=>
+   
+    const filterWareHouse = WareHouse.filter(warehouse =>
         warehouse.ProductName.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+    );
     useEffect(() => {
         const fetchWareHouseData = async () => {
             try {
@@ -47,170 +49,219 @@ function WareHouse() {
         }
         fetchWareHouseData();
     }, []);
-  const handleDeleteWareHouse=async (idProduct)=>{
-    try{
-        const response=await fetch(`http://127.0.0.1:8000/api/removeWareHouse/${idProduct}`,{
-            method:'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body:JSON.stringify({
-                DeleteQualities:formData.DeleteQualities
-            })
-        });
-        if(!response.ok){
-            throw new Error('Failed to Remove WareHouse');
-        }
-        const data=await response.json();
-        if(data.message){
+    const handleDeleteWareHouse = async (idProduct) => {
+        if (formData.DeleteQualities.length <= 0) {
             Swal.fire({
-                icon: "success",
-                title: "remove quality product Successfully",
+                icon: "error",
+                title: "Enter the number of remove updates",
                 showConfirmButton: false,
                 timer: 1500,
             });
-            const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
-            if (response.ok) {
+        } else {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/removeWareHouse/${idProduct}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        DeleteQualities: formData.DeleteQualities
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to Remove WareHouse');
+                }
                 const data = await response.json();
-                setWareHouse(data);
+                if (data.message) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "remove quality product Successfully",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setWareHouse(data);
+                    }
+                    setFormData({
+                        iDProduct: '',
+                        Quality: '',
+                        UpdateQualities: [],
+                        DeleteQualities: []
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "success",
+                        title: "remove quality product Successfully",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setWareHouse(data);
+                    }
+                    setFormData({
+                        iDProduct: '',
+                        Quality: '',
+                        UpdateQualities: [],
+                        DeleteQualities: []
+                    })
+                }
+            } catch (error) {
+                console.error('Error Remove WareHouse:', error);
             }
-            setFormData({
-                iDProduct: '',
-                Quality: '',
-                UpdateQualities: [],
-                DeleteQualities:[]
-            })
-        }else{
-            Swal.fire({
-                icon: "success",
-                title: "remove quality product Successfully",
-                showConfirmButton: false,
-                timer: 1500,
-            });
-            const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
-            if (response.ok) {
-                const data = await response.json();
-                setWareHouse(data);
-            }
-            setFormData({
-                iDProduct: '',
-                Quality: '',
-                UpdateQualities: [],
-                DeleteQualities:[]
-            })
         }
-    }catch(error){
-        console.error('Error Remove WareHouse:', error);
-    }
-  }
-    const updateWarehouse = async (idProduct) => {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/EditWareHouse/${idProduct}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
 
-                    UpdateQualities: formData.UpdateQualities
-                })
-            });
-            if (!response.ok) {
-                throw new Error('Failed to add WareHouse');
-            }
-            const data = await response.json();
-            if (data.message) {
-                Swal.fire({
-                    icon: "success",
-                    title: "Add WareHouse Successfully",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
-                if (response.ok) {
-                    const data = await response.json();
+    }
+    useEffect(()=>{
+        const fetchdata=async ()=>{
+            try{
+                const Warehouse = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
+                if (Warehouse.ok) {
+                    const data = await Warehouse.json();
                     setWareHouse(data);
                 }
-                setFormData({
-                    iDProduct: '',
-                    Quality: '',
-                    UpdateQualities: [],
-                    DeleteQualities:[]
-                })
-            } else {
-                Swal.fire({
-                    icon: "success",
-                    title: "Add WareHouse Successfully",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setWareHouse(data);
-                }
-                setProduct(response.data);
-                setFormData({
-                    iDProduct: '',
-                    Quality: '',
-                    UpdateQualities: [],
-                    DeleteQualities:[]
-                })
-            }
-        } catch (error) {
-            console.error('Error Add WareHouse:', error);
+            }catch(error){
+                console.error('Error during fetch:', error);
+            }finally {
+
+                setloading(false);
+              }
+            
+
         }
+        fetchdata();
+    },[ID])
+    const updateWarehouse = async (idProduct) => {
+        if (formData.UpdateQualities.length <= 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Enter the number of quality updates",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        } else {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/EditWareHouse/${idProduct}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+
+                        UpdateQualities: formData.UpdateQualities
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to add WareHouse');
+                }
+                const data = await response.json();
+                if (data.message) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Add WareHouse Successfully",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setWareHouse(data);
+                    }
+                    setFormData({
+                        iDProduct: '',
+                        Quality: '',
+                        UpdateQualities: [],
+                        DeleteQualities: []
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Add WareHouse Successfully",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    const response = await fetch(`http://127.0.0.1:8000/api/getWareHouse/${ID}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setWareHouse(data);
+                    }
+                    setProduct(response.data);
+                    setFormData({
+                        iDProduct: '',
+                        Quality: '',
+                        UpdateQualities: [],
+                        DeleteQualities: []
+                    })
+                }
+            } catch (error) {
+                console.error('Error Add WareHouse:', error);
+            }
+        }
+
     }
     const AddWareHouse = async (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/AddWareHouse/${ID}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    iDProduct: formData.iDProduct,
-                    Quality: formData.Quality
-                })
+        if (formData.iDProduct === '' || formData.Quality === '') {
+            Swal.fire({
+                icon: "error",
+                title: "Please enter complete information",
+                showConfirmButton: false,
+                timer: 1500,
             });
-            if (!response.ok) {
-                throw new Error('Failed to add WareHouse');
-            }
-            const data = await response.json();
-            if (data.message) {
-                Swal.fire({
-                    icon: "success",
-                    title: "Add WareHouse Successfully",
-                    showConfirmButton: false,
-                    timer: 1500,
+        } else {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/AddWareHouse/${ID}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        iDProduct: formData.iDProduct,
+                        Quality: formData.Quality
+                    })
                 });
-                formData.iDProduct='';
-                formData.Quality='';
-                const response = await axios.get('http://127.0.0.1:8000/api/getProductWareHouse');
-                setProduct(response.data);
-                formData.iDProduct='';
-                formData.Quality='';
-                
-            } else {
-                Swal.fire({
-                    icon: "success",
-                    title: "Add WareHouse Successfully",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                const response = await axios.get('http://127.0.0.1:8000/api/getProductWareHouse');
-                setProduct(response.data);
-                setFormData({
-                    iDProduct: '',
-                    Quality: '',
-                    UpdateQualities: [],
-                    DeleteQualities:[]
-                })
+                if (!response.ok) {
+                    throw new Error('Failed to add WareHouse');
+                }
+                const data = await response.json();
+                if (data.message) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Add WareHouse Successfully",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    formData.iDProduct = '';
+                    formData.Quality = '';
+                    const response = await axios.get('http://127.0.0.1:8000/api/getProductWareHouse');
+                    setProduct(response.data);
+                    formData.iDProduct = '';
+                    formData.Quality = '';
+
+                } else {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Add WareHouse Successfully",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    const response = await axios.get('http://127.0.0.1:8000/api/getProductWareHouse');
+                    setProduct(response.data);
+                    setFormData({
+                        iDProduct: '',
+                        Quality: '',
+                        UpdateQualities: [],
+                        DeleteQualities: []
+                    })
+                }
+            } catch (error) {
+                console.error('Error Add WareHouse:', error);
             }
-        } catch (error) {
-            console.error('Error Add WareHouse:', error);
         }
+
     }
     useEffect(() => {
         const fetchdata = async () => {
@@ -228,6 +279,12 @@ function WareHouse() {
     const currentCategories = filterWareHouse.slice(indexOfFirtCategory, indexOflastCategory)
     return (
         <div>
+              {loading && (
+        <div
+          className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-[9000]">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600"></div>
+        </div>
+      )}
             <div className="wrapper">
 
                 <header className="main-header">
@@ -268,34 +325,21 @@ function WareHouse() {
 
                         <ul className="sidebar-menu">
                             <li className="header">MAIN NAVIGATION</li>
-                            <li className="active treeview text-white">
-                                <a className='cursor-pointer' onClick={() => navigate('/admin', { state: { username: username } })}>
-                                    <i className="fa fa-dashboard"></i> <span>Dashboard</span>
+                            <li className="active treeview">
+                                <a href="" onClick={() => navigate('/admin', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-dashboard" ></i> <span>Dashboard</span>
                                 </a>
 
                             </li>
-                            <li className="treeview">
 
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/layout/top-nav.html"><i className="fa fa-circle-o"></i> Top Navigation</a></li>
-                                    <li><a href="pages/layout/boxed.html"><i className="fa fa-circle-o"></i> Boxed</a></li>
-                                    <li><a href="pages/layout/fixed.html"><i className="fa fa-circle-o"></i> Fixed</a></li>
-                                    <li><a href="pages/layout/collapsed-sidebar.html"><i className="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-                                </ul>
-                            </li>
-                            <li className='active treeview text-white'>
+                            <li className="treeview text-white">
                                 <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>category</span>
                                 </a>
                             </li>
-                            <li className='active treeview text-white'>
+                            <li className="treeview text-white">
                                 <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Picture</span>
-                                </a>
-                            </li>
-                            <li className='active treeview text-white'>
-                                <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username, ID: ID } })}>
-                                    <i className="fa fa-th"></i> <span>Product</span>
                                 </a>
                             </li>
                             <li className="treeview text-white">
@@ -303,88 +347,51 @@ function WareHouse() {
                                     <i className="fa fa-th"></i> <span>Provider</span>
                                 </a>
                             </li>
-
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Product</span>
+                                </a>
+                            </li>
                             <li className="treeview text-white">
                                 <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Edit</span>
                                 </a>
                             </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-pie-chart"></i>
-                                    <span>Charts</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/charts/morris.html"><i className="fa fa-circle-o"></i> Morris</a></li>
-                                    <li><a href="pages/charts/flot.html"><i className="fa fa-circle-o"></i> Flot</a></li>
-                                    <li><a href="pages/charts/inline.html"><i className="fa fa-circle-o"></i> Inline charts</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-laptop"></i>
-                                    <span>UI Elements</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/UI/general.html"><i className="fa fa-circle-o"></i> General</a></li>
-                                    <li><a href="pages/UI/icons.html"><i className="fa fa-circle-o"></i> Icons</a></li>
-                                    <li><a href="pages/UI/buttons.html"><i className="fa fa-circle-o"></i> Buttons</a></li>
-                                    <li><a href="pages/UI/sliders.html"><i className="fa fa-circle-o"></i> Sliders</a></li>
-                                    <li><a href="pages/UI/timeline.html"><i className="fa fa-circle-o"></i> Timeline</a></li>
-                                    <li><a href="pages/UI/modals.html"><i className="fa fa-circle-o"></i> Modals</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-edit"></i> <span>Forms</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/forms/general.html"><i className="fa fa-circle-o"></i> General Elements</a></li>
-                                    <li><a href="pages/forms/advanced.html"><i className="fa fa-circle-o"></i> Advanced Elements</a></li>
-                                    <li><a href="pages/forms/editors.html"><i className="fa fa-circle-o"></i> Editors</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-table"></i> <span>Tables</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/tables/simple.html"><i className="fa fa-circle-o"></i> Simple tables</a></li>
-                                    <li><a href="pages/tables/data.html"><i className="fa fa-circle-o"></i> Data tables</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="pages/calendar.html">
-                                    <i className="fa fa-calendar"></i> <span>Calendar</span>
-                                    <small className="label pull-right bg-red">3</small>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/WareHouse', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>WareHouse</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="pages/mailbox/mailbox.html">
-                                    <i className="fa fa-envelope"></i> <span>Mailbox</span>
-                                    <small className="label pull-right bg-yellow">12</small>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Order', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Order</span>
                                 </a>
                             </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-folder"></i> <span>Examples</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Transport_fee', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Transport fee</span>
                                 </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/examples/invoice.html"><i className="fa fa-circle-o"></i> Invoice</a></li>
-                                    <li><a href="pages/examples/login.html"><i className="fa fa-circle-o"></i> Login</a></li>
-                                    <li><a href="pages/examples/register.html"><i className="fa fa-circle-o"></i> Register</a></li>
-                                    <li><a href="pages/examples/lockscreen.html"><i className="fa fa-circle-o"></i> Lockscreen</a></li>
-                                    <li><a href="pages/examples/404.html"><i className="fa fa-circle-o"></i> 404 Error</a></li>
-                                    <li><a href="pages/examples/500.html"><i className="fa fa-circle-o"></i> 500 Error</a></li>
-                                    <li><a href="pages/examples/blank.html"><i className="fa fa-circle-o"></i> Blank Page</a></li>
-                                </ul>
                             </li>
-
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/AdminBlog', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Blog</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Category_Post', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Category Blog</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Event', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Event</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/login')}>
+                                    <i className="fa fa-th"></i> <span>Log out</span>
+                                </a>
+                            </li>
 
                         </ul>
                     </section>
@@ -395,19 +402,19 @@ function WareHouse() {
                 <div className="content-wrapper">
                     <section className="content-header">
                         <h1>
-                            Product
+                           WareHouse
 
                         </h1>
                         <ol className="breadcrumb">
                             <li><a href="#"><i className="fa fa-dashboard"></i> Home</a></li>
-                            <li><a href="#">Category</a></li>
+                            <li><a href="#">WareHouse</a></li>
                         </ol>
                     </section>
                     <section className="content">
                         <div className="row">
                             <div className="box box-primary" >
                                 <div className="box-header">
-                                    <h3 className="box-title">Quick Example</h3>
+                                    <h3 className="box-title">List WareHouse</h3>
                                 </div>
                                 <form role="form" onSubmit={AddWareHouse}  >
                                     <div className="box-body">
@@ -445,7 +452,7 @@ function WareHouse() {
                                 </div>
                                 <div className="flex items-center space-x-4 float-left flex-1 mb-2 ml-2">
                                     <label for="search" className="text-gray-600">Search</label>
-                                    <input type="text" id="search" name="search" placeholder="Enter your search term" className="border border-gray-300 px-3 py-1 rounded-md focus:outline-none focus:border-blue-500" value={searchTerm} onChange={(e)=>setSearchtem(e.target.value)} />
+                                    <input type="text" id="search" name="search" placeholder="Enter your search term" className="border border-gray-300 px-3 py-1 rounded-md focus:outline-none focus:border-blue-500" value={searchTerm} onChange={(e) => setSearchtem(e.target.value)} />
 
                                 </div>
 
@@ -461,7 +468,7 @@ function WareHouse() {
 
                                                 <th>Update</th>
                                                 <th>Delete</th>
-                                           
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -508,14 +515,14 @@ function WareHouse() {
 
 
                                                                 <input
-                                                                     key={warehouse.ID}
-                                                                     name={`DeleteQuality-${index}`}
-                                                                     value={formData.DeleteQualities[index] || ''}
-                                                                     onChange={(e) => {
-                                                                         const DeleteQualities = [...formData.DeleteQualities];
-                                                                         DeleteQualities[index] = e.target.value;
-                                                                         setFormData({ ...formData, DeleteQualities: DeleteQualities });
-                                                                     }}
+                                                                    key={warehouse.ID}
+                                                                    name={`DeleteQuality-${index}`}
+                                                                    value={formData.DeleteQualities[index] || ''}
+                                                                    onChange={(e) => {
+                                                                        const DeleteQualities = [...formData.DeleteQualities];
+                                                                        DeleteQualities[index] = e.target.value;
+                                                                        setFormData({ ...formData, DeleteQualities: DeleteQualities });
+                                                                    }}
                                                                     type="text"
                                                                     className="border rounded p-2"
                                                                     style={{ outline: 'none' }}

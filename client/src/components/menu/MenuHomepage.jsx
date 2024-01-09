@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
-import './menu.css';
+import '../menu/menu.css';
 import Swal from 'sweetalert2';
 import us from './image/us.png';
 import France from './image/France.png';
@@ -25,28 +25,28 @@ function MenuHomepage() {
 
     const handleClick = async (routeString) => {
         try {
-          setLoading(true);
-    
-          // Simulate an asynchronous task, like data fetching
-          await someAsyncTask();
-    
-          // After the task is completed, navigate to the dynamic route
-          navigate(routeString, { state: { username, ID } });
+            setLoading(true);
+
+            // Simulate an asynchronous task, like data fetching
+            await someAsyncTask();
+
+            // After the task is completed, navigate to the dynamic route
+            navigate(routeString, { state: { username, ID } });
         } catch (error) {
-          console.error('Error during async operation:', error);
+            console.error('Error during async operation:', error);
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
-      const someAsyncTask = () => {
+    };
+    const someAsyncTask = () => {
         return new Promise((resolve) => {
-          // Simulate an asynchronous task
-          setTimeout(() => {
-            console.log('Async task completed');
-            resolve();
-          }, 2000); // Simulate a delay of 2 seconds
+            // Simulate an asynchronous task
+            setTimeout(() => {
+                console.log('Async task completed');
+                resolve();
+            }, 2000); // Simulate a delay of 2 seconds
         });
-      };
+    };
     const username = location.state?.username || 'Default Username';
     const [Page, setPage] = useState(false);
     const [Blogdetail, setblogDetail] = useState(false);
@@ -60,7 +60,7 @@ function MenuHomepage() {
         PostCode: '',
         Phone: ''
     });
-   
+
     const [cartData, setCardData] = useState([]);
     const [currency, setcurrency] = useState(false);
     const [language, setlanguage] = useState(false);
@@ -310,27 +310,27 @@ function MenuHomepage() {
                                                 <i className="fa fa-chevron-down" style={{ paddingLeft: '5px', fontSize: '11px' }}></i>
                                             </a>
                                             <ul className="ht-dropdown ht-currency">
-                                                {username==='Default Username' && (
+                                                {username === 'Default Username' && (
                                                     <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                        <a href="/login"  className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}  >Login</a>
+                                                        <a href="/login" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}  >Login</a>
                                                     </li>
                                                 )}
-                                                {username==='Default Username' && (
+                                                {username === 'Default Username' && (
                                                     <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                        <a href="/register" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={()=>navigate('/register')}>Register</a>
+                                                        <a href="/register" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/register')}>Register</a>
                                                     </li>
                                                 )}
 
-                                                    {username!=='Default Username' &&(
-                                                         <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                         <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>{username}</a>
-                                                     </li>
-                                                    )}
-                                                    {username!=='Default Username' && (
-                                                          <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                          <a href="/layout" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={()=>navigate('/layout')}>log out</a>
-                                                      </li>
-                                                    )}
+                                                {username !== 'Default Username' && (
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                        <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>{username}</a>
+                                                    </li>
+                                                )}
+                                                {username !== 'Default Username' && (
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                        <a href="/layout" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/layout')}>log out</a>
+                                                    </li>
+                                                )}
 
                                                 {username !== 'Default Username' ? (
                                                     <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
@@ -393,10 +393,11 @@ function MenuHomepage() {
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a  id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={()=>handleClick('/HomeProduct')}>Product</a>
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={() => navigate('/HomeProduct', { state: { username: username, ID: ID } })} >Product</a>
+
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a href=""  id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={()=>handleClick('/blog')} >Blog</a>
+                                            <a id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={() => handleClick('/blog')} >Blog</a>
 
                                         </li>
 
@@ -433,7 +434,7 @@ function MenuHomepage() {
                         <div className="col-lg-3 col-md-8 col-sm-8">
                             <div className="flex justify-end" id="reponmenu">
                                 <ul style={{ display: 'inline-flex' }}>
-                                   
+
                                     <li className="inline-block hidden navcon limenu" >
                                         <a onClick={() => isopen(true)} className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
                                             <i class="fa fa-navicon" style={{ borderColor: 'white' }}></i>
@@ -745,8 +746,8 @@ function MenuHomepage() {
                         <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Subtotal</span>
                         <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                     </div>
-                    <div className="minicart-btn_area  pb-[15px]" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>
-                        <a style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" >Minicart</a>
+                    <div className="minicart-btn_area  pb-[15px]" >
+                        <a style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" onClick={() => handleClick('/Minicart', { state: { username: username, ID: ID } })}>Minicart</a>
                     </div>
                 </div>
             </div>

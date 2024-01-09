@@ -18,12 +18,12 @@ import logo2 from '../menu/image/logorespon.png';
 import axios from "axios";
 const featureEnabled = window.location.pathname.includes("/DetailBlog");
 
-    if (featureEnabled) {
-        require('./Blog.css');
-     
-    }
+if (featureEnabled) {
+    require('./Blog.css');
+
+}
 function DetailBlog() {
- 
+
     const [perPage, setperPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(0);
     const location = useLocation();
@@ -41,9 +41,9 @@ function DetailBlog() {
     const [Listview, setListView] = useState(false);
 
     const username = location.state?.username || 'Default Username';
-    const IDBlog=location.state?.IDBlog || "";
+    const IDBlog = location.state?.IDBlog || "";
     const [Page, setPage] = useState(false);
-    const [BlogPage,setBlogPage]=useState([]);
+    const [BlogPage, setBlogPage] = useState([]);
     const [Blogdetail, setblogDetail] = useState(false);
     const [BlogFormat, setBlogFormat] = useState(false);
     const [Grid, setGrid] = useState(false);
@@ -53,43 +53,57 @@ function DetailBlog() {
     const [currency, setcurrency] = useState(false);
     const [language, setlanguage] = useState(false);
     const [open, isopen] = useState(false);
-    const [Minicart,setMiniCart]=useState([]);
-    const [Blog,setBlog]=useState([]);
+    const [Minicart, setMiniCart] = useState([]);
+    const [Blog, setBlog] = useState([]);
+    const [category, setcategory] = useState([]);
     const IDProduct = location.state?.IDProduct || '';
-   
-   useEffect(()=>{
-    const fetchMinicart=async()=>{
-        try{
-            const response=await fetch(`http://127.0.0.1:8000/api/detailBlog/${IDBlog}`);
-            if(response.ok){
-                const data=await response.json();
-                setBlog(data);
-            }else {
-                console.error("Failed to fetch cart data");
+    useEffect(() => {
+        const fetchdata = async () => {
+
+            try {
+                //gửi yêu cầu http để lấy dữ liệu từ api 
+                const response = await axios.get('http://127.0.0.1:8000/api/getTopBlogcategory');
+                setcategory(response.data);
+
+            } catch (error) {
+                console.error('error fetchinh categories:', error)
             }
-        }catch(error){
-            console.error('Error during fetch:', error);
         }
-    }
-    fetchMinicart();
-   },[])
-    useEffect(()=>{
-        const fetchMinicart=async()=>{
-            try{
-                const response=await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
-                if(response.ok){
-                    const data=await response.json();
-                    setMiniCart(data);
-                }else {
+        fetchdata();
+    }, []);
+    useEffect(() => {
+        const fetchMinicart = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/detailBlog/${IDBlog}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setBlog(data);
+                } else {
                     console.error("Failed to fetch cart data");
                 }
-            }catch(error){
+            } catch (error) {
                 console.error('Error during fetch:', error);
             }
         }
         fetchMinicart();
-    },[])
-    
+    }, [])
+    useEffect(() => {
+        const fetchMinicart = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setMiniCart(data);
+                } else {
+                    console.error("Failed to fetch cart data");
+                }
+            } catch (error) {
+                console.error('Error during fetch:', error);
+            }
+        }
+        fetchMinicart();
+    }, [])
+
     useEffect(() => {
         const fetchCardData = async () => {
             try {
@@ -137,8 +151,8 @@ function DetailBlog() {
     const handleuserSetting = () => {
         setuserSetting(!userSetting)
     }
-    
-    
+
+
     const popupCurrency = {
         display: currency ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s'
@@ -179,7 +193,7 @@ function DetailBlog() {
     const handleGrid = () => {
         setGrid(!Grid);
     }
-   
+
     const popupgrid = {
         display: Grid ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s'
@@ -224,21 +238,88 @@ function DetailBlog() {
         setIsExpanded(!IsExpaned);
 
     }
+    const handleClick = async (routeString) => {
+        try {
+            setLoading(true);
 
+            // Simulate an asynchronous task, like data fetching
+            await someAsyncTask();
 
+            // After the task is completed, navigate to the dynamic route
+            navigate(routeString, { state: { username, ID } });
+        } catch (error) {
+            console.error('Error during async operation:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    const [loading, setLoading] = useState(false);
+    const someAsyncTask = () => {
+        return new Promise((resolve) => {
+            // Simulate an asynchronous task
+            setTimeout(() => {
+                console.log('Async task completed');
+                resolve();
+            }, 2000); // Simulate a delay of 2 seconds
+        });
+    };
+    const deleteCard = async (IDProduct) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id_Account: ID,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to Delete card');
+            }
+            const data = await response.json();
+            if (data.message) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setCardData(data);
+                }
+            } else {
+                Swal.fire({
+                    icon: "success",
+                    title: "Delete Successfull",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        } catch (error) {
+            console.error('Error adding card:', error);
+        }
+    }
 
     const popupContentStyle = {
 
         display: IsExpaned ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s',// Default animation
     };
-  
+
     return (
 
         <div>
 
             <header className="block">
-                <ToastContainer zIndex={1000000} />
+                {loading && (
+                    <div
+                        className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+                        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600"></div>
+                    </div>
+                )}
                 <div id="contact" style={{ border: '1px solid #e5e5e5' }}>
                     <div className="container">
                         <div className="row">
@@ -247,8 +328,8 @@ function DetailBlog() {
                                     <div className="header-shipping_area">
                                         <ul>
                                             <li style={{ height: '40px', lineHeight: '35px' }}>
-                                                <span style={{ color: '#595959', fontFamily: 'Lato", sans-serif', fontSize: '15px' }}>Telephone Enquiry:</span>
-                                                <a href="" style={{ transition: 'all 0.3s ease-in', color: '#595959', textDecoration: 'none', fontFamily: 'Lato", sans-serif', fontSize: '15px' }}>(+123) 123 321 345</a>
+                                                <span style={{ color: '#595959', fontFamily: 'Lato", sans-serif', fontSize: '16px' }}>Telephone Enquiry:</span>
+                                                <a href="" style={{ transition: 'all 0.3s ease-in', color: '#595959', textDecoration: 'none', fontFamily: 'Lato", sans-serif', fontSize: '16px' }}>(+123) 123 321 345</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -258,35 +339,35 @@ function DetailBlog() {
                                 <div className="flex justify-end" >
                                     <div className="ht-menu">
                                         <ul className="flex justify-start">
-                                            <li className="inline-block relative" style={{ borderRight: '1px solid #e5e5e5', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px', lineHeight: '24px' }}>
+                                            <li className="inline-block relative" style={{ borderRight: '1px solid #e5e5e5', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
                                                 <a href="" className="block uppercase text-[12px]" style={{ paddingTop: '0', padding: '8px 15px', color: '#666666' }}>Currency
                                                     <i className="fa fa-chevron-down" style={{ paddingLeft: '5px', fontSize: '11px' }}></i>
                                                 </a>
                                                 <ul className="ht-dropdown ht-currency">
-                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px', lineHeight: '24px' }}>
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
                                                         <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>€ EUR</a>
                                                     </li>
-                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px', lineHeight: '24px' }}>
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
                                                         <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>£ Pound Sterling</a>
                                                     </li>
-                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px', lineHeight: '24px' }}>
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
                                                         <a href="" className="pt-0 block" style={{ padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>$ Us Dollar</a>
                                                     </li>
                                                 </ul>
                                             </li>
-                                            <li className="inline-block relative" style={{ borderRight: '1px solid #e5e5e5', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px', lineHeight: '24px' }}>
+                                            <li className="inline-block relative" style={{ borderRight: '1px solid #e5e5e5', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
                                                 <a href="" className="block uppercase text-[12px]" style={{ padding: '8px 15px', color: '#666666' }}>LANGUAGE
                                                     <i className="fa fa-chevron-down" style={{ paddingLeft: '5px', fontSize: '11px' }}></i>
                                                 </a>
                                                 <ul className="ht-dropdown">
-                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px', lineHeight: '24px' }}>
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
                                                         <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', display: 'flex', alignItems: 'center', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none', whiteSpace: 'nowrap', overflow: 'hidden' }}>
                                                             <img src={us} alt="" style={{ marginRight: '5px' }} />
                                                             English
 
                                                         </a>
                                                     </li>
-                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px', lineHeight: '24px' }}>
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
                                                         <a href="" className="pt-0 block" style={{ padding: '10px 5px', display: 'flex', alignItems: 'center', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none', whiteSpace: 'nowrap', overflow: 'hidden', marginTop: '7px' }}>
                                                             <img src={France} alt="" style={{ marginRight: '5px' }} />
                                                             Français
@@ -295,17 +376,38 @@ function DetailBlog() {
                                                     </li>
                                                 </ul>
                                             </li>
-                                            <li className="inline-block relative" style={{ borderRight: '1px solid #e5e5e5', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px', lineHeight: '24px' }}>
+                                            <li className="inline-block relative" style={{ borderRight: '1px solid #e5e5e5', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
                                                 <a href="" className="block uppercase text-[12px]" style={{ padding: '8px 15px', color: '#666666' }}>My Account
                                                     <i className="fa fa-chevron-down" style={{ paddingLeft: '5px', fontSize: '11px' }}></i>
                                                 </a>
                                                 <ul className="ht-dropdown ht-currency">
-                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px', lineHeight: '24px' }}>
-                                                        <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>Login</a>
-                                                    </li>
-                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px', lineHeight: '24px' }}>
-                                                        <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>Register</a>
-                                                    </li>
+                                                    {username === 'Default Username' && (
+                                                        <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                            <a href="/login" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}  >Login</a>
+                                                        </li>
+                                                    )}
+                                                    {username === 'Default Username' && (
+                                                        <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                            <a href="/register" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/register')}>Register</a>
+                                                        </li>
+                                                    )}
+
+                                                    {username !== 'Default Username' && (
+                                                        <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                            <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>{username}</a>
+                                                        </li>
+                                                    )}
+                                                    {username !== 'Default Username' && (
+                                                        <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                            <a href="/layout" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/layout')}>log out</a>
+                                                        </li>
+                                                    )}
+
+                                                    {username !== 'Default Username' ? (
+                                                        <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                            <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/Myorder', { state: { username: username, ID: ID } })}>My order</a>
+                                                        </li>
+                                                    ) : null}
 
                                                 </ul>
                                             </li>
@@ -322,7 +424,7 @@ function DetailBlog() {
                         <div className="row">
                             <div className="col-lg-3">
                                 <div className="header-logo">
-                                    <a href="">
+                                    <a href="" onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>
                                         <img src={logo} />
                                     </a>
                                 </div>
@@ -359,86 +461,31 @@ function DetailBlog() {
                                     <nav>
                                         <ul id="menu"  >
                                             <li className="inline-block pr-[30px]">
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '15px', textDecoration: 'none' }}>Home</a>
+                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
                                             </li>
                                             <li className="inline-block pr-[30px]">
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '15px', textDecoration: 'none' }}>Product</a>
-                                                <ul className="hm-dropdown">
-                                                    <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959', textDecoration: 'none' }} onClick={() => navigate('/HomeProduct', { state: { username: username, ID: ID } })} >Product</a>
+                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={() => navigate('/HomeProduct', { state: { username: username, ID: ID } })} >Product</a>
 
-                                                    </li>
-                                                    <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959', textDecoration: 'none' }}>Detail Product</a>
-
-                                                    </li>
-
-
-
-                                                </ul>
                                             </li>
                                             <li className="inline-block pr-[30px]">
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative " style={{ padding: '18px 0', textDecoration: 'none', fontSize: '15px' }}>Blog</a>
-                                                <ul className="hm-dropdown">
-                                                    <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Grid View</a>
-                                                        <ul className="hm-dropdown hm-sub_dropdown">
-                                                            <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Column Two</a></li>
-                                                            <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Column Three</a></li>
-                                                            <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Left Sidebar</a></li>
-                                                            <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Right Sidebar</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List View</a>
-                                                        <ul className="hm-dropdown hm-sub_dropdown">
-                                                            <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Fullwidth</a></li>
-                                                            <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Left Sidebar</a></li>
-                                                            <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Right Sidebar</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Blog Details</a>
-                                                        <ul className="hm-dropdown hm-sub_dropdown">
-                                                            <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Left Sidebar</a></li>
-                                                            <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Right Sidebar</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Blog Format</a>
-                                                        <ul className="hm-dropdown hm-sub_last">
-                                                            <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Gallery Format</a></li>
-                                                            <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Audio Format</a></li>
-                                                            <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Video Format</a></li>
-                                                        </ul>
-                                                    </li>
+                                                <a id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={() => handleClick('/blog')} >Blog</a>
 
-                                                </ul>
                                             </li>
-                                            <li className="inline-block pr-[30px]">
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', textDecoration: 'none', fontSize: '15px' }}>Pages
 
-                                                </a>
-                                                <ul className="hm-dropdown">
-                                                    <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>{username}</a></li>
-                                                    <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Login|Register</a></li>
-                                                    <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Wishlist</a></li>
-                                                    <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Cart</a></li>
-                                                    <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Checkout</a></li>
-                                                    <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Compare</a></li>
-                                                    <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>FAQ</a></li>
-                                                    <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>404 Error</a></li>
-                                                    <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '15px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Comming soon</a></li>
-                                                </ul>
-                                            </li>
                                             <li className="inline-block pr-[30px]">
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '15px' }}>About US
+                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>About US
 
                                                 </a>
                                             </li>
                                             <li className="inline-block pr-[30px]">
 
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '15px' }}>Contact
+                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Contact
 
                                                 </a>
                                             </li>
                                             <li className="inline-block pr-[30px]">
 
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '15px' }}>JeweLLery
+                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>JeweLLery
 
                                                 </a>
                                             </li>
@@ -458,11 +505,7 @@ function DetailBlog() {
                             <div className="col-lg-3 col-md-8 col-sm-8">
                                 <div className="flex justify-end" id="reponmenu">
                                     <ul style={{ display: 'inline-flex' }}>
-                                        <li className="inline-block limenu" >
-                                            <a href="" className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
-                                                <i class="fa-solid fa-heart" style={{ borderColor: 'white' }}></i>
-                                            </a>
-                                        </li>
+
                                         <li className="inline-block hidden navcon limenu" >
                                             <a onClick={() => isopen(true)} className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
                                                 <i class="fa fa-navicon" style={{ borderColor: 'white' }}></i>
@@ -498,7 +541,7 @@ function DetailBlog() {
                                     <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
 
                                         <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                            <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Home</span>
+                                            <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</span>
                                         </a>
                                     </li>
                                     <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
@@ -752,7 +795,7 @@ function DetailBlog() {
                             <ul className="minicart-list" style={{ maxHeight: '310px', position: 'relative', overflow: 'auto' }}>
                                 {cartData.map((card, index) => (
                                     <li className="minicart-product flex pb-[30px]">
-                                        <a href="" className="product-item_remove absolute " style={{ right: '15px', color: '#595959', textDecoration: 'none' }}>
+                                        <a className="product-item_remove absolute " style={{ right: '15px', color: '#595959', textDecoration: 'none' }} onClick={() => deleteCard(card.ID)}>
 
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </a>
@@ -760,8 +803,8 @@ function DetailBlog() {
                                             <img src={`http://127.0.0.1:8000/${card.link}`} alt="" />
                                         </div>
                                         <div className="product-item_content">
-                                            <a href="" style={{ color: '#595959', textDecoration: 'none', fontFamily: '"Lato", sans-serif', fontSize: '15px' }}>{card.Name}</a>
-                                            <span className="product-item_quantity" style={{ display: 'block', paddingTop: '10px', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px' }}>{card.Quality} x {card.Price}</span>
+                                            <a href="" style={{ color: '#595959', textDecoration: 'none', fontFamily: '"Lato", sans-serif', fontSize: '16px' }} onClick={() => navigate(`/DetailProduct/${card.ID}`, { state: { IDProduct: card.ID, ID: ID } })}>{card.Name}</a>
+                                            <span className="product-item_quantity" style={{ display: 'block', paddingTop: '10px', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>{card.Quality} x {card.Price}</span>
                                         </div>
                                     </li>
 
@@ -771,14 +814,11 @@ function DetailBlog() {
                             </ul>
                         </div>
                         <div className="minicart-item_total">
-                            <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px' }}>Subtotal</span>
-                            <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
+                            <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Subtotal</span>
+                            <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                         </div>
-                        <div className="minicart-btn_area  pb-[15px]">
-                            <a href="" style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Minicart</a>
-                        </div>
-                        <div className="minicart-btn_area pb-[15px]">
-                            <a href="" style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>
+                        <div className="minicart-btn_area  pb-[15px]" >
+                            <a style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" onClick={() => handleClick('/Minicart', { state: { username: username, ID: ID } })}>Minicart</a>
                         </div>
                     </div>
                 </div>
@@ -796,54 +836,54 @@ function DetailBlog() {
                     </div>
                 </div>
             </div>
-        <div className="hiraola-blog_area hiraola-blog_area-2 blog-grid-view_area">
-<div className="container">
-    <div className="row">
-        <div className="col-lg-3 order-lg-1 order-2">
-            <div className="hiraola-blog-sidebar-wrapper">
-                <div className="hiraola-blog-sidebar">
-                    <div className="hiraola-sidebar-search-form">
-                        <form action="">
-                            <input type="text" className="hiraola-search-field" placeholder="search here" />
-                            <button type="submit" className="hiraola-search-btn">
-                                <i className="fa fa-search" style={{color:'#fff'}}></i>
-                            </button>
-                        </form>
+            <div className="hiraola-blog_area hiraola-blog_area-2 blog-grid-view_area">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-3 order-lg-1 order-2">
+                            <div className="hiraola-blog-sidebar-wrapper">
+                                <div className="hiraola-blog-sidebar">
+                                    <div className="hiraola-sidebar-search-form">
+                                        <form action="">
+                                            <input type="text" className="hiraola-search-field" placeholder="search here" />
+                                            <button type="submit" className="hiraola-search-btn">
+                                                <i className="fa fa-search" style={{ color: '#fff' }}></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div className="hiraola-blog-sidebar">
+                                    <div className="hiraola-blog-sidebar" id="tittle" >
+                                        <h4 className="hiraola-blog-sidebar-title" style={{ fontFamily: '"Lato", sans-serif', color: '#333333' }}>            Categories</h4>
+                                        <ul className="hiraola-blog-archive">
+                                            {category.map((category, index) => (
+                                                <li >
+                                                    <a style={{ color: '#595959', textDecoration: 'none', outline: 'none', fontFamily: '"Lato", sans-serif', color: '#595959' }} href="">{category.Name} ({category.TotalProduct})</a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-lg-9 order-lg-2 order-1">
+                            <div className="row blog-item_wrap">
+
+                                <div className="col-lg-12">
+                                    {Blog.map((order, index) => (
+                                        <div className="blog-item" key={index}>
+                                            <div dangerouslySetInnerHTML={{ __html: order.Blog_content }} />
+                                        </div>
+                                    ))}
+                                </div>
+
+
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-                <div className="hiraola-blog-sidebar">
-                <div className="hiraola-blog-sidebar" id="tittle" >
-                    <h4 className="hiraola-blog-sidebar-title" style={{fontFamily:'"Lato", sans-serif',color:'#333333'}}>            Categories</h4>
-                    <ul className="hiraola-blog-archive">
-                    { Blog.map((category, index) => (
-    <li >
-        <a style={{ color: '#595959', textDecoration: 'none', outline: 'none', fontFamily: '"Lato", sans-serif', color: '#595959' }} href="">{category.Name} ({category.TotalProduct})</a>
-    </li>
-))}
-                    </ul>
-                </div>
-                </div>
             </div>
-        </div>
-        <div className="col-lg-9 order-lg-2 order-1">
-            <div className="row blog-item_wrap">
-          
-                <div className="col-lg-12">
-                {Blog.map((order, index) => (
-                     <div className="blog-item" key={index}>
-                     <div dangerouslySetInnerHTML={{ __html: order.Blog_content }} />
-                   </div>
-                      ))}
-                </div>
-                
-              
-            </div>
-            
-        </div>
-    </div>
-</div>
-        </div>
-    
+
         </div>
 
 

@@ -15,14 +15,14 @@ import France from '../menu/image/France.png';
 import logo from '../menu/image/logo.png';
 import jw from './images/jw.png';
 import jew2 from './images/jew2.png';
-import './list.css'
+
 import axios from 'axios';
 import TreeviewMenu from "../superadmin/TreeViewMenu";
 const featureEnabled = window.location.pathname.includes("/HomeProduct");
 
 if (featureEnabled) {
 	require("./global.css");
-	require("./list.css");
+	require("../User/list.css");
 	require('./bootstrap.min.css');
 	require('./index.css');
 	require('./fontawesome.css');
@@ -55,6 +55,7 @@ function ProductUser() {
     const[open,isopen]=useState(false);
     useEffect(()=>{
 		const fetchCardData=async()=>{
+			setLoading(true)
 			try{
 				const response=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
 				if(response.ok){
@@ -65,6 +66,8 @@ function ProductUser() {
 				}
 			}catch(error){
 				console.error('Error during fetch:', error);
+			}finally{
+				setLoading(false)
 			}
 			
 		}
@@ -236,13 +239,17 @@ function ProductUser() {
 	const API_ENDPOINT = 'http://127.0.0.1:8000/api/getHomeProduct';
 	const fetchProducts = async () => {
 		try {
+			setLoading(true)
 			const response = await axios.get(API_ENDPOINT);
 			return response.data;
 		} catch (error) {
 			console.error('Error fetching products:', error);
 			throw error; // Propagate the error for handling in the calling code
+		}finally{
+			setLoading(false)
 		}
 	};
+	
 	const popupContentStyle = {
 
 		animation: 'fadeIn 0.5s', // Default animation
@@ -389,15 +396,24 @@ function ProductUser() {
 	
 	
 	useEffect(() => {
-		// Fetch categories when the component mounts
-		axios.get('http://127.0.0.1:8000/api/getTopcategory')
-			.then(response => {
-				setCategories(response.data.categories);
-			})
-			.catch(error => {
-				console.error(error);
-			});
-	}, []);
+		const fetchCategories = async () => {
+		  try {
+			setLoading(true); // Set loading to true when starting to fetch categories
+	  
+			const response = await axios.get('http://127.0.0.1:8000/api/getTopcategory');
+			setCategories(response.data.categories);
+	  
+		  } catch (error) {
+			console.error('Error fetching categories:', error);
+	  
+		  } finally {
+			setLoading(false); // Set loading to false when category fetching is complete
+		  }
+		};
+	  
+		fetchCategories(); // Call the fetchCategories function
+	  
+	  }, []);
 
 	const handleCheckboxChange = (categoryName) => {
 		// Toggle the category in the selectedCategories state
@@ -423,11 +439,14 @@ function ProductUser() {
 	}
 	useEffect(() => {
 		const fetchdata = async () => {
+			setLoading(true)
 			try {
 				const response = await axios.get('http://127.0.0.1:8000/api/latestProduct');
 				setlatestProduct(response.data);
 			} catch (error) {
 				console.log('Error fetching Product')
+			}finally{
+				setLoading(false);
 			}
 		};
 		fetchdata();
@@ -435,6 +454,7 @@ function ProductUser() {
 	const uniqueProductIds = new Set();
 	useEffect(() => {
 		const fetchProduct = async () => {
+			setLoading(true)
 			try {
 				const response = await axios.get('http://127.0.0.1:8000/api/getHomeProduct');
 
@@ -453,6 +473,8 @@ function ProductUser() {
 				setProduct(filteredProducts);
 			} catch (error) {
 				console.error('Error fetching providers:', error);
+			}finally{
+				setLoading(false);
 			}
 		};
 
@@ -499,7 +521,7 @@ function ProductUser() {
                 id_Account: ID,
             }),
         });
-
+console.log(ID)
         if (!response.ok) {
             throw new Error('Failed to add card');
         }
@@ -554,7 +576,7 @@ const handleIncreaseQuality = () => {
 	  setLoading(false);
 	}
   };
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const deleteCard = async (IDProduct) => {
 	try {
 		const response = await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`, {
@@ -603,6 +625,7 @@ const handleIncreaseQuality = () => {
 	  }, 2000); // Simulate a delay of 2 seconds
 	});
   };
+
 	return (
 
 
@@ -1113,7 +1136,7 @@ const handleIncreaseQuality = () => {
                         <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                     </div>
                     <div className="minicart-btn_area  pb-[15px]" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>
-                        <a style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" >Minicart</a>
+                        <a href='/MiniCart' style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" >Minicart</a>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Magnifier } from 'react-image-magnify';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import '../menu/menu.css';
-import './Myorder.css';
+import '../MyOrder/Myorder.css';
 import Swal from 'sweetalert2';
 import us from '../menu/image/us.png';
 import France from '../menu/image/France.png';

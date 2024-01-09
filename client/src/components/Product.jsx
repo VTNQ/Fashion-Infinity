@@ -1,5 +1,5 @@
 import image from '../images/user2-160x160.jpg';
-import React,{ useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -7,16 +7,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
-import '../components/admin.css'
+import './admin/admin.css'
 function Product() {
     const fileInputRef = useRef(null);
     const [searchTerm, setSearchtem] = useState('');
-    const [loading, setloading] = useState(false);
+    const [loading, setloading] = useState(true);
 
     const [currentPage, setCurrentPage] = useState(0);
     const [perPage, setperPage] = useState(5);
     const [Provider, setprviders] = useState([]);
     const [Product, setProduct] = useState([]);
+
     const [ProductDetails, setProductDetails] = useState([]);
     const [categories, setCategories] = useState([]);
     const [IsClosingPopup, setIsClosingPopup] = useState(false);
@@ -65,6 +66,7 @@ function Product() {
         }, 500);
 
     }
+
     const closingAnimation = {
         animation: 'flipright 0.5s',
     };
@@ -90,14 +92,14 @@ function Product() {
         };
         fetchProviders();
     }, [])
-const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState({
         Image: [],
         NameProduct: '',
         content: '',
         Provider: '',
         Category: '',
         size: '',
-        Price:'',
+        Price: '',
         Extra: [],
         UpdateNameProduct: '',
         UpdateContent: '',
@@ -106,7 +108,7 @@ const [formData, setFormData] = useState({
         UpdateSize: '',
         ID: '',
         IDcategory: '',
-        idAccount:''
+        idAccount: ''
     });
     const updatesubmit = async (e) => {
         e.preventDefault();
@@ -178,13 +180,13 @@ const [formData, setFormData] = useState({
             }
         }
     }
-    const handleDetail = async (Productid, NameProduct, size,Price) => {
+    const handleDetail = async (Productid, NameProduct, size, Price) => {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/getDetailProduct/${Productid}`);
             const selectedProduct = response.data;
             formData.UpdateNameProduct = NameProduct;
             formData.UpdateSize = size;
-            formData.Price=Price;
+            formData.Price = Price;
             // Now you can use the selectedProduct in your state or perform other actions
             setDetail(true);
             setProductDetails(selectedProduct);
@@ -295,88 +297,117 @@ const [formData, setFormData] = useState({
     }, []);
     const navigate = useNavigate();
     const handleImageUpload = async (e) => {
-        e.preventDefault();
-        setloading(true);
-        console.log(formData.Image)
-        if (formData.Image.length > 1) {
+        if (formData.Image.length <= 0 && formData.NameProduct === '' && formData.content === '' && formData.Provider === '' && formData.Category === '' && formData.size === '' && formData.Price === '') {
             Swal.fire({
                 icon: 'error',
-                title: 'Main category can only have one image',
+                title: 'Please enter complete information',
                 showConfirmButton: true,
             });
-            return;
-        }
+        } else {
+            e.preventDefault();
+            setloading(true);
 
-        try {
-            const formDataApi = new FormData();
-
-
-
-            formData.Image.forEach((image) => {
-                formDataApi.append('Image[]', image); // Note the square brackets to handle multiple files
-            });
-            formData.Extra.forEach((image) => {
-                formDataApi.append('Extra[]', image);
-            })
-            formDataApi.append('NameProduct', formData.NameProduct);
-            formDataApi.append('content', formData.content);
-            formDataApi.append('Provider', formData.Provider);
-            formDataApi.append('Category', formData.Category);
-            formDataApi.append('size', formData.size);
-            formDataApi.append('Price',formData.Price);
-            formDataApi.append("idAccount",ID);
-            console.log(ID);
-            const response = await axios.post('http://127.0.0.1:8000/api/Addproduct', formDataApi);
-
-            if (response.data.message) {
-                setloading(false);
-                Swal.fire({
-                    icon: 'success',
-                    title: response.data.message,
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-
-                setFormData({
-                    NameProduct: '',
-                    content: '',
-                    Provider: '',
-                    Category: '',
-                    size: '',
-                    Price:''
-                })
-                const responseData = await axios.get('http://127.0.0.1:8000/api/getProduct');
-                setProduct(responseData.data);
-                document.getElementById('imageInput').value = '';
-                document.getElementById('Extra').value = '';
-
-            } else if (response.data.error) {
+            if (formData.Image.length > 1) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Failed to upload image',
-                    showConfirmButton: false,
-                    timer: 1500,
+                    title: 'Main category can only have one image',
+                    showConfirmButton: true,
                 });
+                return;
             }
-        } catch (error) {
-            console.error('Image upload error:', error);
-        } finally {
-            setloading(false);
+
+            try {
+                const formDataApi = new FormData();
+
+
+
+                formData.Image.forEach((image) => {
+                    formDataApi.append('Image[]', image); // Note the square brackets to handle multiple files
+                });
+                formData.Extra.forEach((image) => {
+                    formDataApi.append('Extra[]', image);
+                })
+                formDataApi.append('NameProduct', formData.NameProduct);
+                formDataApi.append('content', formData.content);
+                formDataApi.append('Provider', formData.Provider);
+                formDataApi.append('Category', formData.Category);
+                formDataApi.append('size', formData.size);
+                formDataApi.append('Price', formData.Price);
+                formDataApi.append("idAccount", ID);
+                console.log(ID);
+                const response = await axios.post('http://127.0.0.1:8000/api/Addproduct', formDataApi);
+
+                if (response.data.message) {
+                    setloading(false);
+                    Swal.fire({
+                        icon: 'success',
+                        title: response.data.message,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+
+                    setFormData({
+                        NameProduct: '',
+                        content: '',
+                        Provider: '',
+                        Category: '',
+                        size: '',
+                        Price: ''
+                    })
+                    const responseData = await axios.get('http://127.0.0.1:8000/api/getProduct');
+                    setProduct(responseData.data);
+                    document.getElementById('imageInput').value = '';
+                    document.getElementById('Extra').value = '';
+
+                } else if (response.data.error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed to upload image',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                }
+            } catch (error) {
+                console.error('Image upload error:', error);
+            } finally {
+                setloading(false);
+            }
         }
+
     };
     const filteredCategories = Product.filter(category =>
 
         category.ProductName.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    useEffect(() => {
+        const fetchdata = async () => {
+            try {
+                const responseData = await axios.get('http://127.0.0.1:8000/api/getProduct');
+                setProduct(responseData.data);
+            } catch (error) {
+                console.error('Error during fetch:', error);
+            } finally {
+                setloading(false);
+            }
+
+        }
+        fetchdata();
+    }, [])
     const indexOflastCategory = (currentPage + 1) * perPage;
     const indexOfFirtCategory = indexOflastCategory - perPage;
     const currentCategories = filteredCategories.slice(indexOfFirtCategory, indexOflastCategory)
 
     return (
         <div>
+            {loading && (
+                <div
+                    className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600"></div>
+                </div>
+            )}
             <div className="wrapper">
 
-                <header className="main-header">
+                <header className="main-header" style={{ zIndex: '20' }}>
 
                     <a href="index2.html" className="logo"><b>Admin</b>LTE</a>
 
@@ -395,7 +426,7 @@ const [formData, setFormData] = useState({
                     </nav>
                 </header>
 
-                <aside className="main-sidebar ">
+                <aside className="main-sidebar " style={{ zIndex: '10' }}>
 
                     <section className="sidebar h-auto">
 
@@ -414,34 +445,21 @@ const [formData, setFormData] = useState({
 
                         <ul className="sidebar-menu">
                             <li className="header">MAIN NAVIGATION</li>
-                            <li className="active treeview text-white">
-                                <a className='cursor-pointer' onClick={() => navigate('/admin', { state: { username: username } })}>
-                                    <i className="fa fa-dashboard"></i> <span>Dashboard</span>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/admin', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-dashboard" ></i> <span>Dashboard</span>
                                 </a>
 
                             </li>
-                            <li className="treeview">
 
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/layout/top-nav.html"><i className="fa fa-circle-o"></i> Top Navigation</a></li>
-                                    <li><a href="pages/layout/boxed.html"><i className="fa fa-circle-o"></i> Boxed</a></li>
-                                    <li><a href="pages/layout/fixed.html"><i className="fa fa-circle-o"></i> Fixed</a></li>
-                                    <li><a href="pages/layout/collapsed-sidebar.html"><i className="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-                                </ul>
-                            </li>
-                            <li className='active treeview text-white'>
+                            <li className="treeview text-white">
                                 <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>category</span>
                                 </a>
                             </li>
-                            <li className='active treeview text-white'>
+                            <li className="treeview text-white">
                                 <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Picture</span>
-                                </a>
-                            </li>
-                            <li className='active treeview text-white'>
-                                <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username, ID: ID } })}>
-                                    <i className="fa fa-th"></i> <span>Product</span>
                                 </a>
                             </li>
                             <li className="treeview text-white">
@@ -449,88 +467,51 @@ const [formData, setFormData] = useState({
                                     <i className="fa fa-th"></i> <span>Provider</span>
                                 </a>
                             </li>
-
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Product</span>
+                                </a>
+                            </li>
                             <li className="treeview text-white">
                                 <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Edit</span>
                                 </a>
                             </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-pie-chart"></i>
-                                    <span>Charts</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/charts/morris.html"><i className="fa fa-circle-o"></i> Morris</a></li>
-                                    <li><a href="pages/charts/flot.html"><i className="fa fa-circle-o"></i> Flot</a></li>
-                                    <li><a href="pages/charts/inline.html"><i className="fa fa-circle-o"></i> Inline charts</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-laptop"></i>
-                                    <span>UI Elements</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/UI/general.html"><i className="fa fa-circle-o"></i> General</a></li>
-                                    <li><a href="pages/UI/icons.html"><i className="fa fa-circle-o"></i> Icons</a></li>
-                                    <li><a href="pages/UI/buttons.html"><i className="fa fa-circle-o"></i> Buttons</a></li>
-                                    <li><a href="pages/UI/sliders.html"><i className="fa fa-circle-o"></i> Sliders</a></li>
-                                    <li><a href="pages/UI/timeline.html"><i className="fa fa-circle-o"></i> Timeline</a></li>
-                                    <li><a href="pages/UI/modals.html"><i className="fa fa-circle-o"></i> Modals</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-edit"></i> <span>Forms</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/forms/general.html"><i className="fa fa-circle-o"></i> General Elements</a></li>
-                                    <li><a href="pages/forms/advanced.html"><i className="fa fa-circle-o"></i> Advanced Elements</a></li>
-                                    <li><a href="pages/forms/editors.html"><i className="fa fa-circle-o"></i> Editors</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-table"></i> <span>Tables</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/tables/simple.html"><i className="fa fa-circle-o"></i> Simple tables</a></li>
-                                    <li><a href="pages/tables/data.html"><i className="fa fa-circle-o"></i> Data tables</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="pages/calendar.html">
-                                    <i className="fa fa-calendar"></i> <span>Calendar</span>
-                                    <small className="label pull-right bg-red">3</small>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/WareHouse', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>WareHouse</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="pages/mailbox/mailbox.html">
-                                    <i className="fa fa-envelope"></i> <span>Mailbox</span>
-                                    <small className="label pull-right bg-yellow">12</small>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Order', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Order</span>
                                 </a>
                             </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-folder"></i> <span>Examples</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Transport_fee', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Transport fee</span>
                                 </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/examples/invoice.html"><i className="fa fa-circle-o"></i> Invoice</a></li>
-                                    <li><a href="pages/examples/login.html"><i className="fa fa-circle-o"></i> Login</a></li>
-                                    <li><a href="pages/examples/register.html"><i className="fa fa-circle-o"></i> Register</a></li>
-                                    <li><a href="pages/examples/lockscreen.html"><i className="fa fa-circle-o"></i> Lockscreen</a></li>
-                                    <li><a href="pages/examples/404.html"><i className="fa fa-circle-o"></i> 404 Error</a></li>
-                                    <li><a href="pages/examples/500.html"><i className="fa fa-circle-o"></i> 500 Error</a></li>
-                                    <li><a href="pages/examples/blank.html"><i className="fa fa-circle-o"></i> Blank Page</a></li>
-                                </ul>
                             </li>
-
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/AdminBlog', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Blog</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Category_Post', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Category Blog</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Event', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Event</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/login')}>
+                                    <i className="fa fa-th"></i> <span>Log out</span>
+                                </a>
+                            </li>
 
                         </ul>
                     </section>
@@ -546,14 +527,14 @@ const [formData, setFormData] = useState({
                         </h1>
                         <ol className="breadcrumb">
                             <li><a href="#"><i className="fa fa-dashboard"></i> Home</a></li>
-                            <li><a href="#">Category</a></li>
+                            <li><a href="#">Product</a></li>
                         </ol>
                     </section>
                     <section className="content">
                         <div className="row">
                             <div className="box box-primary" >
                                 <div className="box-header">
-                                    <h3 className="box-title">Quick Example</h3>
+                                    <h3 className="box-title"> Product</h3>
                                 </div>
                                 <form role="form" onSubmit={handleImageUpload} >
                                     <div className="box-body">
@@ -636,7 +617,7 @@ const [formData, setFormData] = useState({
                             </div>
                             <div className="box">
                                 <div className="box-header">
-                                    <h3 className="box-title">Data Table With Full Features</h3>
+                                    <h3 className="box-title">List Product</h3>
                                 </div>
                                 <div className="flex items-center space-x-4 float-left flex-1 mb-2 ml-2">
                                     <label for="search" className="text-gray-600">Search</label>
@@ -669,7 +650,7 @@ const [formData, setFormData] = useState({
                                                     <td>{Product.NameCategory}</td>
                                                     <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleEditClick(Product.IDproduct)}>Edit</button></td>
                                                     <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => deletesubmit(Product.IDproduct)}>Remove</button></td>
-                                                    <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded " onClick={() => handleDetail(Product.IDproduct, Product.ProductName, Product.size,Product.Price)}  >Detail</button></td>
+                                                    <td><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded " onClick={() => handleDetail(Product.IDproduct, Product.ProductName, Product.size, Product.Price)}  >Detail</button></td>
                                                 </tr>
                                             ))}
 
@@ -832,7 +813,7 @@ const [formData, setFormData] = useState({
                     </div>
                 </div>
             )}
-     
+
         </div>
 
     )

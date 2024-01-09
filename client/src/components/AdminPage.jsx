@@ -14,7 +14,7 @@ function AdminPage() {
   const username = location.state?.username || 'Default Username';
   const ID = location.state?.ID || '';
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
-  const [Month,setMonth]=useState(new Date().getMonth() + 1);
+  const [Month, setMonth] = useState(new Date().getMonth() + 1);
   const [orderData, setOrderData] = useState([]);
   const [productCount, setProductCount] = useState(null);
   const [categorycount, setcategorycount] = useState(null);
@@ -27,7 +27,7 @@ function AdminPage() {
   const [totalorder, setcouttotalorder] = useState(null);
   const [totalEvent, settotalEvent] = useState(null);
   const [Feedback, setFeedback] = useState([]);
-  const[WareHouse,SetWarehouse]= useState([]);
+  const [WareHouse, SetWarehouse] = useState([]);
   useEffect(() => {
     const fetchProductCount = async () => {
       try {
@@ -170,7 +170,7 @@ function AdminPage() {
       },
     },
   };
-  const charop={
+  const charop = {
     scales: {
       y: {
         beginAtZero: true,
@@ -262,8 +262,8 @@ function AdminPage() {
       },
     ],
   };
-const chartWare={
-  labels: Array.from({ length: new Date(new Date().getFullYear(), Month, 0).getDate() }, (_, index) => index + 1),
+  const chartWare = {
+    labels: Array.from({ length: new Date(new Date().getFullYear(), Month, 0).getDate() }, (_, index) => index + 1),
     datasets: [
       {
         label: 'Number of Unique WareHouse',
@@ -273,7 +273,7 @@ const chartWare={
         borderWidth: 1,
       },
     ],
-}
+  }
   const chartOptionsBie = {
     scales: {
       x: {
@@ -371,114 +371,38 @@ const chartWare={
                 <i className="fa fa-th"></i> <span>WareHouse</span>
               </a>
             </li>
+
             <li className="treeview text-white">
-              <a className='cursor-pointer' onClick={() => navigate('/Customer', { state: { username: username, ID: ID } })}>
-                <i className="fa fa-th"></i> <span>Customer</span>
+              <a className='cursor-pointer' onClick={() => navigate('/Order', { state: { username: username, ID: ID } })}>
+                <i className="fa fa-th"></i> <span>Order</span>
               </a>
             </li>
-            <li className="treeview">
-              <a href="#">
-                <i className="fa fa-pie-chart"></i>
-                <span>Charts</span>
-                <i className="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul className="treeview-menu">
-                <li><a href="pages/charts/morris.html"><i className="fa fa-circle-o"></i> Morris</a></li>
-                <li><a href="pages/charts/flot.html"><i className="fa fa-circle-o"></i> Flot</a></li>
-                <li><a href="pages/charts/inline.html"><i className="fa fa-circle-o"></i> Inline charts</a></li>
-              </ul>
-            </li>
-            <li className="treeview">
-              <a href="#">
-                <i className="fa fa-laptop"></i>
-                <span>UI Elements</span>
-                <i className="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul className="treeview-menu">
-                <li><a href="pages/UI/general.html"><i className="fa fa-circle-o"></i> General</a></li>
-                <li><a href="pages/UI/icons.html"><i className="fa fa-circle-o"></i> Icons</a></li>
-                <li><a href="pages/UI/buttons.html"><i className="fa fa-circle-o"></i> Buttons</a></li>
-                <li><a href="pages/UI/sliders.html"><i className="fa fa-circle-o"></i> Sliders</a></li>
-                <li><a href="pages/UI/timeline.html"><i className="fa fa-circle-o"></i> Timeline</a></li>
-                <li><a href="pages/UI/modals.html"><i className="fa fa-circle-o"></i> Modals</a></li>
-              </ul>
-            </li>
-            <li className="treeview">
-              <a href="#">
-                <i className="fa fa-edit"></i> <span>Forms</span>
-                <i className="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul className="treeview-menu">
-                <li><a href="pages/forms/general.html"><i className="fa fa-circle-o"></i> General Elements</a></li>
-                <li><a href="pages/forms/advanced.html"><i className="fa fa-circle-o"></i> Advanced Elements</a></li>
-                <li><a href="pages/forms/editors.html"><i className="fa fa-circle-o"></i> Editors</a></li>
-              </ul>
-            </li>
-            <li className="treeview">
-              <a href="#">
-                <i className="fa fa-table"></i> <span>Tables</span>
-                <i className="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul className="treeview-menu">
-                <li><a href="pages/tables/simple.html"><i className="fa fa-circle-o"></i> Simple tables</a></li>
-                <li><a href="pages/tables/data.html"><i className="fa fa-circle-o"></i> Data tables</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="pages/calendar.html">
-                <i className="fa fa-calendar"></i> <span>Calendar</span>
-                <small className="label pull-right bg-red">3</small>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/Transport_fee', { state: { username: username, ID: ID } })}>
+                <i className="fa fa-th"></i> <span>Transport fee</span>
               </a>
             </li>
-            <li>
-              <a href="pages/mailbox/mailbox.html">
-                <i className="fa fa-envelope"></i> <span>Mailbox</span>
-                <small className="label pull-right bg-yellow">12</small>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/AdminBlog', { state: { username: username, ID: ID } })}>
+                <i className="fa fa-th"></i> <span>Blog</span>
               </a>
             </li>
-            <li className="treeview">
-              <a href="#">
-                <i className="fa fa-folder"></i> <span>Examples</span>
-                <i className="fa fa-angle-left pull-right"></i>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/Category_Post', { state: { username: username, ID: ID } })}>
+                <i className="fa fa-th"></i> <span>Category Blog</span>
               </a>
-              <ul className="treeview-menu">
-                <li><a href="pages/examples/invoice.html"><i className="fa fa-circle-o"></i> Invoice</a></li>
-                <li><a href="pages/examples/login.html"><i className="fa fa-circle-o"></i> Login</a></li>
-                <li><a href="pages/examples/register.html"><i className="fa fa-circle-o"></i> Register</a></li>
-                <li><a href="pages/examples/lockscreen.html"><i className="fa fa-circle-o"></i> Lockscreen</a></li>
-                <li><a href="pages/examples/404.html"><i className="fa fa-circle-o"></i> 404 Error</a></li>
-                <li><a href="pages/examples/500.html"><i className="fa fa-circle-o"></i> 500 Error</a></li>
-                <li><a href="pages/examples/blank.html"><i className="fa fa-circle-o"></i> Blank Page</a></li>
-              </ul>
             </li>
-            <li className="treeview">
-              <a href="#">
-                <i className="fa fa-share"></i> <span>Multilevel</span>
-                <i className="fa fa-angle-left pull-right"></i>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/Event', { state: { username: username, ID: ID } })}>
+                <i className="fa fa-th"></i> <span>Event</span>
               </a>
-              <ul className="treeview-menu">
-                <li><a href="#"><i className="fa fa-circle-o"></i> Level One</a></li>
-                <li>
-                  <a href="#"><i className="fa fa-circle-o"></i> Level One <i className="fa fa-angle-left pull-right"></i></a>
-                  <ul className="treeview-menu">
-                    <li><a href="#"><i className="fa fa-circle-o"></i> Level Two</a></li>
-                    <li>
-                      <a href="#"><i className="fa fa-circle-o"></i> Level Two <i className="fa fa-angle-left pull-right"></i></a>
-                      <ul className="treeview-menu">
-                        <li><a href="#"><i className="fa fa-circle-o"></i> Level Three</a></li>
-                        <li><a href="#"><i className="fa fa-circle-o"></i> Level Three</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li><a href="#"><i className="fa fa-circle-o"></i> Level One</a></li>
-              </ul>
             </li>
-            <li><a href="documentation/index.html"><i className="fa fa-book"></i> Documentation</a></li>
-            <li className="header">LABELS</li>
-            <li><a href="#"><i className="fa fa-circle-o text-danger"></i> Important</a></li>
-            <li><a href="#"><i className="fa fa-circle-o text-warning"></i> Warning</a></li>
-            <li><a href="#"><i className="fa fa-circle-o text-info"></i> Information</a></li>
+            <li className="treeview text-white">
+              <a className='cursor-pointer' onClick={() => navigate('/login')}>
+                <i className="fa fa-th"></i> <span>Log out</span>
+              </a>
+            </li>
+
           </ul>
         </section>
 
@@ -626,16 +550,16 @@ const chartWare={
                 </div>
                 <Bar data={chartWare} options={charop} />
 
-                  {/* Dropdown to select the month */}
-                  <label>Select Month:</label>
-                  <select id="selectMonth"
-                    className="form-select" value={Month} onChange={(e) => setMonth(e.target.value)}>
-                    {[...Array(12).keys()].map((month) => (
-                      <option key={month + 1} value={month + 1}>
-                        {month + 1}
-                      </option>
-                    ))}
-                  </select>
+                {/* Dropdown to select the month */}
+                <label>Select Month:</label>
+                <select id="selectMonth"
+                  className="form-select" value={Month} onChange={(e) => setMonth(e.target.value)}>
+                  {[...Array(12).keys()].map((month) => (
+                    <option key={month + 1} value={month + 1}>
+                      {month + 1}
+                    </option>
+                  ))}
+                </select>
                 <div className="box-footer clearfix">
                   <button className="pull-right btn btn-default" id="sendEmail">Send <i className="fa fa-arrow-circle-right"></i></button>
                 </div>
@@ -690,7 +614,7 @@ const chartWare={
                         <th>Content</th>
 
                         <th>Date</th>
-                        
+
                       </tr>
                     </thead>
                     <tbody>
@@ -710,70 +634,7 @@ const chartWare={
               </div>
 
 
-              <div className="box box-solid bg-green-gradient">
-                <div className="box-header">
-                  <i className="fa fa-calendar"></i>
-                  <h3 className="box-title">Calendar</h3>
 
-                  <div className="pull-right box-tools">
-
-                    <div className="btn-group">
-                      <button className="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown"><i className="fa fa-bars"></i></button>
-                      <ul className="dropdown-menu pull-right" role="menu">
-                        <li><a href="#">Add new event</a></li>
-                        <li><a href="#">Clear events</a></li>
-                        <li className="divider"></li>
-                        <li><a href="#">View calendar</a></li>
-                      </ul>
-                    </div>
-                    <button className="btn btn-success btn-sm" data-widget="collapse"><i className="fa fa-minus"></i></button>
-                    <button className="btn btn-success btn-sm" data-widget="remove"><i className="fa fa-times"></i></button>
-                  </div>
-                </div>
-                <div className="box-body no-padding">
-
-                  <div id="calendar" ></div>
-                </div>
-                <div className="box-footer text-black">
-                  <div className="row">
-                    <div className="col-sm-6">
-
-                      <div className="clearfix">
-                        <span className="pull-left">Task #1</span>
-                        <small className="pull-right">90%</small>
-                      </div>
-                      <div className="progress xs">
-                        <div className="progress-bar progress-bar-green" ></div>
-                      </div>
-
-                      <div className="clearfix">
-                        <span className="pull-left">Task #2</span>
-                        <small className="pull-right">70%</small>
-                      </div>
-                      <div className="progress xs">
-                        <div className="progress-bar progress-bar-green" ></div>
-                      </div>
-                    </div>
-                    <div className="col-sm-6">
-                      <div className="clearfix">
-                        <span className="pull-left">Task #3</span>
-                        <small className="pull-right">60%</small>
-                      </div>
-                      <div className="progress xs">
-                        <div className="progress-bar progress-bar-green" ></div>
-                      </div>
-
-                      <div className="clearfix">
-                        <span className="pull-left">Task #4</span>
-                        <small className="pull-right">40%</small>
-                      </div>
-                      <div className="progress xs">
-                        <div className="progress-bar progress-bar-green" ></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
             </section>
           </div>

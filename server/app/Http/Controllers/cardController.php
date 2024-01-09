@@ -68,7 +68,7 @@ class cardController extends Controller
             if (!$cardProduct ) {
                 // If card doesn't exist, create a new card
                 if($wareSum>0){
-                    $card = card::create(["id_Account" => $request->input('id_Account')]);
+                    $card = card::create(["id_Account" => $request->input('id_Account'),"status"=>0]);
                     $cardId = $card ? $card->id : $cardProduct->id_Account;
         
                     // Create a new detailcard
@@ -88,7 +88,7 @@ class cardController extends Controller
                   
                   
                 }else{
-                    $detail = detailcard::create(['id_card' => $cardProduct->ID , 'id_product' => $ID, 'Quality' => 1]);
+                    $detail = detailcard::create(['id_card' => $cardProduct->ID , 'id_product' => $ID, 'Quality' => 1,"status"=>0]);
                     return response()->json(['message' => 'Card added successfully', 'Cate' => $detail]);
                 }
                 }

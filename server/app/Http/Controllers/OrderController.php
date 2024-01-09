@@ -28,8 +28,16 @@ class OrderController extends Controller
         return response()->json($Customer,200);
     }
     public function detailProductOrder($ID){
-        $ProductOrder=DB::table('order')->join("detailorder","order.ID","=","detailorder.id_order")->join
-        ("product","detailorder.id_product","=","product.ID")->join("city","city.ID","=","order.id_city")->join("district","district.ID","=","order.id_district")->join("ward","ward.ID","=","order.id_ward")->where("order.ID",$ID)->get();
+        $ProductOrder = DB::table('order')
+        ->join("detailorder", "order.ID", "=", "detailorder.id_order")
+        ->join("product", "detailorder.id_product", "=", "product.ID")
+        ->join("city", "city.ID", "=", "order.id_city")
+        ->join("district", "district.ID", "=", "order.id_district")
+        ->join("ward", "ward.ID", "=", "order.id_ward")
+        ->where("order.ID", $ID)
+        ->select(["product.Name as Nameproduct", "detailorder.Quality", "product.Price","order.TotalPrice"])
+        ->groupBy(["product.Name", "detailorder.Quality", "product.Price","order.TotalPrice"])
+        ->get();
         return response()->json($ProductOrder,200);
     }
     public function ship($ID){
@@ -180,6 +188,22 @@ class OrderController extends Controller
                         }
                     }
                     }
+                  $voucherCode = $request->input('vouchercode');
+$freeShipCode = $request->input('Freeship');
+
+if ($voucherCode !== null) {
+    // Nếu voucherCode không phải là null, thì thực hiện cập nhật quantity - 1
+    DB::table('voucher')
+        ->where('voucherCode', $voucherCode)
+        ->update(['quantity' => DB::raw('quantity - 1')]);
+}
+
+if ($freeShipCode !== null && strpos($freeShipCode, 'FSH') === 0) {
+    // Nếu Freeship không phải là null và bắt đầu bằng 'FSH', thì thực hiện cập nhật quantity + 1
+    DB::table('voucher')
+        ->where('voucherCode', $freeShipCode)
+        ->update(['quantity' => DB::raw('quantity + 1')]);
+}
                 }
 
                 return response()->json(['message' => 'Order placed successfully', 'Order' => $order]);
@@ -261,6 +285,22 @@ class OrderController extends Controller
                         }
                     }
                     }
+                }
+                $voucherCode = $request->input('vouchercode');
+                $freeShipCode = $request->input('Freeship');
+                
+                if ($voucherCode !== null) {
+                    // Nếu voucherCode không phải là null, thì thực hiện cập nhật quantity - 1
+                    DB::table('voucher')
+                        ->where('voucherCode', $voucherCode)
+                        ->update(['quantity' => DB::raw('quantity - 1')]);
+                }
+                
+                if ($freeShipCode !== null && strpos($freeShipCode, 'FSH') === 0) {
+                    // Nếu Freeship không phải là null và bắt đầu bằng 'FSH', thì thực hiện cập nhật quantity + 1
+                    DB::table('voucher')
+                        ->where('voucherCode', $freeShipCode)
+                        ->update(['quantity' => DB::raw('quantity + 1')]);
                 }
                 return response()->json(['message' => 'Account does not meet the criteria for placing an order']);
             }

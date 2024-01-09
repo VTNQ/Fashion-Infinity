@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import '../menu/menu.css';
 import Swal from 'sweetalert2';
-import './Detail.css';
+
 import Slider from 'react-slick';
 import us from '../menu/image/us.png';
 import France from '../menu/image/France.png';
@@ -724,7 +724,7 @@ setrating(value)
     return (
         
         <div>
-           
+           	<ToastContainer />
            <header className="block">
             {loading && (
                 <div
@@ -1229,7 +1229,7 @@ setrating(value)
                         <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                     </div>
                     <div className="minicart-btn_area  pb-[15px]" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>
-                        <a style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" >Minicart</a>
+                        <a href='/MiniCart' style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" >Minicart</a>
                     </div>
                 </div>
             </div>

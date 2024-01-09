@@ -6,17 +6,17 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
-import '../components/admin.css'
+import './admin/admin.css'
 function Picture() {
- 
+
   const [searchTerm, setSearchtem] = useState('');
-  const [loading, setloading] = useState(false);
+  const [loading, setloading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [perPage, setperPage] = useState(5);
   const [Picture, setPicture] = useState([]);
 
 
-  
+
   useEffect(() => {
     const fetchdata = async () => {
       try {
@@ -28,16 +28,17 @@ function Picture() {
     }
     fetchdata();
   }, []);
+
   const location = useLocation();
   const username = location.state?.username || 'Default Username';
-  const ID=location.state?.ID||'';
+  const ID = location.state?.ID || '';
   const navigate = useNavigate();
   const [previewImage, setpreviewImage] = useState([]);
 
   const [formData, setFormData] = useState({
     Image: [],
     status: '1',
-    ID:'',
+    ID: '',
 
   });
   const handleStatusChange = (e) => {
@@ -47,45 +48,59 @@ function Picture() {
     });
 
   }
-  
-  const validateImageFormat=(file)=>{
-    return new Promise((resolve,reject)=>{
-      const render=new FileReader();
-      render.onloadend=function(){
-        const arr=new Uint8Array(render.result).subarray(0,4);
-        let header='';
-        for(let i=0;i<arr.length;i++){
-          header+=arr[i].toString(16);
+
+  const validateImageFormat = (file) => {
+    return new Promise((resolve, reject) => {
+      const render = new FileReader();
+      render.onloadend = function () {
+        const arr = new Uint8Array(render.result).subarray(0, 4);
+        let header = '';
+        for (let i = 0; i < arr.length; i++) {
+          header += arr[i].toString(16);
         }
-        if(header.startsWith('89504e47')){
+        if (header.startsWith('89504e47')) {
           resolve(true);
-        }else if(header.startsWith('ffd8ff')){
+        } else if (header.startsWith('ffd8ff')) {
           resolve(true)
-        }else if(header.startsWith('47494638')){
+        } else if (header.startsWith('47494638')) {
           resolve(true);
-        }else{
+        } else {
           reject('Invalid image format')
         }
       };
-      render.onerror=function(){
+      render.onerror = function () {
         reject('error reading the file');
       };
       render.readAsArrayBuffer(file);
     })
   }
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/getPicture");
+        setPicture(response.data);
+      } catch (error) {
+        console.error('Error during fetch:', error);
+      } finally {
+
+        setloading(false);
+      }
+    }
+    fetchdata();
+  }, [])
   const filteredCategories = Picture.filter(category =>
 
     category.status.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
 
   const handleImageChange = async (e) => {
     const selectedImage = Array.from(e.target.files);
-  
+
     try {
-   
+
       await Promise.all(selectedImage.map(validateImageFormat));
-  
+
       setpreviewImage(selectedImage.map((image) => URL.createObjectURL(image)));
       setFormData({
         ...formData,
@@ -105,70 +120,91 @@ function Picture() {
       document.getElementById('imageInput').value = '';
 
       // Clear selected image names on error
- 
-    
+
+
     }
   };
   const handleImageUpload = async (e) => {
     e.preventDefault();
-    setloading(true);
-
-    try {
-      const formDataApi = new FormData();
-
-      // Check if status is "main" and more than one image is selected
-      if (formData.status === '1' && formData.Image.length > 1) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Main category can only have one image',
-          showConfirmButton: true,
-        });
-        return;
-      }
-
-      formData.Image.forEach((image) => {
-        formDataApi.append('Image[]', image); // Note the square brackets to handle multiple files
+    if (formData.Image.length <= 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Image is required',
+        showConfirmButton: true,
       });
+    } else {
+      try {
+        setloading(true);
+        const formDataApi = new FormData();
 
-      formDataApi.append('status', formData.status);
+        // Check if status is "main" and more than one image is selected
+        if (formData.status === '1' && formData.Image.length > 1) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Main category can only have one image',
+            showConfirmButton: true,
+          });
+          return;
+        }
 
-      const response = await axios.post('http://127.0.0.1:8000/api/uploadImage', formDataApi);
+        formData.Image.forEach((image) => {
+          formDataApi.append('Image[]', image); // Note the square brackets to handle multiple files
+        });
 
-      if (response.data.message) {
+        formDataApi.append('status', formData.status);
+
+        const response = await axios.post('http://127.0.0.1:8000/api/uploadImage', formDataApi);
+
+        if (response.data.message) {
+          setloading(false);
+          Swal.fire({
+            icon: 'success',
+            title: 'Image uploaded successfully',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          setFormData({
+            Image: null,
+            status: '1',
+          });
+          const responseData = await axios.get('http://127.0.0.1:8000/api/getPicture');
+          setPicture(responseData.data);
+          setpreviewImage([]);
+          document.getElementById('imageInput').value = '';
+
+        } else if (response.data.error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed to upload image',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      } catch (error) {
+        console.error('Image upload error:', error);
+      } finally {
         setloading(false);
-        Swal.fire({
-          icon: 'success',
-          title: 'Image uploaded successfully',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        setFormData({
-          Image: null,
-          status: '1',
-        });
-        const responseData = await axios.get('http://127.0.0.1:8000/api/getPicture');
-        setPicture(responseData.data);
-        setpreviewImage([]);
-        document.getElementById('imageInput').value = '';
-        
-      } else if (response.data.error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed to upload image',
-          showConfirmButton: false,
-          timer: 1500,
-        });
       }
-    } catch (error) {
-      console.error('Image upload error:', error);
-    } finally {
-      setloading(false);
     }
-  };
 
+
+  };
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/getPicture");
+        setPicture(response.data);
+      } catch (error) {
+        console.error('Error during fetch:', error);
+      } finally {
+
+        setloading(false);
+      }
+    }
+  })
   // ... (your existing code)
 
-  
+
   const handlePageclick = (data) => {
     setCurrentPage(data.selected);
   };
@@ -183,7 +219,7 @@ function Picture() {
           status: '1', // Include the data you want to send in the request body
         }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         Swal.fire({
@@ -193,7 +229,7 @@ function Picture() {
           timer: 1500,
         });
       }
-  
+
       const updatedPicture = [...Picture];
       if (updatedPicture[index]) {
         updatedPicture[index].status = '1';
@@ -201,7 +237,7 @@ function Picture() {
       } else {
         console.error('Picture not found at index:', index);
       }
-  
+
       const responseData = await axios.get('http://127.0.0.1:8000/api/getPicture');
       setPicture(responseData.data);
     } catch (error) {
@@ -210,37 +246,37 @@ function Picture() {
   };
   const deletePicture = async (idpicture) => {
     const confirmation = await Swal.fire({
-        title: 'Are you sure you want to delete?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
+      title: 'Are you sure you want to delete?',
+      text: 'You won\'t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
     });
 
     if (confirmation.isConfirmed) {
-        try {
-            const response = await axios.put(`http://127.0.0.1:8000/api/DeletePicture/${idpicture}`);
-            if (response.data.message) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Deletion successful',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+      try {
+        const response = await axios.put(`http://127.0.0.1:8000/api/DeletePicture/${idpicture}`);
+        if (response.data.message) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Deletion successful',
+            showConfirmButton: false,
+            timer: 1500,
+          });
 
-                const responseData = await axios.get('http://127.0.0.1:8000/api/getPicture');
-                setPicture(responseData.data);
-            }
-        } catch (error) {
-            console.error('Error deleting picture:', error);
-            // Handle error, show a message, or log it
+          const responseData = await axios.get('http://127.0.0.1:8000/api/getPicture');
+          setPicture(responseData.data);
         }
+      } catch (error) {
+        console.error('Error deleting picture:', error);
+        // Handle error, show a message, or log it
+      }
     }
-};
+  };
 
-  
+
   const indexOflastCategory = (currentPage + 1) * perPage;
   const indexOfFirtCategory = indexOflastCategory - perPage;
   const currentCategories = filteredCategories.slice(indexOfFirtCategory, indexOflastCategory)
@@ -293,118 +329,75 @@ function Picture() {
 
             <ul className="sidebar-menu">
               <li className="header">MAIN NAVIGATION</li>
-              <li className="active treeview text-white">
-                <a className='cursor-pointer' onClick={() => navigate('/admin', { state: { username: username,ID:ID  } })}>
-                  <i className="fa fa-dashboard"></i> <span>Dashboard</span> 
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/admin', { state: { username: username, ID: ID } })}>
+                  <i className="fa fa-dashboard" ></i> <span>Dashboard</span>
                 </a>
 
               </li>
-              <li className="treeview">
 
-                <ul className="treeview-menu">
-                  <li><a href="pages/layout/top-nav.html"><i className="fa fa-circle-o"></i> Top Navigation</a></li>
-                  <li><a href="pages/layout/boxed.html"><i className="fa fa-circle-o"></i> Boxed</a></li>
-                  <li><a href="pages/layout/fixed.html"><i className="fa fa-circle-o"></i> Fixed</a></li>
-                  <li><a href="pages/layout/collapsed-sidebar.html"><i className="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-                </ul>
-              </li>
-              <li className='active treeview text-white'>
-                <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username,ID:ID  } })}>
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username, ID: ID } })}>
                   <i className="fa fa-th"></i> <span>category</span>
                 </a>
               </li>
-              <li className='active treeview text-white'>
-                <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username,ID:ID  } })}>
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username, ID: ID } })}>
                   <i className="fa fa-th"></i> <span>Picture</span>
                 </a>
               </li>
               <li className="treeview text-white">
-              <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username,ID:ID  } })}>
-                <i className="fa fa-th"></i> <span>Provider</span> 
-              </a>
-            </li>
+                <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username, ID: ID } })}>
+                  <i className="fa fa-th"></i> <span>Provider</span>
+                </a>
+              </li>
               <li className="treeview text-white">
-              <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username,ID:ID  } })}>
-                <i className="fa fa-th"></i> <span>Product</span> 
-              </a>
-            </li>
-              <li className="treeview">
-                <a href="#">
-                  <i className="fa fa-pie-chart"></i>
-                  <span>Charts</span>
-                  <i className="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul className="treeview-menu">
-                  <li><a href="pages/charts/morris.html"><i className="fa fa-circle-o"></i> Morris</a></li>
-                  <li><a href="pages/charts/flot.html"><i className="fa fa-circle-o"></i> Flot</a></li>
-                  <li><a href="pages/charts/inline.html"><i className="fa fa-circle-o"></i> Inline charts</a></li>
-                </ul>
-              </li>
-              <li className="treeview">
-                <a href="#">
-                  <i className="fa fa-laptop"></i>
-                  <span>UI Elements</span>
-                  <i className="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul className="treeview-menu">
-                  <li><a href="pages/UI/general.html"><i className="fa fa-circle-o"></i> General</a></li>
-                  <li><a href="pages/UI/icons.html"><i className="fa fa-circle-o"></i> Icons</a></li>
-                  <li><a href="pages/UI/buttons.html"><i className="fa fa-circle-o"></i> Buttons</a></li>
-                  <li><a href="pages/UI/sliders.html"><i className="fa fa-circle-o"></i> Sliders</a></li>
-                  <li><a href="pages/UI/timeline.html"><i className="fa fa-circle-o"></i> Timeline</a></li>
-                  <li><a href="pages/UI/modals.html"><i className="fa fa-circle-o"></i> Modals</a></li>
-                </ul>
-              </li>
-              <li className="treeview">
-                <a href="#">
-                  <i className="fa fa-edit"></i> <span>Forms</span>
-                  <i className="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul className="treeview-menu">
-                  <li><a href="pages/forms/general.html"><i className="fa fa-circle-o"></i> General Elements</a></li>
-                  <li><a href="pages/forms/advanced.html"><i className="fa fa-circle-o"></i> Advanced Elements</a></li>
-                  <li><a href="pages/forms/editors.html"><i className="fa fa-circle-o"></i> Editors</a></li>
-                </ul>
-              </li>
-              <li className="treeview">
-                <a href="#">
-                  <i className="fa fa-table"></i> <span>Tables</span>
-                  <i className="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul className="treeview-menu">
-                  <li><a href="pages/tables/simple.html"><i className="fa fa-circle-o"></i> Simple tables</a></li>
-                  <li><a href="pages/tables/data.html"><i className="fa fa-circle-o"></i> Data tables</a></li>
-                </ul>
-              </li>
-              <li>
-                <a href="pages/calendar.html">
-                  <i className="fa fa-calendar"></i> <span>Calendar</span>
-                  <small className="label pull-right bg-red">3</small>
+                <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username, ID: ID } })}>
+                  <i className="fa fa-th"></i> <span>Product</span>
                 </a>
               </li>
-              <li>
-                <a href="pages/mailbox/mailbox.html">
-                  <i className="fa fa-envelope"></i> <span>Mailbox</span>
-                  <small className="label pull-right bg-yellow">12</small>
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username, ID: ID } })}>
+                  <i className="fa fa-th"></i> <span>Edit</span>
                 </a>
               </li>
-              <li className="treeview">
-                <a href="#">
-                  <i className="fa fa-folder"></i> <span>Examples</span>
-                  <i className="fa fa-angle-left pull-right"></i>
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/WareHouse', { state: { username: username, ID: ID } })}>
+                  <i className="fa fa-th"></i> <span>WareHouse</span>
                 </a>
-                <ul className="treeview-menu">
-                  <li><a href="pages/examples/invoice.html"><i className="fa fa-circle-o"></i> Invoice</a></li>
-                  <li><a href="pages/examples/login.html"><i className="fa fa-circle-o"></i> Login</a></li>
-                  <li><a href="pages/examples/register.html"><i className="fa fa-circle-o"></i> Register</a></li>
-                  <li><a href="pages/examples/lockscreen.html"><i className="fa fa-circle-o"></i> Lockscreen</a></li>
-                  <li><a href="pages/examples/404.html"><i className="fa fa-circle-o"></i> 404 Error</a></li>
-                  <li><a href="pages/examples/500.html"><i className="fa fa-circle-o"></i> 500 Error</a></li>
-                  <li><a href="pages/examples/blank.html"><i className="fa fa-circle-o"></i> Blank Page</a></li>
-                </ul>
               </li>
 
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/Order', { state: { username: username, ID: ID } })}>
+                  <i className="fa fa-th"></i> <span>Order</span>
+                </a>
+              </li>
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/Transport_fee', { state: { username: username, ID: ID } })}>
+                  <i className="fa fa-th"></i> <span>Transport fee</span>
+                </a>
+              </li>
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/AdminBlog', { state: { username: username, ID: ID } })}>
+                  <i className="fa fa-th"></i> <span>Blog</span>
+                </a>
+              </li>
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/Category_Post', { state: { username: username, ID: ID } })}>
+                  <i className="fa fa-th"></i> <span>Category Blog</span>
+                </a>
+              </li>
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/Event', { state: { username: username, ID: ID } })}>
+                  <i className="fa fa-th"></i> <span>Event</span>
+                </a>
+              </li>
 
+              <li className="treeview text-white">
+                <a className='cursor-pointer' onClick={() => navigate('/login')}>
+                  <i className="fa fa-th"></i> <span>Log out</span>
+                </a>
+              </li>
             </ul>
           </section>
 
@@ -419,14 +412,14 @@ function Picture() {
             </h1>
             <ol className="breadcrumb">
               <li><a href="#"><i className="fa fa-dashboard"></i> Home</a></li>
-              <li><a href="#">Category</a></li>
+              <li><a href="#">Picture</a></li>
             </ol>
           </section>
           <section className="content">
             <div className="row">
               <div className="box box-primary" style={{ maxHeight: '400px' }}>
                 <div className="box-header">
-                  <h3 className="box-title">Quick Example</h3>
+                  <h3 className="box-title">Picture</h3>
                 </div>
                 <form role="form" onSubmit={handleImageUpload} >
                   <div className="box-body">
@@ -434,9 +427,9 @@ function Picture() {
                     <div className="form-group">
                       <label >Name</label>
                       <input type='file' name='Image' className="form-control" id="imageInput" placeholder="Enter Name Category" onChange={handleImageChange} multiple />
- 
-   
-             </div>
+
+
+                    </div>
                     <div className="form-group">
                       <label >Name</label>
                       <select name="status" className="form-control" value={formData.status} onChange={handleStatusChange}>
@@ -470,7 +463,7 @@ function Picture() {
               </div>
               <div className="box">
                 <div className="box-header">
-                  <h3 className="box-title">Data Table With Full Features</h3>
+                  <h3 className="box-title">List Picture</h3>
                 </div>
                 <div className="flex items-center space-x-4 float-left flex-1 mb-2 ml-2">
                   <label for="search" className="text-gray-600">Search</label>
@@ -505,8 +498,8 @@ function Picture() {
                               <span className="slider" ></span>
                             </label>
                           </td>
-                      
-                          <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={()=>deletePicture(item.ID)} >Remove</button></td>
+
+                          <td><button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => deletePicture(item.ID)} >Remove</button></td>
                         </tr>
                       ))}
 
@@ -548,7 +541,7 @@ function Picture() {
           </div>
           <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
         </footer>
-    
+
       </div>
 
     </div>

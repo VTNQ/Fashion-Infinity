@@ -21,7 +21,6 @@ import Layout from './components/Layout';
 import Homepage from './components/layout/homepage/Homepage';
 import MiniCart from './components/Minicart/MiniCart';
 import ProductUser from './components/User/ProductUser';
-import Customer from './components/Customer';
 import Menu from './components/menu/MenuHomepage';
 import WareHouse from './components/WareHouse';
 import WareHouseSuperadmin from './components/superadmin/WareHouse';
@@ -41,6 +40,8 @@ import DetailBlog from './components/Blog/DetailBlog';
 import Myorder from './components/MyOrder/Myorder';
 import OrderDetail from './components/MyOrderDetail/OrderDetail';
 import Event from './components/Event';
+import Contact from './components/Contact/Contact';
+import About from './components/About/About';
 function App() {
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -85,7 +86,6 @@ function App() {
         
         <Route path='/DetailProduct/:id' element={<DetailProduct/>}/>
         <Route path='/MiniCart' element={<MiniCart/>}/>
-        <Route path='/Customer' element={<Customer/>}/>
         <Route path='/footer' element={<Footer/>}/>
         <Route path='/Check' element={<CheckOut/>}/>
         <Route path='/order' element={<Order/>}/>
@@ -99,6 +99,8 @@ function App() {
         <Route path='/OrderDetail' element={<OrderDetail/>}/>
         <Route path='/Event' element={<Event/>}/>
         <Route path='/voucher' element={<Voucher/>}/>
+        <Route path='/Contact' element={<Contact/>}/>
+        <Route path='/About' element={<About/>}/>
       </Routes>
     </Router>
   );
