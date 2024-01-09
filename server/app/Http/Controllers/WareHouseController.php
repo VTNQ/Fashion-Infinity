@@ -92,6 +92,11 @@ class WareHouseController extends Controller
     
     return response()->json($WareHouse, 200);
     }
+    public function getWareHouseCountsOrder($month){
+        $wareHouseCount=DB::table('detail_warehouse')->whereMonth('detail_warehouse.CreateTime',$month)->select(DB::raw('DATE(detail_warehouse.CreateTime) as detail_date'),DB::raw('Sum(detail_warehouse.Quality) as order_Quality'))
+        ->groupBy("detail_date")->get();
+        return response()->json($wareHouseCount, 200);
+    }
     public function AddWareHouse(Request $request,$ID){
         try{
             $WareHouseProduct=WareHouse::where("IDAccount",$ID)->first();

@@ -149,10 +149,14 @@ ul .list{
     padding: 0;
     opacity: 1;
 }
+a:hover{
+    text-decoration: none;
+}
  .minicart-btn_area .hiraola-btn {
     height: 60px;
     line-height: 60px;
     color: #ffffff !important;
+    width: 100%;
 }
 a.hiraola-btn:hover{
     background-color: #333333;
@@ -264,12 +268,14 @@ li:hover #menu::before{
     visibility: visible;
     left: -10px;
     transition: all ease 0.5s;
+    text-decoration: none !important;
 }
 li:hover #menu::after{
     opacity: 1;
     visibility: visible;
     right: -10px;
     transition: all ease 0.5s;
+    text-decoration: none !important;
 }
 button.li-btn:hover {
     background: #333333;
@@ -328,6 +334,7 @@ li:hover .hm-megamenu1{
 #menu{
     display: inline-block;
     padding-right: 30px;
+
 }
 .limenu{
     border-left: 1px solid rgba(0, 0, 0, 0.07); 

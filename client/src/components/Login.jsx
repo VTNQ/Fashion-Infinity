@@ -3,10 +3,12 @@
 import logoimage from "../images/logo-trang-suc-5.png";
 import Swal from "sweetalert2";
 import React, { useState } from "react";
+
 import { GoogleLogin } from "react-google-login";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+   
     const [username, setUsername] = useState('');
     const [ID,SetID]=useState('');
     const [loading, setloading] = useState(false);
@@ -88,6 +90,8 @@ function Login() {
     }
     const [errors, setErrors] = useState({});
     const navigate=useNavigate();
+    const isAuthenticated =false;
+    
     const [formData,setFormData]=useState({
         Email: '',
         Password: '',
@@ -114,8 +118,7 @@ function Login() {
     const handleInputChange=(e)=>{
         setFormData({...formData,[e.target.name]:e.target.value});
     }
-
-
+   
     const handleSubmit=async (e)=>{
         if(formData.Email===''|| formData.Password===''){
             Swal.fire({
@@ -171,7 +174,7 @@ function Login() {
                 }
             }
         }
-        
+       
     }
     return (
         <div>

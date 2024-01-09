@@ -23,37 +23,94 @@ function CheckOut() {
     const [selectedWard, setSelectedWard] = useState(null);
     const [ward, setward] = useState([]);
     const [city, setCity] = useState([]);
-    const[del,setdel]=useState([]);
-
+    const [isVoucherDisabled, setVoucherDisabled] = useState(true);
+    const [iscaculateship,setiscaculateship]=useState(false);
+    const [del, setdel] = useState([]);
+    const [voucher, setvoucher] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const [Districts, setDistricts] = useState([]);
     const [selecteddistrict, setselecteddistrict] = useState(null);
-    const [Account,setAccount]=useState([]);
+    const [Account, setAccount] = useState([]);
+
+    const [priceship, setpriceship] = useState(0);
     const location = useLocation();
     const ID = location.state?.ID || '';
+    const [voucherCode, setVoucherCode] = useState('');
+
+    const handleCouponCodeChange = (event) => {
+        // Update the state with the entered coupon code
+        setVoucherCode(event.target.value);
+    };
     const [formData, setFormData] = useState({
-        Address:'',
-        FullName:'',
-        City:'',
-        PostCode:'',
-        Phone:'',
-        Email:''
+        Address: '',
+        FullName: '',
+        City: '',
+        PostCode: '',
+        Phone: '',
+        Email: ''
     });
+    const [TotalQuantity, setTotalQuantity] = useState(1);
+    const [Tol, setTol] = useState(1);
+    const [text, settext] = useState('');
+    const [free, setfree] = useState('');
+    useEffect(() => {
+        const fetchfresship = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/VoucherFreeship');
+                setfree(response.data);
+
+
+
+            } catch (error) {
+                console.error('Error fetching districts', error);
+            }
+        }
+        fetchfresship();
+    }, [])
+    const [apply, setapply] = useState(false);
+    const applyFreeship = () => {
+        free.forEach(charge => {
+            if (voucherCode && charge.voucherCode.includes(voucherCode)) {
+                if (couttotalPrice - priceship < 0) {
+                    setcouttotalPrice(0);
+                } else {
+                    setcouttotalPrice(couttotalPrice - priceship);
+                }
+
+
+            }
+        });
+    };
     useEffect(() => {
         const fetchdelivery = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/displaydelivery');
-                setdelivery(response.data);
-              
+                const response = await axios.get('http://127.0.0.1:8000/api/VoucherCheck');
+                setvoucher(response.data);
 
-           
+
+
             } catch (error) {
                 console.error('Error fetching districts', error);
             }
         }
         fetchdelivery()
     }, [])
- 
+
+    useEffect(() => {
+        const fetchdelivery = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/displaydelivery');
+                setdelivery(response.data);
+
+
+
+            } catch (error) {
+                console.error('Error fetching districts', error);
+            }
+        }
+        fetchdelivery()
+    }, [])
+
     useEffect(() => {
         const fetchDistricts = async () => {
             try {
@@ -114,7 +171,7 @@ function CheckOut() {
                 if (response.ok) {
                     const data = await response.json();
                     setAccount(data);
-    
+
                     // Set formData based on Account values
                     setFormData({
                         Address: data.Address || '', // Set to empty string if null
@@ -123,9 +180,9 @@ function CheckOut() {
                         PostCode: data.PostCode || '',
                         Phone: data.Phone || ''
                     });
-                  
+
                     setselectedItem(data.Country || 'Bangladesh')
-              
+
                 } else {
                     console.error("Failed to fetch cart data");
                 }
@@ -135,117 +192,120 @@ function CheckOut() {
         };
         fetchMinicart();
     }, [ID]);
-    
-    const [selectedItem,setselectedItem]=useState("Bangladesh");
-    const [shipItem,setshipItem]=useState("Bangladesh");
-    const [checkout,setcheckout]=useState([]);
-    useEffect(()=>{
-        const fetchMinicart=async()=>{
-            try{
-                const response=await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
-                if(response.ok){
-                    const data=await response.json();
-                    setcheckout(data);
-                    const totalPrice = data.reduce((total, item) => total + item.TotalQuantity * item.Price, 0);
+
+    const [selectedItem, setselectedItem] = useState("Bangladesh");
+    const [shipItem, setshipItem] = useState("Bangladesh");
+    const [checkout, setcheckout] = useState([]);
+    useEffect(() => {
+        const fetchMinicart = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const filteredData = data.filter(item => item.status === 1);
+
+                    setcheckout(filteredData);
+                    const filteredDataPrice = data.filter(item => item.status === 1);
+                    const totalPrice = filteredDataPrice.reduce((total, item) => total + item.TotalQuantity * item.Price, 0);
                     setcouttotalPrice(totalPrice);
-                   
-                }else {
+
+                } else {
                     console.error("Failed to fetch cart data");
                 }
-            }catch(error){
+            } catch (error) {
                 console.error('Error during fetch:', error);
             }
         }
         fetchMinicart();
-    },[])
+    }, [])
 
     const IDProduct = location.state?.IDProduct || '';
-    const [isCouponVisible,setIsCouponVisible]=useState(false);
-    const [combo,setcombo]=useState(false);
-    const [ship,setship]=useState(false);
-    
-    const caculateTotalPrice=(quanlity,Price)=>{
-        return (quanlity*Price);
+    const [isCouponVisible, setIsCouponVisible] = useState(false);
+    const [combo, setcombo] = useState(false);
+    const [ship, setship] = useState(false);
+
+    const caculateTotalPrice = (quanlity, Price) => {
+        return (quanlity * Price);
     }
-    const [paypal,setpaypal]=useState(false);
-    const [delivery,setdelivery]=useState(true);
-    const buttondelivery=()=>{
+    const [paypal, setpaypal] = useState(false);
+    const [delivery, setdelivery] = useState(true);
+    const buttondelivery = () => {
         setdelivery(!delivery);
         setpaypal(false)
     }
-    const buttonpaypal=()=>{
+    const buttonpaypal = () => {
         setdelivery(false);
         setpaypal(!paypal);
-        
+
     }
-    const [ischeckbox,setischeckbox]=useState(false);
-    const [Direct,setDirect]=useState(false);
-     const [Payment,setPayment]=useState(false);
-     const AddCard = async () => {
+    const [ischeckbox, setischeckbox] = useState(false);
+    const [Direct, setDirect] = useState(false);
+    const [Payment, setPayment] = useState(false);
+    const AddCard = async () => {
         try {
             const response = await fetch("http://127.0.0.1:8000/api/Addorder", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                
+
                 body: JSON.stringify(
                     {
                         id_Account: ID,
                         id_city: selectedCity.value,
-                        id_ward:selectedWard.value,
-                        id_district:selecteddistrict.value,
+                        id_ward: selectedWard.value,
+                        id_district: selecteddistrict.value,
                         FullName: formData.FullName,
-                        
+
                         PostCode: formData.PostCode,
                         Phone: formData.Phone,
                         Address: formData.Address,
                         TotalPrice: couttotalPrice,
                         id_product: checkout.map(card => card.ID),
                         Quality: checkout.map(card => card.TotalQuantity),
-                      
+
                     }
-                          
-                     
-                  ),
+
+
+                ),
             });
             console.log(checkout.map(card => card.ID))
-            const responseData=await response.json();
-            if(response.ok){
+            const responseData = await response.json();
+            if (response.ok) {
                 Swal.fire({
                     icon: "success",
                     title: "Add category successfully",
                     showConfirmButton: false,
                     timer: 1500
-                  });
-                  const response = await fetch(`http://127.0.0.1:8000/api/DefaultOrder/${ID}`);
-                  
-                  if (response.ok) {
-                      const data = await response.json();
-                      setAccount(data);
-      
-                      // Set formData based on Account values
-                      setFormData({
-                          Address: data.Address || '', // Set to empty string if null
-                          FullName: data.FullName || '',
-                          City: data.City || '',
-                          PostCode: data.PostCode || '',
-                          Phone: data.Phone || ''
-                      });
-                      setselectedItem(data.Country || 'Bangladesh')
-                      const responsedata=await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
-                if(response.ok){
-                    const data=await responsedata.json();
-                    setcheckout(data);
+                });
+                const response = await fetch(`http://127.0.0.1:8000/api/DefaultOrder/${ID}`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setAccount(data);
+
+                    // Set formData based on Account values
+                    setFormData({
+                        Address: data.Address || '', // Set to empty string if null
+                        FullName: data.FullName || '',
+                        City: data.City || '',
+                        PostCode: data.PostCode || '',
+                        Phone: data.Phone || ''
+                    });
+                    setselectedItem(data.Country || 'Bangladesh')
+                    const responsedata = await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
+                    if (response.ok) {
+                        const data = await responsedata.json();
+                        setcheckout(data);
+                    }
                 }
             }
-        }
-           
+
         } catch (error) {
             console.error('Error adding card:', error);
         }
     };
-    
+
     // Helper function to show success message using SweetAlert
     const showSuccessMessage = () => {
         Swal.fire({
@@ -255,7 +315,7 @@ function CheckOut() {
             timer: 1500,
         });
     };
-    
+
     // Helper function to reset the form fields and selected item after success
     const resetFormAndSelectedItem = () => {
         setFormData({
@@ -270,39 +330,39 @@ function CheckOut() {
             id_product: checkout.map(card => card.ID),
             Quality: checkout.map(card => card.TotalQuantity),
         });
-    
+
         // Assuming selectedItem is a state variable that needs to be reset
         selectedItem = '';
     };
-    
-    
-     const tooglePayment=()=>{
+
+
+    const tooglePayment = () => {
         setPayment(!Payment);
-     }
-    const toogleDirect=()=>{
+    }
+    const toogleDirect = () => {
         setDirect(!Direct);
     }
-    const toggleCouponVisible=()=>{
+    const toggleCouponVisible = () => {
         setIsCouponVisible(!isCouponVisible);
     }
-    const tooglecheckbox=()=>{
+    const tooglecheckbox = () => {
         setischeckbox(!ischeckbox);
     }
-    const showship=()=>{
+    const showship = () => {
         setship(!ship);
     }
-    const comboshow=()=>{
+    const comboshow = () => {
         setcombo(!combo);
     }
-  
+
     const [IsExpaned, setIsExpanded] = useState(false);
     const [Issubmenu, setIsubmenu] = useState(false);
     const [isBlog, setisblod] = useState(false);
     const [cartPopup, setcartPopup] = useState(false);
     const [secondmenu, SetSecondmenu] = useState(false);
-  
+
     const navigate = useNavigate();
-   
+
     const [singleproduct, setsingleproduct] = useState(false);
     const [Listview, setListView] = useState(false);
 
@@ -315,27 +375,27 @@ function CheckOut() {
     const [detail, setDetail] = useState(null);
     const [cartData, setCardData] = useState([]);
     const [currency, setcurrency] = useState(false);
-    const[curent,setcurent]=useState(false);
+    const [curent, setcurent] = useState(false);
     const [language, setlanguage] = useState(false);
     const [open, isopen] = useState(false);
     const [isHovered, setisHovered] = useState(false);
     const [showMainImage, setShowMainImage] = useState(false);
-    const handleItemHistory=(value)=>{
+    const handleItemHistory = (value) => {
         setshipItem(value);
         setship(false);
     }
-    const handleItemClick=(value)=>{
+    const handleItemClick = (value) => {
         setselectedItem(value);
         setcombo(false)
     }
-   
+
     const popupopen = {
         left: 'auto',
         right: '0',
         visibility: 'visible',
         opacity: '1',
         padding: '105px 29px 0px',
-        zIndex:'1'
+        zIndex: '1'
 
     }
     const closepopup = {
@@ -452,22 +512,76 @@ function CheckOut() {
         display: IsExpaned ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s',// Default animation
     };
-    const [couttotalPrice,setcouttotalPrice]=useState(0);
+    const [couttotalPrice, setcouttotalPrice] = useState(0);
+    const [selectVoucher, setselectVoucher] = useState(null);
+    const handleVoucher = () => {
 
-   
-    const handleWard = (selectedward) => {
-        setSelectedWard(selectedward);
+        if(selectVoucher.value===undefined){
+            Swal.fire({
+                icon: "error",
+                title: "Please choose voucher",
+                showConfirmButton: false,
+                timer: 1500
+              });
+        }else{
+            const matchingCharge = voucher.find((charge) => charge.ID === selectVoucher.value);
+
+            if (matchingCharge) {
+                const totalPercent = couttotalPrice;
+                const total = totalPercent - matchingCharge.value;
     
-        const matchingCharge = del.find(charge =>
-            charge.ID_district === selecteddistrict.value && charge.id_city === selectedCity.value
-        );
-            console.log(totalprice())
-        // Calculate the total price directly and update the state
-        const updatedTotal =totalprice()+(matchingCharge ? matchingCharge.Price : 0);
+                if (total <= 0) {
+                    setcouttotalPrice(0);
+                } else {
+                    setcouttotalPrice(total);
+                }
+            } else {
+                // Handle the case when no matching charge is found
+                console.error('No matching charge found for the selected voucher.');
+            }
+            setVoucherDisabled(true);
+            setiscaculateship(true)
+        }
         
-        setcouttotalPrice(updatedTotal);
-    }
-    
+
+    };
+
+
+
+    const handleWard = () => {
+        // Reset the total price before processing the new selected option
+        if (
+            selecteddistrict?.value === undefined ||
+            selectedCity?.value === undefined ||
+            selectedWard?.value === undefined
+          ) {
+            Swal.fire({
+              icon: "error",
+              title: "Please choose full information",
+              showConfirmButton: false,
+              timer: 1500
+            });
+          } else {
+            del.forEach(charge => {
+              if (
+                charge.ID_district === selecteddistrict?.value &&
+                charge.id_city === selectedCity?.value &&
+                charge.ID_Ward === selectedWard?.value
+              ) {
+                const updatedTotal = totalprice() + charge.Price;
+                setcouttotalPrice(updatedTotal);
+                setpriceship(charge.Price);
+              }
+            });
+          
+            setVoucherDisabled(false);
+          }
+        // Iterate over the del array
+      
+    };
+
+
+
     const totalprice = () => {
         // Calculate the total without updating the state here
         return checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0);
@@ -477,9 +591,9 @@ function CheckOut() {
             try {
                 const response = await axios.get('http://127.0.0.1:8000/api/totalpricedisplay');
                 setdel(response.data);
-              
 
-           
+
+
             } catch (error) {
                 console.error('Error fetching districts', error);
             }
@@ -488,9 +602,9 @@ function CheckOut() {
     }, [])
 
     return (
-        
+
         <div>
-           
+
             <header className="block">
 
                 <div id="contact" style={{ border: '1px solid #e5e5e5' }}>
@@ -1029,7 +1143,7 @@ function CheckOut() {
                             <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '15px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                         </div>
                         <div className="minicart-btn_area  pb-[15px]">
-                            <a  style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>Minicart</a>
+                            <a style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>Minicart</a>
                         </div>
                         <div className="minicart-btn_area pb-[15px]">
                             <a href="" style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>
@@ -1050,254 +1164,269 @@ function CheckOut() {
                     </div>
                 </div>
             </div>
-         <div className="checkout-area">
-            <div className="container">
-                <div className="row">
-                    <div className="col-12">
-                        <div className="coupon-accordion">
-                            <h3 style={{fontFamily:'"Lato", sans-serif',color:"#333333"}}>
-                            Returning customer? 
-                            <span id="showlogin"> Click here to login</span>
-                            </h3>
-                            <h3 style={{fontFamily:'"Lato", sans-serif',color:"#333333"}}>
-                            Have a coupon? 
-                            <span id="showcoupon" onClick={toggleCouponVisible}>Click here to enter your code</span>
-                            </h3>
-                            <div id="checkout_coupon" className={`coupon-checkout-content ${isCouponVisible ? 'visible' : 'hidden'}`}>
-                                <div className="coupon-info">
-                                    <form action="">
-                                        <p className="checkout-coupon" style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px',lineHeight:'24px'}}>
-                                            <input type="text" placeholder="Coupon code" style={{outline:'none',color:"#888888"}} />
-                                            <input type="submit" value={'Apply Coupon'} className="coupon-inner_btn" />
-                                        </p>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>-
-                    </div>
+            <div className="checkout-area">
+                <div className="container">
                     <div className="row">
-                        <div className="col-lg-6 col-12">
-                            <form action="">
-                                <div className="checkbox-form">
-                                    <h3 style={{fontFamily:'"Lato", sans-serif',color:'#333333',fontWeight:'bold'}}>Billing Details</h3>
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            <div className="country-select clearfix">
-                                                <label htmlFor="" style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Country 
-                                                <span className="required">*</span>
-                                                </label>
-                                                <div className={`nice-select myniceselect wide  ${combo ? 'open' :''}`}>
-                                                    <span className="current"  onClick={comboshow}>{selectedItem}</span>
-                                                    <ul className="list">
-                                                        <li key="Bangladesh" data-value="Bangladesh" data-display="Bangladesh" className={`option ${selectedItem === 'Bangladesh' ? 'selected focus' : ''}`} onClick={()=>handleItemClick('Bangladesh')}>Bangladesh</li>
-                                                        <li key="uk" data-value="uk"  className={`option ${selectedItem === 'London' ? 'selected focus' : ''}`} onClick={()=>handleItemClick('London')}>London</li>
-                                                        <li key="rou" data-value="rou"  className={`option ${selectedItem === 'Romania' ? 'selected focus' : ''}`} onClick={()=>handleItemClick('Romania')}>Romania</li>
-                                                        <li key="fr" data-value="fr"  className={`option ${selectedItem === 'French' ? 'selected focus' : ''}`} onClick={()=>handleItemClick('French')}>French</li> 
-                                                        <li key="de" data-value="de"  className={`option ${selectedItem === 'Germany' ? 'selected focus' : ''}`} onClick={()=>handleItemClick('Germany')}>Germany</li> 
-                                                        <li key="aus" data-value="aus"  className={`option ${selectedItem === 'Australia' ? 'selected focus' : ''}`} onClick={()=>handleItemClick('Australia')}>Australia</li> 
-                                                    </ul>
+                        <div className="col-12">
+                            <div className="coupon-accordion">
+                                <h3 style={{ fontFamily: '"Lato", sans-serif', color: "#333333" }}>
+                                    Returning customer?
+                                    <span id="showlogin"> Click here to login</span>
+                                </h3>
+                                <h3 style={{ fontFamily: '"Lato", sans-serif', color: "#333333" }}>
+                                    Have a coupon?
+                                    <span id="showcoupon" onClick={toggleCouponVisible}>Click here to enter your code</span>
+                                </h3>
+                                <div id="checkout_coupon" className={`coupon-checkout-content ${isCouponVisible ? 'visible' : 'hidden'}`}>
+                                    <div className="coupon-info">
+                                        <form action="">
+                                            <p className="checkout-coupon" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                <input type="text" placeholder="Coupon code" style={{ outline: 'none', color: "#888888" }} />
+                                                <input type="submit" value={'Apply Coupon'} className="coupon-inner_btn" />
+                                            </p>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>-
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-6 col-12">
+                                <form action="">
+                                    <div className="checkbox-form">
+                                        <h3 style={{ fontFamily: '"Lato", sans-serif', color: '#333333', fontWeight: 'bold' }}>Billing Details</h3>
+                                        <div className="row">
+                                            <div className="col-md-12">
+                                                <div className="country-select clearfix">
+                                                    <label htmlFor="" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Country
+                                                        <span className="required">*</span>
+                                                    </label>
+                                                    <div className={`nice-select myniceselect wide  ${combo ? 'open' : ''}`}>
+                                                        <span className="current" onClick={comboshow}>{selectedItem}</span>
+                                                        <ul className="list">
+                                                            <li key="Bangladesh" data-value="Bangladesh" data-display="Bangladesh" className={`option ${selectedItem === 'Bangladesh' ? 'selected focus' : ''}`} onClick={() => handleItemClick('Bangladesh')}>Bangladesh</li>
+                                                            <li key="uk" data-value="uk" className={`option ${selectedItem === 'London' ? 'selected focus' : ''}`} onClick={() => handleItemClick('London')}>London</li>
+                                                            <li key="rou" data-value="rou" className={`option ${selectedItem === 'Romania' ? 'selected focus' : ''}`} onClick={() => handleItemClick('Romania')}>Romania</li>
+                                                            <li key="fr" data-value="fr" className={`option ${selectedItem === 'French' ? 'selected focus' : ''}`} onClick={() => handleItemClick('French')}>French</li>
+                                                            <li key="de" data-value="de" className={`option ${selectedItem === 'Germany' ? 'selected focus' : ''}`} onClick={() => handleItemClick('Germany')}>Germany</li>
+                                                            <li key="aus" data-value="aus" className={`option ${selectedItem === 'Australia' ? 'selected focus' : ''}`} onClick={() => handleItemClick('Australia')}>Australia</li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-md-12">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Full Name
-                                                <span className="required">*</span>
-                                                </label>
-                                                <input type="text" value={formData.FullName} onChange={(e) => setFormData({ ...formData, FullName: e.target.value })} />
+                                            <div className="col-md-12">
+                                                <div className="checkout-form-list">
+                                                    <label htmlFor="" style={{ marginBottom: '0.5rem', display: 'inline-block', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Full Name
+                                                        <span className="required">*</span>
+                                                    </label>
+                                                    <input type="text" value={formData.FullName} onChange={(e) => setFormData({ ...formData, FullName: e.target.value })} />
+                                                </div>
+                                            </div>
+
+                                            <div className="col-md-12">
+                                                <div className="checkout-form-list">
+                                                    <label htmlFor="" style={{ marginBottom: '0.5rem', display: 'inline-block', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Address
+                                                        <span className="required">*</span>
+                                                    </label>
+                                                    <input type="text" value={formData.Address} onChange={(e) => setFormData({ ...formData, Address: e.target.value })} placeholder="Street address" />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-12">
+                                                <div className="checkout-form-list">
+                                                    <label htmlFor="" style={{ marginBottom: '0.5rem', display: 'inline-block', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}> City
+                                                        <span className="required">*</span>
+                                                    </label>
+                                                    <Select
+                                                        options={city.map(d => ({ value: d.ID, label: d.Name }))}
+                                                        onChange={(selectedOption) => handleCityChange(selectedOption)}
+                                                        value={selectedCity}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-12">
+                                                <div className="checkout-form-list">
+                                                    <label htmlFor="" style={{ marginBottom: '0.5rem', display: 'inline-block', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}> District
+                                                        <span className="required">*</span>
+                                                    </label>
+                                                    <Select
+                                                        options={Districts.map(d => ({ value: d.ID, label: d.Name }))}
+                                                        onChange={(selectedOption) => handledistrictChange(selectedOption)}
+                                                        value={selecteddistrict}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-12">
+                                                <div className="checkout-form-list">
+                                                    <label htmlFor="" style={{ marginBottom: '0.5rem', display: 'inline-block', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}> Ward
+                                                        <span className="required">*</span>
+                                                    </label>
+                                                    <Select
+                                                        options={ward.map(d => ({ value: d.ID, label: d.Name }))}
+                                                        onChange={(selectedOption) => setSelectedWard(selectedOption)}
+                                                        value={selectedWard}
+                                                    />
+                                                </div>
+                                            </div>
+               
+                                            <div className="col-md-12">
+                                                <div className="checkout-form-list">
+                                                    <label htmlFor="" style={{ marginBottom: '0.5rem', display: 'inline-block', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Postcode / Zip
+                                                        <span className="required">*</span>
+                                                    </label>
+                                                    <input type="text" value={formData.PostCode} onChange={(e) => setFormData({ ...formData, PostCode: e.target.value })} />
+                                                </div>
+                                            </div>
+
+                                            <div className="col-md-12">
+                                                <div className="checkout-form-list">
+                                                    <label htmlFor="" style={{ marginBottom: '0.5rem', display: 'inline-block', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Phone
+                                                        <span className="required">*</span>
+                                                    </label>
+                                                    <input type="text" value={formData.Phone} onChange={(e) => setFormData({ ...formData, Phone: e.target.value })} />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-12">
+                                                <div className="checkout-form-list">
+                                                    <label htmlFor="" style={{ marginBottom: '0.5rem', display: 'inline-block', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}> Voucher
+                                                        <span className="required">*</span>
+                                                    </label>
+                                                    <Select
+                                                        options={voucher.map(d => ({ value: d.ID, label: d.voucherCode }))}
+                                                        onChange={(selectedOption) => setselectVoucher(selectedOption)}
+                                                        value={selectVoucher}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div className="col-md-12">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor=""  style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Address 
-                                                <span className="required">*</span>
-                                                </label>
-                                                <input type="text" value={formData.Address} onChange={(e)=>setFormData({...formData,Address:e.target.value})} placeholder="Street address" />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-12">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}> City 
-                                                <span className="required">*</span>
-                                                </label>
-                                                <Select
-                                                options={city.map(d => ({ value: d.ID, label: d.Name }))}
-                                                onChange={(selectedOption) => handleCityChange(selectedOption)}
-                                                value={selectedCity}
-                                            />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-12">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}> District
-                                                <span className="required">*</span>
-                                                </label>
-                                                <Select
-                                                options={Districts.map(d => ({ value: d.ID, label: d.Name }))}
-                                                onChange={(selectedOption) => handledistrictChange(selectedOption)}
-                                                value={selecteddistrict}
-                                            />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-12">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}> Ward
-                                                <span className="required">*</span>
-                                                </label>
-                                                <Select
-                                                options={ward.map(d => ({ value: d.ID, label: d.Name }))}
-                                                onChange={(selectedOption) => handleWard(selectedOption)}
-                                                value={selectedWard}
-                                            />
-                                            </div>
-                                        </div>
-                                        <div className="col-md-12">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Town / City 
-                                                <span className="required">*</span>
-                                                </label>
-                                                <input type="text" value={formData.City} onChange={(e) => setFormData({ ...formData, City: e.target.value })} />
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="col-md-12">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Postcode / Zip 
-                                                <span className="required">*</span>
-                                                </label>
-                                                <input type="text" value={formData.PostCode} onChange={(e) => setFormData({ ...formData, PostCode: e.target.value })} />
-                                            </div>
-                                        </div>
-                                       
-                                        <div className="col-md-12">
-                                            <div className="checkout-form-list">
-                                                <label htmlFor="" style={{marginBottom:'0.5rem',display:'inline-block',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Phone
-                                                <span className="required">*</span>
-                                                </label>
-                                                <input type="text" value={formData.Phone} onChange={(e) => setFormData({ ...formData, Phone: e.target.value })} />
-                                            </div>
-                                        </div>
                                     </div>
-                                    
-                                </div>
-                            </form>
-                        </div>
-                        <div className="col-lg-6 col-12">
-                            <div className="your-order">
-                                <h3 style={{fontFamily:'"Lato", sans-serif',color:'#333333',fontWeight:'bold'}}>Your order</h3>
-                                <div className="your-order-table table-responsive">
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                <th className="cart-product-name" style={{background:'#f4f4f4',fontFamily:'"Lato", sans-serif',fontWeight:'normal'}}>Product</th>
-                                                <th className="cart-product-total" style={{background:'#f4f4f4',fontFamily:'"Lato", sans-serif',fontWeight:'normal'}}>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        {checkout.map((card, index) => (
-                                            <tr className="cart_item">
-                                                <td className="cart-product-name" style={{background:'#f4f4f4',fontFamily:'"Lato", sans-serif',fontWeight:'normal',fontSize:'16px'}}>
-                                               {card.Name}
-                                                    <strong className="product-quantity" style={{marginLeft:'3px'}}>
-                                                        × {card.TotalQuantity}</strong>
-                                                </td>
-                                                <td className="cart-product-total" style={{background:'#f4f4f4'}}>
-                                                    <span className="amount" style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',color:'#212529'}}>£{caculateTotalPrice(card.TotalQuantity,card.Price)}</span>
-                                                </td>
-                                            </tr>
-                                               ))}
-                                        </tbody>
-                                        <tfoot>
-                                            <tr className="cart-subtotal">
-                                                <th style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',color:'#212529',background:'#f4f4f4'}}>Cart Subtotal</th>
-                                                <td className="cart-product-total" style={{background:'#f4f4f4'}}>
-                                                    <span className="amount" style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',color:'#212529'}}>£{checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0)}</span>
-                                                </td>
-                                            </tr>
-                                            <tr className="order-total">
-                                                <th style={{fontFamily:'"Lato", sans-serif',fontSize:'16px',color:'#212529',background:'#f4f4f4',borderBottom:'medium none'}}>Order Total</th>
-                                                <td className="cart-product-total" style={{background:'#f4f4f4',borderBottom:'medium none'}}>
-                                                    <strong>
-                                                    <span className="amount" style={{fontFamily:'"Lato", sans-serif',fontSize:'20px',color:'#212529'}}>£ {couttotalPrice}</span>
-                                                    </strong>
-                                                   
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <div className="payment-method">
-                                    <div className="payment-accordion">
-                                        <div id="accordion">
-                                            <div className="card actives">
-                                                <div className="card-header" id="payment-1">
-                                                    <h5 className="panel-title">
-                                                        <a  className="collapsed" style={{color:'#595959',textDecoration:'none'}}  onClick={toogleDirect}>
-                                                        Direct Bank Transfer.
-                                                    </a>
-                                                    </h5>
-                                                </div>
-                                                <div className={`coupon-checkout-content ${Direct ? 'visible' : 'hidden'}`}>
-                                                    <div className="card-body">
-                                                        <p style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px',marginTop:'0',marginBottom:'1rem'}}>
-                                                        Make your payment directly into our bank account. Please use your Order
-                                                        ID as the payment
-                                                        reference. Your order won’t be shipped until the funds have cleared in
-                                                        our account.
-                                                        </p>
+                                </form>
+                            </div>
+                            <div className="col-lg-6 col-12">
+                                <div className="your-order">
+                                    <h3 style={{ fontFamily: '"Lato", sans-serif', color: '#333333', fontWeight: 'bold' }}>Your order</h3>
+                                    <div className="your-order-table table-responsive">
+                                        <table className="table">
+                                            <thead>
+                                                <tr>
+                                                    <th className="cart-product-name" style={{ background: '#f4f4f4', fontFamily: '"Lato", sans-serif', fontWeight: 'normal' }}>Product</th>
+                                                    <th className="cart-product-total" style={{ background: '#f4f4f4', fontFamily: '"Lato", sans-serif', fontWeight: 'normal' }}>Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {checkout.map((card, index) => (
+                                                    <tr className="cart_item">
+                                                        <td className="cart-product-name" style={{ background: '#f4f4f4', fontFamily: '"Lato", sans-serif', fontWeight: 'normal', fontSize: '16px' }}>
+                                                            {card.Name}
+                                                            <strong className="product-quantity" style={{ marginLeft: '3px' }}>
+                                                                × {card.TotalQuantity}</strong>
+                                                        </td>
+                                                        <td className="cart-product-total" style={{ background: '#f4f4f4' }}>
+                                                            <span className="amount" style={{ fontFamily: '"Lato", sans-serif', fontSize: '16px', color: '#212529' }}>£{caculateTotalPrice(card.TotalQuantity, card.Price)}</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr className="cart-subtotal">
+                                                    <th style={{ fontFamily: '"Lato", sans-serif', fontSize: '16px', color: '#212529', background: '#f4f4f4' }}>Cart Subtotal</th>
+                                                    <td className="cart-product-total" style={{ background: '#f4f4f4' }}>
+                                                        <span className="amount" style={{ fontFamily: '"Lato", sans-serif', fontSize: '16px', color: '#212529' }}>£{checkout.reduce((total, card) => total + card.TotalQuantity * card.Price, 0)}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr className="order-total">
+                                                    <th style={{ fontFamily: '"Lato", sans-serif', fontSize: '16px', color: '#212529', background: '#f4f4f4', borderBottom: 'medium none' }}>Order Total</th>
+                                                    <td className="cart-product-total" style={{ background: '#f4f4f4', borderBottom: 'medium none' }}>
+                                                        <strong>
+                                                            <span className="amount" style={{ fontFamily: '"Lato", sans-serif', fontSize: '20px', color: '#212529' }}>£ {couttotalPrice}</span>
+                                                        </strong>
+
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div className="payment-method">
+                                        <div className="payment-accordion">
+                                            <div id="accordion">
+                                                <div className="card actives">
+                                                    <div className="card-header" id="payment-1">
+                                                        <h5 className="panel-title">
+                                                            <a className="collapsed" style={{ color: '#595959', textDecoration: 'none' }} onClick={toogleDirect}>
+                                                                Direct Bank Transfer.
+                                                            </a>
+                                                        </h5>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div className="card">
-                                            <div className="card-header" id="payment-1">
-                                                    <h5 className="panel-title">
-                                                        <a  className="collapsed" style={{color:'#595959',textDecoration:'none'}}  onClick={tooglePayment}>
-                                                       
-                                                        Cheque Payment
-                                                    
-                                                    </a>
-                                                    </h5>
-                                                </div>
-                                                <div className={`coupon-checkout-content ${Payment ? 'visible' : 'hidden'}`}>
-                                                    <div className="card-body">
-                                                        <p style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px',marginTop:'0',marginBottom:'1rem'}}>
-                                                        Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.
-                                                        </p>
+                                                    <div className={`coupon-checkout-content ${Direct ? 'visible' : 'hidden'}`}>
+                                                        <div className="card-body">
+                                                            <p style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', marginTop: '0', marginBottom: '1rem' }}>
+                                                                Make your payment directly into our bank account. Please use your Order
+                                                                ID as the payment
+                                                                reference. Your order won’t be shipped until the funds have cleared in
+                                                                our account.
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div className="card">
-                                            <div className="card-header" id="payment-1">
-                                                    <h5 className="panel-title">
-                                                        <a  className="collapsed" style={{color:'#595959',textDecoration:'none'}}  >
-                                                       
-                                                   Phuong thuc thanh toan
-                                                    
-                                                    </a>
-                                                    </h5>
-                                                </div>
-                                                <div >
+                                                    <div className="card-header" id="payment-1">
+                                                        <h5 className="panel-title">
+                                                            <a className="collapsed" style={{ color: '#595959', textDecoration: 'none' }} onClick={tooglePayment}>
+
+                                                                Cheque Payment
+
+                                                            </a>
+                                                        </h5>
+                                                    </div>
+                                                    <div className={`coupon-checkout-content ${Payment ? 'visible' : 'hidden'}`}>
+                                                        <div className="card-body">
+                                                            <p style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', marginTop: '0', marginBottom: '1rem' }}>
+                                                                Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="card">
+                                                        <div className="coupon-all">
+                                                            <div className="coupon">
+                                                                <input
+                                                                    name="voucherCode"
+                                                                    type="text"
+                                                                    id="coupon_code"
+                                                                    value={voucherCode}
+                                                                    onChange={handleCouponCodeChange}
+                                                                    className="input-text"
+                                                                    placeholder="Coupon code"
+                                                                />
+                                                                <input type="button" className="button" name="apply_coupon" value={"Apply coupon"} onClick={() => applyFreeship()} />
+                                                                {/* <button 
+                                                    type="button" 
+                                                    className="button" 
+                                                    name="apply_coupon" 
+                                                    onClick={handleApplyVoucher}
+                                                    >
+                                                    Apply coupon
+                                            </button> */}
+                                                            </div>
+                                                        </div>
+
+
+
+                                                    </div>
                                                     <div className="card-body">
-                                                        <p style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px',marginTop:'0',marginBottom:'1rem'}}>
-                                                        Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.
-                                                        </p>
-                                                        <button className={`paypal-button ${paypal ?'col-paypal':''}`} onClick={buttonpaypal}  style={{ background: '#fff', color: '#000000CC',border:'1px solid rgba(0,0,0,.09)', padding: '10px', borderRadius: '5px', marginRight: '10px',outline:'none' }}>
-                                                        <i class="fa-brands fa-paypal"></i>
-            Pay with PayPal
-          </button>
-          <button className={`cod-button ${delivery ?'col-delivery':''}`}  style={{ background: '#fff', color: '#000000CC',border:'1px solid rgba(0,0,0,.09)', padding: '10px', borderRadius: '5px' }} onClick={buttondelivery}>
-          Payment on delivery
-          </button>
+
+                                                        <button className={`paypal-button col-paypal`} style={{ background: '#fff', color: '#000000CC', border: '1px solid rgba(0,0,0,.09)', padding: '10px', borderRadius: '5px', marginRight: '10px', outline: 'none' }} disabled={isVoucherDisabled} onClick={() => handleVoucher()}>
+                                                            <i class="fa-brands fa-paypal"></i>
+                                                            caculate on voucher
+                                                        </button>
+                                                        <button className={`cod-button col-delivery`} style={{ background: '#fff', color: '#000000CC', border: '1px solid rgba(0,0,0,.09)', padding: '10px', borderRadius: '5px' }} disabled={iscaculateship} onClick={() => handleWard()}>
+                                                            caculate on ship
+                                                        </button>
+                                                    </div>
+                                                    <div className="order-button-payment">
+                                                        <input type="button" value="Place order" onClick={() => AddCard()} />
                                                     </div>
                                                 </div>
-                                               
-                                               
+
                                             </div>
-                                                <div className="order-button-payment">
-                                                    <input type="button" value="Place order" onClick={()=>AddCard()} />
-                                                </div>
-                                            </div>
-                                            
                                         </div>
                                     </div>
                                 </div>
@@ -1306,7 +1435,6 @@ function CheckOut() {
                     </div>
                 </div>
             </div>
-         </div>
         </div>
 
 

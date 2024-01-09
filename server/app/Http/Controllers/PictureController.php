@@ -44,7 +44,10 @@ class PictureController extends Controller
             return response()->json(['error' => 'Failed to delete picture', 'message' => $e->getMessage()], 500);
         }
     }
-    
+    public function totalPicture(){
+        $picture=Picture::count();
+        return response()->json(['pictureCount' => $picture], 200);
+    }
     public function Updatestatus(Request $request,$ID){
         try{
             $picture=Picture::where("ID",$ID)->where("status",2)->first();

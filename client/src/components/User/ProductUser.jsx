@@ -2,7 +2,7 @@
 import image from './images/user2-160x160.jpg';
 import React, { useEffect, useState, useRef } from 'react';
 import Slider from 'rc-slider';
-
+import Swal from 'sweetalert2';
 import logo2 from '../menu/image/logorespon.png';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'rc-slider/assets/index.css'
@@ -15,6 +15,7 @@ import France from '../menu/image/France.png';
 import logo from '../menu/image/logo.png';
 import jw from './images/jw.png';
 import jew2 from './images/jew2.png';
+import './list.css'
 import axios from 'axios';
 import TreeviewMenu from "../superadmin/TreeViewMenu";
 const featureEnabled = window.location.pathname.includes("/HomeProduct");
@@ -538,6 +539,70 @@ const handleIncreaseQuality = () => {
 		}));
 	  }
   };
+  const handleClick = async (routeString) => {
+	try {
+	  setLoading(true);
+
+	  // Simulate an asynchronous task, like data fetching
+	  await someAsyncTask();
+
+	  // After the task is completed, navigate to the dynamic route
+	  navigate(routeString, { state: { username, ID } });
+	} catch (error) {
+	  console.error('Error during async operation:', error);
+	} finally {
+	  setLoading(false);
+	}
+  };
+  const [loading, setLoading] = useState(false);
+  const deleteCard = async (IDProduct) => {
+	try {
+		const response = await fetch(`http://127.0.0.1:8000/api/DeleteCard/${IDProduct}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				id_Account: ID,
+			}),
+		});
+		if (!response.ok) {
+			throw new Error('Failed to Delete card');
+		}
+		const data = await response.json();
+		if (data.message) {
+			Swal.fire({
+				icon: "success",
+				title: "Delete Successfull",
+				showConfirmButton: false,
+				timer: 1500
+			});
+			const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+			if (response.ok) {
+				const data = await response.json();
+				setCardData(data);
+			}
+		} else {
+			Swal.fire({
+				icon: "success",
+				title: "Delete Successfull",
+				showConfirmButton: false,
+				timer: 1500
+			});
+		}
+	} catch (error) {
+		console.error('Error adding card:', error);
+	}
+}
+  const someAsyncTask = () => {
+	return new Promise((resolve) => {
+	  // Simulate an asynchronous task
+	  setTimeout(() => {
+		console.log('Async task completed');
+		resolve();
+	  }, 2000); // Simulate a delay of 2 seconds
+	});
+  };
 	return (
 
 
@@ -545,6 +610,12 @@ const handleIncreaseQuality = () => {
 			<ToastContainer />
 		
 			<header className="block">
+            {loading && (
+                <div
+                    className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600"></div>
+                </div>
+            )}
             <div id="contact" style={{ border: '1px solid #e5e5e5' }}>
                 <div className="container">
                     <div className="row">
@@ -606,12 +677,33 @@ const handleIncreaseQuality = () => {
                                                 <i className="fa fa-chevron-down" style={{ paddingLeft: '5px', fontSize: '11px' }}></i>
                                             </a>
                                             <ul className="ht-dropdown ht-currency">
-                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                    <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>Login</a>
-                                                </li>
-                                                <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                    <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>Register</a>
-                                                </li>
+                                                {username==='Default Username' && (
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                        <a href="/login"  className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}  >Login</a>
+                                                    </li>
+                                                )}
+                                                {username==='Default Username' && (
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                        <a href="/register" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={()=>navigate('/register')}>Register</a>
+                                                    </li>
+                                                )}
+
+                                                    {username!=='Default Username' &&(
+                                                         <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                         <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>{username}</a>
+                                                     </li>
+                                                    )}
+                                                    {username!=='Default Username' && (
+                                                          <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                          <a href="/layout" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={()=>navigate('/layout')}>log out</a>
+                                                      </li>
+                                                    )}
+
+                                                {username !== 'Default Username' ? (
+                                                    <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
+                                                        <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/Myorder', { state: { username: username, ID: ID } })}>My order</a>
+                                                    </li>
+                                                ) : null}
 
                                             </ul>
                                         </li>
@@ -628,7 +720,7 @@ const handleIncreaseQuality = () => {
                     <div className="row">
                         <div className="col-lg-3">
                             <div className="header-logo">
-                                <a href="">
+                                <a href="" onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>
                                     <img src={logo} />
                                 </a>
                             </div>
@@ -668,69 +760,13 @@ const handleIncreaseQuality = () => {
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }}>Product</a>
-                                            <ul className="hm-dropdown">
-                                                <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }} onClick={() => navigate('/HomeProduct', { state: { username: username,ID:ID } })} >Product</a>
-                                                  
-                                                </li>
-                                                <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Detail Product</a>
-                                                    
-                                                </li>
-                                               
-                                               
-
-                                            </ul>
+                                            <a  id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={()=>handleClick('/HomeProduct')}>Product</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Blog</a>
-                                            <ul className="hm-dropdown">
-                                                <li className="relative"><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Grid View</a>
-                                                    <ul className="hm-dropdown hm-sub_dropdown">
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Column Two</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Column Three</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Left Sidebar</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '0px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Right Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li className="relative"><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List View</a>
-                                                    <ul className="hm-dropdown hm-sub_dropdown">
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Fullwidth</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Left Sidebar</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>List Right Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Blog Details</a>
-                                                    <ul className="hm-dropdown hm-sub_dropdown">
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Left Sidebar</a></li>
-                                                        <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Right Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="" className="block" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Blog Format</a>
-                                                    <ul className="hm-dropdown hm-sub_last">
-                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Gallery Format</a></li>
-                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Audio Format</a></li>
-                                                        <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Video Format</a></li>
-                                                    </ul>
-                                                </li>
+                                            <a  id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={()=>handleClick('/blog')} >Blog</a>
 
-                                            </ul>
                                         </li>
-                                        <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Pages
 
-                                            </a>
-                                            <ul className="hm-dropdown">
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>{username}</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Login|Register</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Wishlist</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Cart</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Checkout</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Compare</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>FAQ</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>404 Error</a></li>
-                                                <li className="relative"><a href="" style={{ padding: '10px 20px', lineHeight: '35px', fontSize: '16px', fontFamily: '"Lato", sans-serif', color: '#595959' }}>Comming soon</a></li>
-                                            </ul>
-                                        </li>
                                         <li className="inline-block pr-[30px]">
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>About US
 
@@ -764,19 +800,15 @@ const handleIncreaseQuality = () => {
                         <div className="col-lg-3 col-md-8 col-sm-8">
                             <div className="flex justify-end" id="reponmenu">
                                 <ul style={{ display: 'inline-flex' }}>
-                                    <li className="inline-block limenu" >
-                                        <a href="" className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
-                                            <i class="fa-solid fa-heart" style={{ borderColor: 'white' }}></i>
-                                        </a>
-                                    </li>
-                                    <li className="inline-block   limenu" id='navcon' >
-                                        <a onClick={()=>isopen(true)} className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
+                                   
+                                    <li className="inline-block hidden navcon limenu" >
+                                        <a onClick={() => isopen(true)} className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
                                             <i class="fa fa-navicon" style={{ borderColor: 'white' }}></i>
                                         </a>
                                     </li>
                                     <li className="inline-block limenu" >
-                                        <a  className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
-                                            <i class="fa-solid fa-bag-shopping" onClick={()=>setcartPopup(true)} style={{ color: 'white' }}></i>
+                                        <a className="block" style={{ width: '60px', height: '60px', lineHeight: '60px', textAlign: 'center', color: '#fff', fontSize: '20px' }}>
+                                            <i class="fa-solid fa-bag-shopping" onClick={() => setcartPopup(true)} style={{ color: 'white' }}></i>
                                         </a>
                                     </li>
                                 </ul>
@@ -786,9 +818,9 @@ const handleIncreaseQuality = () => {
                 </div>
             </div>
             <div className="left-auto right-0 mobile-menu_wrapper" >
-                <div className="offcanvas-menu-inner" style={open ? {...closepopup,...popupopen}:closepopup}>
+                <div className="offcanvas-menu-inner" style={open ? { ...closepopup, ...popupopen } : closepopup}>
                     <div className="container">
-                        <a  className="btnclose" onClick={()=>isopen(false)}>
+                        <a className="btnclose" onClick={() => isopen(false)}>
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
                         <div className="offcanvas-inner_search">
@@ -820,7 +852,7 @@ const handleIncreaseQuality = () => {
                                     <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
                                         <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleToggle}>Shop</span>
                                     </a>
-                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupContentStyle1 }} >
+                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupContentStyle }} >
                                         <li className="relative menu-item-has-children">
                                             <span className="menu-expand-submenu">
                                                 {Issubmenu ? (
@@ -978,15 +1010,15 @@ const handleIncreaseQuality = () => {
                                         <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={handlePage}>Pages</span>
                                     </a>
                                     <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupPage }}>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Wishlist</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Cart</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>CheckOut</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Compare</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>FAQ</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Error 404</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Comming Soon</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Wishlist</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Cart</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>CheckOut</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Compare</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>FAQ</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Error 404</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Comming Soon</span></a></li>
                                     </ul>
                                 </li>
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
@@ -998,11 +1030,11 @@ const handleIncreaseQuality = () => {
                                         )}
                                     </span>
                                     <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif',cursor:'pointer' }} onClick={handleuserSetting}>User Setting</span>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleuserSetting}>User Setting</span>
                                     </a>
                                     <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupUsersetting }}>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
                                     </ul>
                                 </li>
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
@@ -1014,11 +1046,11 @@ const handleIncreaseQuality = () => {
                                         )}
                                     </span>
                                     <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif',cursor:'pointer' }} onClick={handleCurrency}>Currency</span>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleCurrency}>Currency</span>
                                     </a>
                                     <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupCurrency }}>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>EUR €</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>USD $</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>EUR €</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>USD $</span></a></li>
                                     </ul>
                                 </li>
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
@@ -1030,13 +1062,13 @@ const handleIncreaseQuality = () => {
                                         )}
                                     </span>
                                     <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif',cursor:'pointer' }} onClick={handleLanguage}>language</span>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif', cursor: 'pointer' }} onClick={handleLanguage}>language</span>
                                     </a>
-                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popuplanguage}}>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>English</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Français</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Romanian</span></a></li>
-                                    <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Japanese</span></a></li>
+                                    <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popuplanguage }}>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>English</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Français</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Romanian</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Japanese</span></a></li>
                                     </ul>
                                 </li>
 
@@ -1047,44 +1079,41 @@ const handleIncreaseQuality = () => {
 
             </div>
             <div id="miniCart">
-                <div className="offcanvas-menu-inner" style={cartPopup ? {...closepopup,...popupopen}:closepopup} >
-                    <a  className="btn-close"  onClick={()=>setcartPopup(false)} style={{background:'transparent',color:'#595959',top:'0',right:'0',left:'auto'}}>
-                    <i class="fa fa-times" aria-hidden="true"></i>
+                <div className="offcanvas-menu-inner" style={cartPopup ? { ...closepopup, ...popupopen } : closepopup} >
+                    <a className="btn-close" onClick={() => setcartPopup(false)} style={{ background: 'transparent', color: '#595959', top: '0', right: '0', left: 'auto' }}>
+                        <i class="fa fa-times" aria-hidden="true"></i>
                     </a>
                     <div className="minicart-content">
                         <div className="minicart-heading">
-                            <h4 style={{marginBottom:'0',paddingBottom:'25px',fontFamily:'"Lato", sans-serif',color:'#333333',lineHeight:'1',fontWeight:'bold',fontSize:'24px'}}>Shopping Cart</h4>
+                            <h4 style={{ marginBottom: '0', paddingBottom: '25px', fontFamily: '"Lato", sans-serif', color: '#333333', lineHeight: '1', fontWeight: 'bold', fontSize: '24px' }}>Shopping Cart</h4>
                         </div>
-                        <ul className="minicart-list" style={{maxHeight:'310px',position:'relative',overflow:'auto'}}>
-                        {cartData.map((card,index)=>(
-                                       <li className="minicart-product flex pb-[30px]">
-                                       <a href="" className="product-item_remove absolute " style={{right:'15px',color:'#595959',textDecoration:'none'}}>
-                                          
-                                       <i class="fa fa-times" aria-hidden="true"></i>
-                                       </a>
-                                                   <div className="product-item_img" style={{flexBasis:'65px',maxWidth:'65px'}}>
-                                                   <img src={`http://127.0.0.1:8000/${card.link}`} alt="" />
-                                                   </div>
-                                                   <div className="product-item_content">
-                                           <a href="" style={{color:'#595959',textDecoration:'none',fontFamily:'"Lato", sans-serif',fontSize:'16px'}}>{card.Name}</a>
-                                           <span className="product-item_quantity" style={{display:'block',paddingTop:'10px',fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>{card.Quality} x {card.Price}</span>
-                                                   </div>
-                                   </li>
-                                   
-                                        ))}
-                           
-                          
+                        <ul className="minicart-list" style={{ maxHeight: '310px', position: 'relative', overflow: 'auto' }}>
+                            {cartData.map((card, index) => (
+                                <li className="minicart-product flex pb-[30px]">
+                                    <a className="product-item_remove absolute " style={{ right: '15px', color: '#595959', textDecoration: 'none' }} onClick={() => deleteCard(card.ID)}>
+
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                    <div className="product-item_img" style={{ flexBasis: '65px', maxWidth: '65px' }}>
+                                        <img src={`http://127.0.0.1:8000/${card.link}`} alt="" />
+                                    </div>
+                                    <div className="product-item_content">
+                                        <a href="" style={{ color: '#595959', textDecoration: 'none', fontFamily: '"Lato", sans-serif', fontSize: '16px' }} onClick={() => navigate(`/DetailProduct/${card.ID}`, { state: { IDProduct: card.ID, ID: ID } })}>{card.Name}</a>
+                                        <span className="product-item_quantity" style={{ display: 'block', paddingTop: '10px', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>{card.Quality} x {card.Price}</span>
+                                    </div>
+                                </li>
+
+                            ))}
+
+
                         </ul>
                     </div>
                     <div className="minicart-item_total">
-                        <span style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}}>Subtotal</span>
-                        <span style={{fontFamily:'"Lato", sans-serif',color:'#595959',fontSize:'16px'}} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
+                        <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Subtotal</span>
+                        <span style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }} className="ammount"> ${cartData.reduce((total, card) => total + card.Quality * card.Price, 0).toFixed(2)}</span>
                     </div>
-                    <div className="minicart-btn_area  pb-[15px]">
-                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>Minicart</a>
-                    </div>
-                    <div className="minicart-btn_area pb-[15px]">
-                        <a href="" style={{textDecoration:'none'}} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth">Checkout</a>
+                    <div className="minicart-btn_area  pb-[15px]" onClick={() => navigate('/MiniCart', { state: { username: username, ID: ID } })}>
+                        <a style={{ textDecoration: 'none' }} className="hiraola-btn hiraola-btn_dark hiraola-btn_fullwidth" >Minicart</a>
                     </div>
                 </div>
             </div>
@@ -1205,7 +1234,7 @@ const handleIncreaseQuality = () => {
 																<div className="col-sm-4 mb-3" key={index + rowIndex}>
 																	<div className="product_1r1 clearfix">
 																		<div className="clearfix mgt-center">
-																			<a onClick={()=>navigate(`/DetailProduct/${productInRow.IDproduct}`,{state:{IDProduct:productInRow.IDproduct,ID:ID}})} className="product-link">
+																			<a href='' onClick={()=>navigate(`/DetailProduct/${productInRow.IDproduct}`,{state:{IDProduct:productInRow.IDproduct,ID:ID,username:username}})} className="product-link">
 																				{/* Use the same image for each product */}
 																				<img
 																					src={`http://127.0.0.1:8000/${productInRow.link}`}

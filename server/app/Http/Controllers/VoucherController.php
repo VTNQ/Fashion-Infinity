@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\voucher;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -67,7 +68,30 @@ class VoucherController extends Controller{
             return response()->json(['success' => false,'message' => 'Failed to create voucher', 'error' => $e->getMessage()], 500);
         }
     }
-
+    public function VoucherFreeship() {
+        try {
+            $voucher = Voucher::where('quantity', '>', 0)
+                ->whereDate("startDate", "<=", now())
+                ->whereDate("endDate", ">=", now())
+                ->where('voucherCode', 'LIKE', 'FSH%') // Add this line for voucher codes starting with "FSH"
+                ->get();
+    
+            return response()->json($voucher, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update category'], 500);
+        }
+    }
+    public function VoucherCheck(){
+        try{
+            $voucher = voucher::where('quantity',">",0)->whereDate("startDate","<=",Carbon::now())->whereDate("endDate",">=",Carbon::now())->get();
+           
+              
+                return response()->json($voucher,200);
+            
+        }catch(\Exception $e){
+            return response()->json(['error' => 'Failed to update category'], 500);
+          }
+    }
     public function checkVoucher(Request $request) {
         try {
             $code = $request->input('voucherCode');

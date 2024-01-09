@@ -14,8 +14,14 @@ import product from '../menu/image/product.png';
 import product2 from '../menu/image/product2.png';
 import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
-import './Blog.css';
+
 import axios from "axios";
+const featureEnabled = window.location.pathname.includes("/DetailBlog");
+
+    if (featureEnabled) {
+        require('./Blog.css');
+     
+    }
 function DetailBlog() {
  
     const [perPage, setperPage] = useState(5);

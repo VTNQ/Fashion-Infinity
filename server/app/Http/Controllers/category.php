@@ -48,6 +48,10 @@ class category extends Controller
             return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
         }
     }
+    public function totalCategory(){
+        $category=ModelsCategory::count();
+        return response()->json(['totalCategory' => $category], 200);
+    }
     public function getcategories(){
         try{
             $categories=ModelsCategory::all();

@@ -85,6 +85,10 @@ class BlogController extends Controller
        
        
     }
+    public function coutBlog(){
+        $blog=Blog::count();
+        return response()->json(['blogCount' => $blog], 200);
+    }
     public function deleteBlog(Request $request, $ID)
     {
         try {

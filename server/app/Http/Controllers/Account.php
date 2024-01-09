@@ -8,6 +8,10 @@ use App\Models\Account as ModelsAccount;
 use Illuminate\Support\Facades\Mail;
 
 class Account extends Controller {
+    public function countuser(){
+        $user=ModelsAccount::where("Accounttype",1)->count();
+        return response()->json(['totaluser' => $user], 200);
+    }
     public function getCustomer(){
         try {
             $customers = ModelsAccount::where('Accounttype',1)->get();

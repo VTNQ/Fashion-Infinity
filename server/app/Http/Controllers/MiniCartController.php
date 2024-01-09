@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\detailcard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,16 +16,38 @@ class MiniCartController extends Controller
        join("category_product","category_product.id_product","=","product.ID")->
        join("picture","picture.ID","=","category_product.id_Picture")->
        select([
+        "card.ID as IDcard",
         "product.ID",
         "picture.link",
         "product.Name",
         "product.Price",
+        "detailcard.status",
         DB::raw("SUM(detailcard.Quality) as TotalQuantity"),
 
         ])->groupBy("product.ID", "picture.link",
         "product.Name",
-        "product.Price")->where("card.id_Account",$ID)->where("picture.status",1)->get();
+        "product.Price","detailcard.status","card.ID")->where("card.id_Account",$ID)->where("picture.status",1)->get();
         return response()->json($Mini, 200);
+    }
+    public function updateCard(Request $request, $ID, $IDproduct) {
+        try {
+            $card = detailcard::where("id_card", $ID)->where("id_product", $IDproduct)->first();
+        
+            if ($card) {
+                $newStatus = ($card->status == 1) ? 0 : 1;
+        
+                $update = detailcard::where("id_card", $ID)->where("id_product", $IDproduct)->update(["status" => $newStatus]);
+        
+                if ($update > 0) {
+                    return response()->json(['message' => 'successful', 'newStatus' => $newStatus]);
+                }
+            }
+        
+            return response()->json(['error' => 'Card not found']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()]);
+        }
+        
     }
     public function DeleteCard(Request $request,$ID){
         try{

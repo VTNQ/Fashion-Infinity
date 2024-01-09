@@ -8,15 +8,14 @@ class DetailController extends Controller
 {
    public function getDetail($ID){
     $Detail=DB::table("product")->join("category_product","product.ID","=","category_product.id_Product")->
-    join("category","category.ID","=","category_product.id_Category")->join("picture","picture.ID","=","category_product.id_Picture")->
-    join("detail_warehouse","detail_warehouse.ID_Product","=","product.ID")
+    join("category","category.ID","=","category_product.id_Category")->join("picture","picture.ID","=","category_product.id_Picture")
     ->select([
         "product.Name as ProductName",
         "product.Price",
         "product.content",
         "category.Name as NameCategory",
         "picture.link",
-        DB::raw("SUM(detail_warehouse.Quality) as TotalQuantity"),
+       
 
     ])->groupBy("product.Name",
     "product.Price",

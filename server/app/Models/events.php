@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class events extends Model
 {
     protected $table='events';
-    protected $fillable=['Title','Description','StartDate','EndDate'];
+    protected $fillable=['Title','Description','StartDate','EndDate','BannerUrl'];
     public $timestamps=false;
 }
