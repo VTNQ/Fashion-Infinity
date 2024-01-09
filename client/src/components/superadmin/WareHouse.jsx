@@ -1,5 +1,7 @@
 import axios from "axios";
 import React from "react";
+import Pagination from 'react-paginate';
+import 'react-paginate/theme/basic/react-paginate.css';
 import { useState,useEffect } from "react";
 
 function WareHouse(){
@@ -23,9 +25,18 @@ useEffect(() => {
   fetchData();
 }, []);
 
+const [currentPage, setCurrentPage] = useState(0);
+  const perPage = 8;
 
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
 
-  
+  // Calculate the correct warehouses to display
+  const indexOfLastWarehouse = (currentPage + 1) * perPage;
+  const indexOfFirstWarehouse = indexOfLastWarehouse - perPage;
+  const currentWarehouses = warehouses.slice(indexOfFirstWarehouse, indexOfLastWarehouse);
+
     return(
         <div class="content-wrapper">
        
@@ -64,7 +75,7 @@ useEffect(() => {
                     </thead>
                     <tbody>
 
-                      {warehouses.map((warehouse,index)=>(
+                      {currentWarehouses.map((warehouse,index)=>(
                         <tr key={index}>
                         <td>{warehouse.username}</td>
                         <td>{warehouse.product_name}</td>
@@ -79,6 +90,26 @@ useEffect(() => {
                     </tbody>
                     
                   </table>
+                  <Pagination
+            previousLabel={'previous'}
+            nextLabel={'next'}
+            breakLabel={'...'}
+            pageCount={Math.ceil(warehouses.length / perPage)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={'pagination'}
+            activeClassName={'active'}
+            previousClassName={'page-item'}
+         previousLinkClassName={'page-link'}
+         nextClassName={'page-item'}
+         nextLinkClassName={'page-link'}
+         breakClassName={'page-item'}
+         breakLinkClassName={'page-link'}
+         pageClassName={'page-item'}
+         pageLinkClassName={'page-link'}
+            // ... other pagination props
+          />
                 </div>
               </div>
             </div>
