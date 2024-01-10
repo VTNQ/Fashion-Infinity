@@ -40,7 +40,12 @@ function AdminBlog() {
       [name]: value,
     }));
   };
-
+  const [Act,setAct]=useState(true);
+  useEffect(() => {
+    if (!ID && Act) {
+     navigate(-1); 
+    }
+  }, [ID, navigate]);
   const handleImageChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,

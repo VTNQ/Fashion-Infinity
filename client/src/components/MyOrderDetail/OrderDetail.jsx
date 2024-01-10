@@ -30,7 +30,14 @@ function OrderDetail() {
   const [customer, setcustomer] = useState([]);
   const [order, setorder] = useState([]);
   const [ActiveTab, setActiveTab] = useState('Address');
+  const navigate = useNavigate();
 
+  const [Act,setAct]=useState(true);
+  useEffect(() => {
+    if (!ID && Act) {
+     navigate(-1); 
+    }
+  }, [ID, navigate]);
   const handleTabChange = (tabID) => {
     setActiveTab(tabID);
   }

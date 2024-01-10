@@ -174,3 +174,5 @@ Route::get('/coutEvent',[EventController::class,'coutEvent'])->name('coutEvent')
 Route::get('/showfeedback',[FeedbackProductController::class,'showfeedback'])->name('showfeedback');
 Route::post('/SendEmailContact',[RegisterController::class,'SendEmailContact'])->name('SendEmailContact');
 Route::get('/displayEvent',[EventController::class,'displayEvent'])->name("displayEvent");
+Route::get('/showEdit/{id}',[LoginController::class,'showEdit'])->name('showEdit');
+Route::post('/EditProfile/{id}',[LoginController::class,'EditProfile'])->name("EditProfile");

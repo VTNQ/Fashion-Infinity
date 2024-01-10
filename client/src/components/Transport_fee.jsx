@@ -36,6 +36,12 @@ function Transport_fee() {
         Price: '',
         updatePrice: ''
     });
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if (!ID && Act) {
+       navigate(-1); 
+      }
+    }, [ID, navigate]);
     const [Categories, setCategories] = useState([]);
     const handlePriceChange = (index, value) => {
         const updatedCategories = [...Categories];

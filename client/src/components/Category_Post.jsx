@@ -42,7 +42,12 @@ function Category_Post() {
             console.error('Error updating status:', error);
         }
     };
-
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if (!ID && Act) {
+       navigate(-1); 
+      }
+    }, [ID, navigate]);
     useEffect(() => {
         const fetchCategoryProduct = async () => {
             try {

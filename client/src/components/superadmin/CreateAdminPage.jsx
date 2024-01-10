@@ -15,7 +15,13 @@ function CreateAdmin(){
         Email: '',
         Password: '25f9e794323b453885f5181f1b624d0b',
     });
-    
+  
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if ( Act) {
+       navigate(-1); 
+      }
+    }, [ navigate]);
     const [errors, setErrors] = useState({});
     const [loading, setloading] = useState(false);
     const handleInputChange = (e) => {

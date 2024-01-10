@@ -18,6 +18,13 @@ function Order() {
     const username = location.state?.username || 'Default Username';
     const ID = location.state?.ID || '';
     const navigate = useNavigate();
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if (!ID && Act) {
+       navigate(-1); 
+      }
+    }, [ID, navigate]);
+    
     const [order, setorder] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('all');
     const filteredCategories = order.filter(customer => {

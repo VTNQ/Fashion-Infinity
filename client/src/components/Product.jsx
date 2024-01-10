@@ -29,6 +29,12 @@ function Product() {
     const handlePageclick = (data) => {
         setCurrentPage(data.selected);
     };
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if (!ID && Act) {
+       navigate(-1); 
+      }
+    }, [ID, navigate]);
     const username = location.state?.username || 'Default Username';
     const ID = location.state?.ID || '';
     const popupContentStyle = {

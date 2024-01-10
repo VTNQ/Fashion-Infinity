@@ -10,7 +10,13 @@ import image from '../../../src/images/user2-160x160.jpg';
 
 
 function DefaultDashboard(){
-
+  const navigate = useNavigate();
+  const [Act,setAct]=useState(true);
+  useEffect(() => {
+    if ( Act) {
+     navigate(-1); 
+    }
+  }, [ navigate]);
 
   //lay truy cap
 // const [visitCount, setVisitCount] = useState(0);

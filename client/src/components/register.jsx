@@ -212,7 +212,7 @@ function Register() {
                 </div>
             )}
             <section className="min-h-screen flex items-stretch text-white ">
-                <div className="bg-img lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center"
+                <div className="bg-img lg:flex w-1/2  bg-gray-500 bg-no-repeat bg-cover relative items-center"
                 >
                     <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
                     <div className="w-full px-24 z-10">
@@ -277,8 +277,8 @@ function Register() {
                                     <p className="text-red-500 text-sm italic">{errors.Password}</p>
                                 )}
                             </div>
-                            <div className="text-right text-gray-400 hover:underline hover:text-gray-100">
-                                <a href="#" onClick={() => navigate('/login')}>Already Account?</a>
+                            <div className="text-right text-gray-400  hover:text-gray-100">
+                                <a href="#"  onClick={() => navigate('/login')}>Already Account?</a>
                             </div>
                             <div className="px-4 pb-2 pt-4">
                                 <button

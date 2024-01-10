@@ -312,7 +312,7 @@ function MenuHomepage() {
                                             <ul className="ht-dropdown ht-currency">
                                                 {username === 'Default Username' && (
                                                     <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                        <a href="/login" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}  >Login</a>
+                                                        <a href="" className="pt-0 block" style={{ borderBottom: '1px solid #e5e5e5', padding: '10px 5px', lineHeight: '25px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/login')} >Login</a>
                                                     </li>
                                                 )}
                                                 {username === 'Default Username' && (
@@ -323,12 +323,12 @@ function MenuHomepage() {
 
                                                 {username !== 'Default Username' && (
                                                     <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                        <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>{username}</a>
+                                                        <a  className="pt-0 block cursor-pointer" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={()=>navigate('/editprofile', { state: { username: username, ID: ID }})}>{username}</a>
                                                     </li>
                                                 )}
                                                 {username !== 'Default Username' && (
                                                     <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                        <a href="/layout" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/layout')}>log out</a>
+                                                        <a href="/" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/')}>log out</a>
                                                     </li>
                                                 )}
 
@@ -353,7 +353,7 @@ function MenuHomepage() {
                     <div className="row">
                         <div className="col-lg-3">
                             <div className="header-logo">
-                                <a href="" onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>
+                                <a href="" onClick={() => navigate('/', { state: { username: username, ID: ID } })}>
                                     <img src={logo} />
                                 </a>
                             </div>
@@ -390,7 +390,7 @@ function MenuHomepage() {
                                 <nav>
                                     <ul id="menu"  >
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/', { state: { username: username, ID: ID } })}>Home</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={() => navigate('/HomeProduct', { state: { username: username, ID: ID } })} >Product</a>
@@ -465,7 +465,7 @@ function MenuHomepage() {
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
 
                                     <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</span>
+                                        <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={() => navigate('/', { state: { username: username, ID: ID } })}>Home</span>
                                     </a>
                                 </li>
                                 <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>

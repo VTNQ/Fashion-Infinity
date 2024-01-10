@@ -25,6 +25,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+
 import { useState, useEffect, useRef } from 'react';
 
 
@@ -416,11 +419,84 @@ useEffect(()=>{
 
 
 
+const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlidehaha = () => { 
+    setCurrentSlide((prevSlide) => 
+      prevSlide === slides.length - 1 ? 0 : prevSlide + 1
+    ); 
+  }; 
+
+  const prevSlidehaha = () => { 
+    setCurrentSlide((prevSlide) => 
+      prevSlide === 0 ? slides.length - 1 : prevSlide - 1 
+    ); 
+  }; 
+  useEffect(() => {
+    const slideInterval = setInterval(() => { 
+      nextSlide();
+    }, 5000);
+
+    return () => clearInterval(slideInterval);
+  }, []);
+
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 4
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 4
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 600 },
+      items: 3
+    },
+    mobile: {
+      breakpoint: { max: 600, min: 400 },
+      items: 2
+    },
+    tinymobile: {
+      breakpoint: { max: 400, min: 0 },
+      items: 1
+    }
+  };
+
+
+  const responsiveArrival = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 5
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 737 },
+      items: 4
+    },
+    mobile: {
+      breakpoint: { max: 737, min: 554 },
+      items: 3
+    },
+    supermobile: {
+      breakpoint: { max: 554, min: 334 },
+      items: 2
+    },
+    tinymobile: {
+      breakpoint: { max: 334, min: 0 },
+      items: 1
+    }
+  };
+  
 
 
     //===============================================================================================================================
     return (
       <div>
+        
         
         <div className="slider-container h-[80vh] relative max-w-full overflow-hidden" onMouseEnter={() => setShowButtons(true)}
       onMouseLeave={() => setShowButtons(false)}>
@@ -469,8 +545,7 @@ useEffect(()=>{
         <button
           onClick={prevSlide} 
           className={`absolute left-10 top-1/2 transform -translate-y-1/2 z-30 rounded-full bg-none hover:bg-gray-100 cursor-pointer transition-all duration-900 shadow-lg ${showButtons ? 'opacity-100' : 'opacity-0'}`}
-          aria-label="Previous slide" style={{ boxShadow: '0 0 20px rgba(0, 0, 0, 0.2)' }}
-          
+          aria-label="Previous slide" style={{ boxShadow: '0 0 20px rgba(0, 0, 0, 0.2)' }}         
         >
           <img src={imageArrowLeft} className="w-[45px] h-auto" alt="Previous slide" />
         </button>
@@ -521,106 +596,27 @@ useEffect(()=>{
                 <div className="border-[1px] mt-3  border-[#E5E5E5] mx-[5%]"></div>
 
 
-                <div className="slider-containerrr mt-10 pl-[5%] pr-[2.9%]">
-                <Slider ref={sliderRef} {...settings}>
-          
-          {productArrival.map(productNewArrival => (
-            <div key={productNewArrival.ID}>
-            <div className="relative card border-[#E5E5E5] border-[1px]  w-[87%]  ">
-                    <img className="w-full h-[250px] object-cover lg-max:h-[200px] md-max:h-[150px]" src={`http://127.0.0.1:8000/${productNewArrival.link}`} alt="" />
-                    
-                    <div class="tag-container absolute  left-0">
-                     <div class="tag">
-                             <span style={{fontFamily: 'lato'}} class="tag-text">NEW</span>
-                                    </div>
-
-                    
-                    </div>
-                    <div className="px-[8%]">
-                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold product-name">{productNewArrival.ProductName}</h1>
-                    
-                    <div className="flex justify-between items-center">
-                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${productNewArrival.Price}.00</h1>
-                    <i class='bx bx-heart'  ></i>
-                    </div>
-                    <ul className="flex">
-                        
-                        <li><i class='bx bx-star' style={{color:'#cda557'}}  ></i></li>
-                        <li><i class='bx bx-star' style={{color:'#cda557'}}  ></i></li>
-                        <li><i class='bx bx-star' style={{color:'#cda557'}}  ></i></li>
-                        <li><i class='bx bx-star' style={{color:'#cda557'}}  ></i></li>
-                        <li><i class='bx bx-star' style={{color:'#ababab'}}  ></i></li>
-                        
-                    </ul>
-                    </div>
-
-            </div>
-          </div>
-          ))}
-          
-          
-          
-          
-        </Slider>
-                </div>
-            </div>
-
-        <div className="relative w-full mt-[8%] px-[5%] overflow-hidden">
-            <img  className="w-full h-[410px] object-cover " src={bannerData1.img} alt="" />
-            <div className="absolute top-[20%] pl-[8%] xs-max:pl-[4%] ">
-                <div className="flex gap-4">
-                    <h1 className="text-[2rem] m-0 md-max:text-[1.7rem]" style={{color: "#EA4755",fontFamily: 'lato'}}>{bannerData1.text1}</h1>
-                    <h1 className="text-[2rem] m-0 md-max:text-[1.7rem]"  style={{color: "#333333",fontFamily: 'lato'}}>{bannerData1.text2}</h1>
-                </div>
-                <h1 class="text-[5.5rem] m-0 font-semibold md-max:text-[4.5rem] xs-max:text-[3rem]"  style={{color: "#333333",fontFamily: 'lato'}}>{bannerData1.title1}</h1>
-                <h1 class=" text-[5rem] m-0 font-medium md-max:text-[4.5rem] xs-max:text-[3rem]"  style={{color: "#333333",fontFamily: 'lato'}}>{bannerData1.title2}</h1>
-                <div className="flex gap-3 mt-7 xs-max:mt-3">
-                    <p className="text-[2.5rem] font-bold md-max:text-[2rem]" style={{color: "#333333",fontFamily: 'lato'}}>Staring at</p>
-                    <p className="text-[2.5rem] font-bold md-max:text-[2rem]" style={{color: "#EA4755",fontFamily: 'lato'}}>{bannerData1.price}</p>
-                </div>
-                <h4 className="hover:text-black"><a class="button col " href="#">Shopping Now</a></h4>
-
-
-            </div>
-        </div>
-        <div className=" mt-14 w-full ">
-                
-                <div className="flex justify-between px-[5%] md-max:flex-col">
-                    <h1>NEW PRODUCTS</h1>
-
-                    <div className="flex items-center gap-16 xs-max:gap-6 xs-max:mt-4">
-                    {categoriesFirst.map((category) => (
-  <button
-    className={`font-semibold xs-max:text-[1.5rem] ${activeCategory === category.Name && category.Name === 'Necklace' ? 'active-class-or-style' : 'inactive-class-or-style'}`}
-    key={category.ID} style={{fontFamily: 'lato'}}
-    onClick={() => handleCategorySelection(category.Name)}
-  >
-    {category.Name}
-  </button>
-))}
-
-      </div>
-      
-                </div>
-                <div className="border-[1px] mt-3 border-[#E5E5E5] mx-[5%]"></div>
-
-
-                <div className=" relative slider-container mt-10 pl-[5%] pr-[2%]" >
-                <div className="absolute top-[0%] px-[5%] z-30 inset-0 flex justify-between">
-                    <button onClick={previousProduct}><img className="h-[40px]" src={imageArrowLeft} alt="" /></button>
-                    <button onClick={nextProduct}><img className="h-[40px]" src={imageArrowRight} alt="" /></button>
-                </div>
-
-
-
-                <div className="slider-containerrr">
-                <Slider ref={productSliderRef} {...settings1}>
-          
-          {filterProducts.length > 0 && filterProducts.map((product) => (
-            <div key={product.IDproduct}>
-            <div className="relative card border-[#E5E5E5] border-[1px] w-[87%]  ">
-                    
-                    <img className="w-full h-[250px] object-cover lg-max:h-[200px] md-max:h-[150px]" src={`http://127.0.0.1:8000/${product.link}`} alt="" />
+                <div className="px-[4%]">
+<Carousel
+        swipeable
+        draggable
+        
+        responsive={responsiveArrival}
+        ssr // Server-side rendering
+        infinite
+        autoPlay={false} // Set to true if you want the carousel to autoplay
+        autoPlaySpeed={3000}
+        keyBoardControl
+        customTransition="transform 300ms ease-in-out"
+        transitionDuration={300}
+        containerClass="carousel-container"
+        removeArrowOnDeviceType={["tablet", "mobile"]}
+        itemClass="carousel-item-padding-40-px px-3 pb-3 pt-8" 
+        
+      >
+        {productArrival.map((product, index) => (
+            <div className=" carousel-item border space-x-5 rounded-[5px] px-2 m-2 bg-white flex flex-col items-center justify-center h-full" key={product.IDproduct} style={{ width: '100%', display: 'inline-block' }}>
+               <img className="w-full h-[250px] object-cover lg-max:h-[200px] md-max:h-[150px]" src={`http://127.0.0.1:8000/${product.link}`} alt="" />
                     
                     
                     
@@ -649,17 +645,106 @@ useEffect(()=>{
                         
                     </ul>
                     </div>
+            </div>
+          ))}
+      </Carousel>
+</div>
+            </div>
+
+        <div className="relative w-full mt-[8%] px-[5%] overflow-hidden">
+            <img  className="w-full h-[410px] object-cover " src={bannerData1.img} alt="" />
+            <div className="absolute top-[20%] pl-[8%] xs-max:pl-[4%] ">
+                <div className="flex gap-4">
+                    <h1 className="text-[2rem] m-0 md-max:text-[1.7rem]" style={{color: "#EA4755",fontFamily: 'lato'}}>{bannerData1.text1}</h1>
+                    <h1 className="text-[2rem] m-0 md-max:text-[1.7rem]"  style={{color: "#333333",fontFamily: 'lato'}}>{bannerData1.text2}</h1>
+                </div>
+                <h1 class="text-[5.5rem] m-0 font-semibold md-max:text-[4.5rem] xs-max:text-[3rem]"  style={{color: "#333333",fontFamily: 'lato'}}>{bannerData1.title1}</h1>
+                <h1 class=" text-[5rem] m-0 font-medium md-max:text-[4.5rem] xs-max:text-[3rem]"  style={{color: "#333333",fontFamily: 'lato'}}>{bannerData1.title2}</h1>
+                <div className="flex gap-3 mt-7 xs-max:mt-3">
+                    <p className="text-[2.5rem] font-bold md-max:text-[2rem]" style={{color: "#333333",fontFamily: 'lato'}}>Staring at</p>
+                    <p className="text-[2.5rem] font-bold md-max:text-[2rem]" style={{color: "#EA4755",fontFamily: 'lato'}}>{bannerData1.price}</p>
+                </div>
+                <h4 className="hover:text-black"><a class="button col " href="#">Shopping Now</a></h4>
+
 
             </div>
-          </div>
+        </div>
+
+
+        {/* ================================================================================ */}
+        <div className=" mt-14 w-full ">
+                
+                <div className="flex justify-between px-[5%] md-max:flex-col">
+                    <h1>NEW PRODUCTS</h1>
+
+                    <div className="flex items-center gap-16 xs-max:gap-6 xs-max:mt-4">
+                    {categoriesFirst.map((category) => (
+  <button
+    className={`font-semibold xs-max:text-[1.5rem] ${activeCategory === category.Name && category.Name === 'Necklace' ? 'active-class-or-style' : 'inactive-class-or-style'}`}
+    key={category.ID} style={{fontFamily: 'lato'}}
+    onClick={() => handleCategorySelection(category.Name)}
+  >
+    {category.Name}
+  </button>
+))}
+
+      </div>
+      
+                </div>
+                <div className="border-[1px] mt-3 border-[#E5E5E5] mx-[5%]"></div>
+
+<div className="px-[4%]">
+<Carousel
+        swipeable
+        draggable
+        
+        responsive={responsive}
+        ssr
+        infinite
+        autoPlay={false}
+        autoPlaySpeed={3000}
+        keyBoardControl
+        customTransition="transform 300ms ease-in-out"
+        transitionDuration={300}
+        containerClass="carousel-container"
+        removeArrowOnDeviceType={["tablet", "mobile"]}
+        itemClass="carousel-item-padding-40-px px-3 pb-3 pt-8"  
+      >
+      
+        {filterProducts.map((product, index) => (
+            <div className=" carousel-item border space-x-5 rounded-[5px] px-2 m-2 bg-white flex flex-col items-center justify-center h-full" key={product.IDproduct} style={{ width: '100%', display: 'inline-block' }}>
+               <img className="w-full h-[250px] object-cover lg-max:h-[200px] md-max:h-[150px]" src={`http://127.0.0.1:8000/${product.link}`} alt="" />
+                    <div class="tag-container absolute  left-0">
+                     <div class="tag">
+                             <span style={{fontFamily: 'lato'}} class="tag-text">NEW</span></div>
+                    </div>
+                    <div className="px-[8%] mt-10">
+                    <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold product-name">{product.ProductName}</h1>
+
+                    <div className="flex justify-between items-center">
+                    <h1 style={{fontFamily: 'lato'}} className="text-[1.7rem] mt-3">${product.Price}.00</h1>
+                    <i class='bx bx-heart'  ></i>
+
+
+                    </div>
+
+                    <ul className="flex">
+                    
+                      
+                        <li> <i class='bx bx-star' style={ {color:'#cda557'} }  ></i> </li>
+                        <li> <i class='bx bx-star' style={ {color:'#cda557'} }  ></i> </li>
+                        <li> <i class='bx bx-star' style={ {color:'#cda557'} }  ></i> </li>
+                        <li> <i class='bx bx-star' style={ {color:'#cda557'} }  ></i> </li>
+                        <li> <i class='bx bx-star' style={ {color:'#ababab'} }  ></i> </li>
+                      
+                    </ul>
+
+                    </div>
+            </div>
           ))}
-          
-          
-          
-          
-        </Slider>
-                </div>
-                </div>
+      </Carousel>
+</div>
+                
         </div>
         
        
@@ -703,30 +788,41 @@ useEffect(()=>{
                 <div className="border-[1px] mt-3 border-[#E5E5E5] mx-[5%]"></div>
 
 
-                <div className="relative slider-container mt-10 pl-[5%] pr-[2%]" >
-                <div className="absolute top-[0%] px-[5%] z-30 inset-0 flex justify-between">
-                    <button onClick={previousProduct1}><img className="h-[40px]" src={imageArrowLeft} alt="" /></button>
-                    <button onClick={nextProduct1}><img className="h-[40px]" src={imageArrowRight} alt="" /></button>
-                </div>
+                
 
 
 
-                <div>
-                <Slider ref={productSlider1Ref} {...settings1}>
-          
-          {filterProducts1.length > 0 && filterProducts1.map((product) => (
-            <div key={products1.IDproduct}>
-            <div className="card relative border-[#E5E5E5] border-[1px] w-[87%]  ">
-                    <img className="w-full  object-cover" src={`http://127.0.0.1:8000/${product.link}`} alt="" />
+                <div className="px-[4%]">
+<Carousel
+        swipeable
+        draggable
+        
+        responsive={responsive}
+        ssr // Server-side rendering
+        infinite
+        autoPlay={false} // Set to true if you want the carousel to autoplay
+        autoPlaySpeed={3000}
+        keyBoardControl
+        customTransition="transform 300ms ease-in-out"
+        transitionDuration={300}
+        containerClass="carousel-container"
+        removeArrowOnDeviceType={["tablet", "mobile"]}
+        itemClass="carousel-item-padding-40-px px-3 pb-3 pt-8" 
+        
+      >
+        {filterProducts1.map((product, index) => (
+            <div className=" carousel-item border space-x-5 rounded-[5px] px-2 m-2 bg-white flex flex-col items-center justify-center h-full" key={product.IDproduct} style={{ width: '100%', display: 'inline-block' }}>
+               <img className="w-full h-[250px] object-cover lg-max:h-[200px] md-max:h-[150px]" src={`http://127.0.0.1:8000/${product.link}`} alt="" />
                     
+                    
+                    
+                   
                     <div class="tag-container absolute  left-0">
                      <div class="tag">
                              <span style={{fontFamily: 'lato'}} class="tag-text">NEW</span>
                                     </div>
-
-                    
                     </div>
-                    <div className="px-[8%]">
+                    <div className="px-[8%] mt-10">
                     <h1 style={{fontFamily: 'lato',}} className="text-[1.7rem] m-0 font-semibold product-name">{product.ProductName}</h1>
                     
 
@@ -745,17 +841,11 @@ useEffect(()=>{
                         
                     </ul>
                     </div>
-
             </div>
-          </div>
           ))}
-          
-          
-          
-          
-        </Slider>
-                </div>
-                </div>
+      </Carousel>
+</div>
+                
         </div>
         <div className="bg-none w-full mt-[8%] px-[5%] flex gap-14 lg-max:flex-col">
                 <div className="relative w-full min-h-[220px] sm-max:min-h-[190px] flex gap-[10%] bg-[#F3F5F7] justify-center items-center">
@@ -783,8 +873,9 @@ useEffect(()=>{
                 
         </div>
             
-
+        
       </div>
+
       
     );
   }

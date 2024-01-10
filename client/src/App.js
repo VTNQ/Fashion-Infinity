@@ -42,6 +42,7 @@ import OrderDetail from './components/MyOrderDetail/OrderDetail';
 import Event from './components/Event';
 import Contact from './components/Contact/Contact';
 import About from './components/About/About';
+import Edit from './components/Edit/Edit';
 function App() {
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -74,7 +75,7 @@ function App() {
             <Route path='Provider' element={<ProviderSuperadmin/>}/>
             <Route path='VoucherSuperadmin' element={<VoucherSuperadmin/>}/>
         </Route>
-        <Route path='/layout/' element={<Layout/>}>
+        <Route path='/' element={<Layout/>}>
             <Route index element={<Homepage/>}/>
            
         </Route>
@@ -101,6 +102,7 @@ function App() {
         <Route path='/voucher' element={<Voucher/>}/>
         <Route path='/Contact' element={<Contact/>}/>
         <Route path='/About' element={<About/>}/>
+      <Route path='/editprofile' element={<Edit/>}/>
       </Routes>
     </Router>
   );

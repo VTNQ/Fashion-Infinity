@@ -15,7 +15,13 @@ function ShowAdmin(){
     const [perPage,setperPage] = useState(5);
     const navigate = useNavigate();
     const [currentPage,setCurrentPage] = useState(0);
-
+    
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if ( Act) {
+       navigate(-1); 
+      }
+    }, [ navigate]);
     const [formData, setFormData] = useState({
       
       UpdatePasswordAdmin:'',

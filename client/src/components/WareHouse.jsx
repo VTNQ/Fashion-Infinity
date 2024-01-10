@@ -29,7 +29,12 @@ function WareHouse() {
         UpdateQualities: [],
         DeleteQualities: []
     });
-   
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if (!ID && Act) {
+       navigate(-1); 
+      }
+    }, [ID, navigate]);
     const filterWareHouse = WareHouse.filter(warehouse =>
         warehouse.ProductName.toLowerCase().includes(searchTerm.toLowerCase())
     );

@@ -7,7 +7,7 @@ import footer from './footer/FooterHome'
 import MenuHomepage from "./menu/MenuHomepage";
 import TreeviewMenu from "./superadmin/TreeViewMenu";
 import FooterHome from "./footer/FooterHome";
-const featureEnabled = window.location.pathname.includes("/layout");
+const featureEnabled = window.location.pathname.includes("/");
 if(featureEnabled){
 	require("../layoutFolder/global.css");
 	require('../layoutFolder/bootstrap.min.css');

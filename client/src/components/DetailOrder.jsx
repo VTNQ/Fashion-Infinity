@@ -26,6 +26,12 @@ function DetailOrder() {
     const caculateTotalPrice = (quanlity, Price) => {
         return (quanlity * Price);
     }
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if (!ID && Act) {
+       navigate(-1); 
+      }
+    }, [ID, navigate]);
     useEffect(() => {
         const fetchdata = async () => {
             try {

@@ -32,7 +32,12 @@ function Event() {
         ID: '',
         image: null,
     });
-
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if (!ID && Act) {
+       navigate(-1); 
+      }
+    }, [ID, navigate]);
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.Name === "" || formData.Description === "" || startDate == null || EndDate == null || formData.image == null) {

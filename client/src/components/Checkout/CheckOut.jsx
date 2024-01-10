@@ -775,12 +775,12 @@ function CheckOut() {
 
                                                     {username !== 'Default Username' && (
                                                         <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                            <a href="" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }}>{username}</a>
+                                                            <a className="pt-0 block cursor-pointer" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/editprofile', { state: { username: username, ID: ID } })}>{username}</a>
                                                         </li>
                                                     )}
                                                     {username !== 'Default Username' && (
                                                         <li className="bg-white" style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', lineHeight: '24px' }}>
-                                                            <a href="/layout" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/layout')}>log out</a>
+                                                            <a href="/" className="pt-0 block" style={{ marginTop: '5px', padding: '10px 5px', lineHeight: '37px', fontSize: '12px', fontFamily: '"Lato", sans-serif', color: '#666666', textDecoration: 'none' }} onClick={() => navigate('/')}>log out</a>
                                                         </li>
                                                     )}
 
@@ -805,7 +805,7 @@ function CheckOut() {
                         <div className="row">
                             <div className="col-lg-3">
                                 <div className="header-logo">
-                                    <a href="" onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>
+                                    <a href="" onClick={() => navigate('/', { state: { username: username, ID: ID } })}>
                                         <img src={logo} />
                                     </a>
                                 </div>
@@ -842,7 +842,7 @@ function CheckOut() {
                                     <nav>
                                         <ul id="menu"  >
                                             <li className="inline-block pr-[30px]">
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
+                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/', { state: { username: username, ID: ID } })}>Home</a>
                                             </li>
                                             <li className="inline-block pr-[30px]">
                                                 <a id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => handleClick('/HomeProduct')}>Product</a>
@@ -863,7 +863,7 @@ function CheckOut() {
 
                                                 </a>
                                             </li>
-                    
+
 
 
                                         </ul>
@@ -916,7 +916,7 @@ function CheckOut() {
                                     <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
 
                                         <a style={{ fontSize: '14px', fontWeight: '400', textTransform: 'uppercase', display: 'block', padding: '10px 0' }}>
-                                            <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</span>
+                                            <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={() => navigate('/', { state: { username: username, ID: ID } })}>Home</span>
                                         </a>
                                     </li>
                                     <li className="relative h-[100%] " style={{ borderBottom: '1px solid #e5e5e5' }}>
@@ -1216,7 +1216,7 @@ function CheckOut() {
                     <div className="row">
                         <div className="col-12">
                             <div className="coupon-accordion">
-                                {ID==='' && (
+                                {ID === '' && (
                                     <h3 style={{ fontFamily: '"Lato", sans-serif', color: "#333333" }}>
                                         Returning customer?
                                         <span id="showlogin"> Click here to login</span>
@@ -1445,15 +1445,17 @@ function CheckOut() {
 
                                                     </div>
                                                     <div className="card-body" >
-                                                <button href="" style={{ background:'#595959', border: '1px solid rgba(0,0,0,.09)',
-                                                                padding: '10px',
-                                                                borderRadius: '5px',
-                                                                marginRight: '10px',
-                                                                color:'white',
-                                                                marginTop:'8px',
-                                                                outline: 'none'}} onClick={()=>handlechange() }>List Voucher</button>
+                                                        <button href="" style={{
+                                                            background: '#595959', border: '1px solid rgba(0,0,0,.09)',
+                                                            padding: '10px',
+                                                            borderRadius: '5px',
+                                                            marginRight: '10px',
+                                                            color: 'white',
+                                                            marginTop: '8px',
+                                                            outline: 'none'
+                                                        }} onClick={() => handlechange()}>List Voucher</button>
                                                     </div>
-                                                    <div className="card-body" style={{marginTop:'8px'}}>
+                                                    <div className="card-body" style={{ marginTop: '8px' }}>
                                                         <button
                                                             className={`paypal-button col-paypal`}
                                                             style={{
@@ -1490,7 +1492,7 @@ function CheckOut() {
                     </div>
                 </div>
             </div>
-            <FooterHome/>
+            <FooterHome />
         </div>
 
 

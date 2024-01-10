@@ -22,6 +22,12 @@ function Provider() {
     const [SelectedCountry, setSelectedCountry] = useState('');
     const [IsClosingPopup, setIsClosingPopup] = useState(false);
     const [isPopupVisible, setPopupVisibility] = useState(false);
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if (!ID && Act) {
+       navigate(-1); 
+      }
+    }, [ID, navigate]);
     const validateInput = (fieldname, value) => {
         const newErors = { ...errors };
         if (fieldname === 'NameOrigin') {

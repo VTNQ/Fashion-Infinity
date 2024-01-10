@@ -2,7 +2,8 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState,useEffect } from "react";
-import axios from 'axios'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 import { useLocation } from 'react-router-dom';
 
@@ -13,7 +14,13 @@ function VoucherSuperadmin(){
 
     const [voucherCode, setVoucherCode] = useState('');
     const [voucherCodeError, setVoucherCodeError] = useState(false);   
-    
+    const navigate = useNavigate();
+  const [Act,setAct]=useState(true);
+  useEffect(() => {
+    if ( Act) {
+     navigate(-1); 
+    }
+  }, [ navigate]);
     const handleVoucherCodeChange = (e) => {
       const value = e.target.value.toUpperCase(); 
       if (value.length <= 6) {

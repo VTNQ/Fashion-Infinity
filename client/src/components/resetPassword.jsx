@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import logoimage from "../images/logo-trang-suc-5.png";
 import Swal from "sweetalert2";
-
+import { useNavigate } from "react-router-dom";
 
 function ResetPassword() {
     const initialCountdown = parseInt(localStorage.getItem('countdown')) || 300;
@@ -23,6 +23,13 @@ function ResetPassword() {
             inputRefs[index+1].current.focus();
         }
     };
+    const [Act,setAct]=useState(true);
+    const navigate = useNavigate();
+    useEffect(() => {
+      if (  Act) {
+       navigate(-1); 
+      }
+    }, [ navigate]);
 const handlekeyDown=(index,event)=>{
     if(event.key==='Backspace' && !otpInputs[index] && index>0){
         inputRefs[index-1].current.focus();

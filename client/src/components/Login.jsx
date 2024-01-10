@@ -160,7 +160,7 @@ function Login() {
                         });
                       } else if (responseData.user) {
                         
-                        navigate('/layout', { state: { username: responseData.Username, ID: responseData.ID } })
+                        navigate('/', { state: { username: responseData.Username, ID: responseData.ID } })
                         window.location.reload();   
                       }
                 });
@@ -186,7 +186,7 @@ function Login() {
         <div>
 
             <section className="min-h-screen flex items-stretch text-white ">
-                <div className="bg-img lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center"
+                <div className="bg-img lg:flex w-1/2  bg-gray-500 bg-no-repeat bg-cover relative items-center"
                 >
                     <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
                     <div className="w-full px-24 z-10">
@@ -251,10 +251,10 @@ function Login() {
                                 )}
                             </div>
                             <div className="flex justify-between">
-                                <div className="text-right text-gray-400 hover:underline hover:text-gray-100">
+                                <div className="text-right text-gray-400  hover:text-gray-100">
                                     <a href="#" className="hover:text-black" onClick={()=>navigate('/register')}>Don't Have Account</a>
                                 </div>
-                                <div className="text-right text-gray-400 hover:underline hover:text-gray-100">
+                                <div className="text-right text-gray-400  hover:text-gray-100">
                                     <a href="#"  onClick={()=>navigate('/forgot')}>Forgot Password?</a>
                                 </div>
                             </div>
