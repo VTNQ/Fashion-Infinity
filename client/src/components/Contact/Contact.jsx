@@ -2,22 +2,89 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import MenuHomepage from "../menu/MenuHomepage";
 import FooterHome from "../footer/FooterHome";
+import Swal from 'sweetalert2';
 import './Contact.css'
 
 function Contact(){
-
+    const location = useLocation();
+    const username = location.state?.username || 'Default Username';
+    const ID = location.state?.ID || '';
+    const navigate = useNavigate();
+const [formData,setFormData]=useState({
+    Name:'',
+    Email:'',
+    Subject:'',
+    Message:''
+})
+const handleSubmit=async (e)=>{
+    e.preventDefault();
+    if(formData.Name=='' || formData.Email=='' || formData.Subject=='' || formData.Message==''){
+        Swal.fire({
+            icon: "error",
+            title: "Please complete all information",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }else if(ID==='' || username==='Default Username'){
+        Swal.fire({
+            icon: "error",
+            title: "Please Login",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }else{
+        try{
+            const response=await fetch('http://127.0.0.1:8000/api/SendEmailContact',{
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body:JSON.stringify({
+                    Name:formData.Name,
+                    Email:formData.Email,
+                    Subject:formData.Subject,
+                    Message:formData.Message
+                  })
+            })
+            if(response.ok){
+                setFormData({
+                    Email:'',
+                    Name:'',
+                    Subject:'',
+                    Message:''
+                })
+                Swal.fire({
+                    icon: "success",
+                    title: "Send Contact successfully",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }else{
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed to send email",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        }catch(error){
+            console.error('Error:', error);
+        }
+    }
+   
+}
 return(
     <div>
            <MenuHomepage/>
         <div className="breadcrumb-area">
                 <div className="container">
                     <div className="breadcrumb-content">
-                        <h2 className="font-bold" style={{ color: '#ffffff', textTransform: 'uppercase', textAlign: 'center', fontSize: '36px', marginBottom: '0', paddingBottom: '20px', fontFamily: '"Lato", sans-serif' }}>Single Product Type</h2>
+                        <h2 className="font-bold" style={{ color: '#ffffff', textTransform: 'uppercase', textAlign: 'center', fontSize: '36px', marginBottom: '0', paddingBottom: '20px', fontFamily: '"Lato", sans-serif' }}>Other</h2>
                         <ul>
                             <li>
                                 <a href="" style={{ textDecoration: 'none' }}>Home</a>
                             </li>
-                            <li className="active">Single Product</li>
+                            <li className="active">Contact</li>
                         </ul>
                     </div>
                 </div>
@@ -86,30 +153,30 @@ return(
                 <div className="contact-form-content">
                     <h3 className="contact-page-title" style={{fontFamily:'"Lato", sans-serif',color:'#333333'}}>Tell Us Your Message</h3>
                     <div className="contact-form">
-                        <form action="">
+                        <form action="" onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label htmlFor="" style={{fontFamily:'"Lato", sans-serif',color:'#595959'}}>Your Name 
                                 <span className="required">*</span>
                                 </label>
-                                <input type="text" name="con_name" required style={{color:'#888888'}} />
+                                <input type="text"  value={formData.Name} onChange={(e)=>setFormData({...formData,Name:e.target.value})}  style={{color:'#888888'}} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="" style={{fontFamily:'"Lato", sans-serif',color:'#595959'}}>Your Email 
                                 <span className="required">*</span>
                                 </label>
-                                <input type="text" name="con_name" required style={{color:'#888888'}} />
+                                <input type="email" value={formData.Email} onChange={(e)=>setFormData({...formData,Email:e.target.value})}  style={{color:'#888888'}} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="" style={{fontFamily:'"Lato", sans-serif',color:'#595959'}}>Subject 
                                 
                                 </label>
-                                <input type="text" name="con_name" required style={{color:'#888888'}} />
+                                <input type="text"  value={formData.Subject} onChange={(e)=>setFormData({...formData,Subject:e.target.value})}  style={{color:'#888888'}} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="" style={{fontFamily:'"Lato", sans-serif',color:'#595959'}}>Your Message 
                                 
                                 </label>
-                               <textarea name="con_message" id="" cols="30" rows="10"></textarea>
+                               <textarea  id="" value={formData.Message} onChange={(e)=>setFormData({...formData,Message:e.target.value})} cols="30" rows="10"></textarea>
                             </div>
                             <div className="form-group">
                                 <button type="submit"  id="submit" className="hiraola-contact-form_btn" name="submit">Send</button>

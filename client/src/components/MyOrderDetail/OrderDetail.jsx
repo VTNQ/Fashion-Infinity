@@ -15,7 +15,7 @@ import product2 from '../menu/image/product2.png';
 import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
 import MenuHomepage from "../menu/MenuHomepage";
-
+import FooterHome from "../footer/FooterHome";
 import axios from "axios";
 function OrderDetail() {
   const location = useLocation();
@@ -30,6 +30,7 @@ function OrderDetail() {
   const [customer, setcustomer] = useState([]);
   const [order, setorder] = useState([]);
   const [ActiveTab, setActiveTab] = useState('Address');
+
   const handleTabChange = (tabID) => {
     setActiveTab(tabID);
   }
@@ -239,7 +240,7 @@ function OrderDetail() {
 
 
 
-
+<FooterHome/>
 
 
     </div>

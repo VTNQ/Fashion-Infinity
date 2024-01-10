@@ -15,8 +15,9 @@ import France from '../menu/image/France.png';
 import logo from '../menu/image/logo.png';
 import jw from './images/jw.png';
 import jew2 from './images/jew2.png';
-
+import FooterHome from '../footer/FooterHome';
 import axios from 'axios';
+
 import TreeviewMenu from "../superadmin/TreeViewMenu";
 const featureEnabled = window.location.pathname.includes("/HomeProduct");
 
@@ -743,7 +744,7 @@ const handleIncreaseQuality = () => {
                     <div className="row">
                         <div className="col-lg-3">
                             <div className="header-logo">
-                                <a href="" onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>
+                                <a href=''  onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>
                                     <img src={logo} />
                                 </a>
                             </div>
@@ -780,34 +781,28 @@ const handleIncreaseQuality = () => {
                                 <nav>
                                     <ul id="menu"  >
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a  id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={()=>handleClick('/HomeProduct')}>Product</a>
+                                            <a  id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0', fontSize: '16px' }} onClick={()=>handleClick('/HomeProduct')}>Product</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a  id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={()=>handleClick('/blog')} >Blog</a>
+                                            <a  id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={()=>handleClick('/blog')} >Blog</a>
 
                                         </li>
 
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>About US
+                                            <a  id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={()=>handleClick('/About')}>About US
 
                                             </a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
 
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Contact
+                                            <a  id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={()=>handleClick('/Contact')}>Contact
 
                                             </a>
                                         </li>
-                                        <li className="inline-block pr-[30px]">
-
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>JeweLLery
-
-                                            </a>
-                                        </li>
-
+                                        
 
                                     </ul>
                                 </nav>
@@ -1033,7 +1028,7 @@ const handleIncreaseQuality = () => {
                                         <span style={{ position: 'relative', fontWeight: '600', color: '#595959', textDecoration: 'none', fontSize: '14px', textTransform: 'uppercase', display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={handlePage}>Pages</span>
                                     </a>
                                     <ul style={{ paddingLeft: '10px', maxHeight: '100px', overflowY: 'auto', ...popupPage }}>
-                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>My Account</span></a></li>
+                                        <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }} onClick={()=>navigate("/Myorder")}>My Account</span></a></li>
                                         <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Login|Register</span></a></li>
                                         <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Wishlist</span></a></li>
                                         <li className="relative"><a className="capitalize text-[13px]" style={{ color: '#595959', textDecoration: 'none', fontWeight: '400' }} href=""><span style={{ display: 'block', padding: '10px 0', fontFamily: '"Lato", sans-serif' }}>Cart</span></a></li>
@@ -1322,121 +1317,7 @@ const handleIncreaseQuality = () => {
 				</div>
 			</section>
 
-			<section id="footer">
-				<div className="container">
-					<div className="row">
-						<div className="footer_1 mgt clearfix">
-							<div className="col-sm-2">
-								<div className="footer_1i clearfix">
-									<h4 className="mgt col_3">Our Story</h4>
-									<h5><a className="hvr-forward col" href="#">The Rd Jewellers</a></h5>
-									<h5><a className="hvr-forward col" href="#">CSR Activities</a></h5>
-									<h5><a className="hvr-forward col" href="#">Get In Touch</a></h5>
-									<h5><a className="hvr-forward col" href="#">Career</a></h5>
-								</div>
-							</div>
-							<div className="col-sm-2">
-								<div className="footer_1i clearfix">
-									<h4 className="mgt col_3">Our Collections</h4>
-									<h5><a className="hvr-forward col" href="#">Wedding</a></h5>
-									<h5><a className="hvr-forward col" href="#">Diamond</a></h5>
-									<h5><a className="hvr-forward col" href="#">Kids</a></h5>
-									<h5><a className="hvr-forward col" href="#">Semper</a></h5>
-									<h5><a className="hvr-forward col" href="#">Porta</a></h5>
-									<h5><a className="hvr-forward col" href="#">Popular</a></h5>
-								</div>
-							</div>
-							<div className="col-sm-2">
-								<div className="footer_1i clearfix">
-									<h4 className="mgt col_3">Our Categories</h4>
-									<h5><a className="hvr-forward col" href="#">Premium</a></h5>
-									<h5><a className="hvr-forward col" href="#">Silver</a></h5>
-									<h5><a className="hvr-forward col" href="#">Diamond</a></h5>
-								</div>
-							</div>
-							<div className="col-sm-6">
-								<div className="footer_1i clearfix">
-									<h4 className="mgt col_3">Join Our Newsletter</h4>
-									<p className="col">Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitursodales ligula in libero.Sed dignissim lacinia nunc.</p>
-									<div className="input-group">
-										<input type="text" className="form-control" placeholder="Search" />
-										<span className="input-group-btn">
-											<button className="btn btn-primary" type="button">
-												<i className="fa fa-long-arrow-right"></i></button>
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="footer_1 clearfix">
-							<div className="col-sm-2">
-								<div className="footer_1i clearfix">
-									<h4 className="mgt col_3">Our Properties</h4>
-									<h5><a className="hvr-forward col" href="#">Semper Porta</a></h5>
-									<h5><a className="hvr-forward col" href="#">Nec Tellus</a></h5>
-								</div>
-							</div>
-							<div className="col-sm-2">
-								<div className="footer_1i clearfix">
-									<h4 className="mgt col_3">Advertisement</h4>
-									<h5><a className="hvr-forward col" href="#">Print Media</a></h5>
-									<h5><a className="hvr-forward col" href="#">TV Commercials</a></h5>
-									<h5><a className="hvr-forward col" href="#">Photo Gallery</a></h5>
-									<h5><a className="hvr-forward col" href="#">Video Gallery</a></h5>
-									<h5><a className="hvr-forward col" href="#">Press Room</a></h5>
-								</div>
-							</div>
-							<div className="col-sm-2">
-								<div className="footer_1i clearfix">
-									<h4 className="mgt col_3">Follow Us</h4>
-									<h5><a className="hvr-forward col" href="#">Facebook</a></h5>
-									<h5><a className="hvr-forward col" href="#">Twitter</a></h5>
-									<h5><a className="hvr-forward col" href="#">Instagram</a></h5>
-									<h5><a className="hvr-forward col" href="#">Youtube</a></h5>
-								</div>
-							</div>
-							<div className="col-sm-6">
-								<div className="footer_1i clearfix">
-									<h4 className="mgt col_3">Social Links</h4>
-									<ul className="social-network social-circle">
-										<li><a href="#" className="icoRss" title="Rss"><i className="fa fa-rss"></i></a></li>
-										<li><a href="#" className="icoFacebook" title="Facebook"><i className="fa fa-facebook"></i></a></li>
-										<li><a href="#" className="icoTwitter" title="Twitter"><i className="fa fa-twitter"></i></a></li>
-										<li><a href="#" className="icoGoogle" title="Google +"><i className="fa fa-google-plus"></i></a></li>
-										<li><a href="#" className="icoLinkedin" title="Linkedin"><i className="fa fa-linkedin"></i></a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<section id="footer_bottom">
-				<div className="container">
-					<div className="row">
-						<div className="footer_b clearfix">
-							<div className="col-sm-5 space_left">
-								<div className="footer_br clearfix">
-									<ul className="mgt">
-										<li>
-											<a href="#">Our Policy</a>
-											<a href="#">Shipping</a>
-											<a href="#">Terms & Conditions</a>
-											<a className="border_none" href="#">Refund Policy</a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div className="col-sm-7 space_left">
-								<div className="footer_bl  text-right clearfix">
-									<p>© 2013 Your Website . All Rights Reserved | Design by <a className="col_1" href="http://www.templateonweb.com">TemplateOnWeb</a></p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
+		<FooterHome/>
 			{isPopupVisible && (
 				<div className="popup-container">
 
@@ -1650,7 +1531,7 @@ const handleIncreaseQuality = () => {
 					</div>
 				</div>
 			)}
-
+<FooterHome/>
 		</div>
 
 

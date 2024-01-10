@@ -19,7 +19,7 @@ import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
 import jewry from '../User/images/jewry.png';
 import axios from "axios";
-
+import FooterHome from "../footer/FooterHome";
 
 function DetailProduct() {
     
@@ -876,30 +876,25 @@ setrating(value)
                                             <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a  id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={()=>handleClick('/HomeProduct')}>Product</a>
+                                        <a href="" id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={() => navigate('/HomeProduct', { state: { username: username, ID: ID } })} >Product</a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
-                                            <a  id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={()=>handleClick('/blog')} >Blog</a>
+                                            <a  id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={()=>handleClick('/blog')} >Blog</a>
 
                                         </li>
 
                                         <li className="inline-block pr-[30px]">
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>About US
+                                            <a  id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={()=>handleClick('/About')}>About US
 
                                             </a>
                                         </li>
                                         <li className="inline-block pr-[30px]">
 
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Contact
+                                            <a href="" id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={()=>handleClick('/Contact')}>Contact
 
                                             </a>
                                         </li>
-                                        <li className="inline-block pr-[30px]">
-
-                                            <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>JeweLLery
-
-                                            </a>
-                                        </li>
+                                       
 
 
                                     </ul>
@@ -1742,6 +1737,7 @@ setrating(value)
                     </div>
                 </div>
             </div>
+            <FooterHome/>
         </div>
 
 

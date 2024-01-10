@@ -172,3 +172,5 @@ Route::get('/coutBlog',[BlogController::class,'coutBlog'])->name('coutBlog');
 Route::get('/countOrder',[OrderController::class,'countOrder'])->name('countOrder');
 Route::get('/coutEvent',[EventController::class,'coutEvent'])->name('coutEvent');
 Route::get('/showfeedback',[FeedbackProductController::class,'showfeedback'])->name('showfeedback');
+Route::post('/SendEmailContact',[RegisterController::class,'SendEmailContact'])->name('SendEmailContact');
+Route::get('/displayEvent',[EventController::class,'displayEvent'])->name("displayEvent");

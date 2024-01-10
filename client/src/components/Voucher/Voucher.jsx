@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import FooterHome from '../footer/FooterHome';
 const featureEnabled = window.location.pathname.includes("/voucher");
 
 if (featureEnabled) {
@@ -169,6 +170,7 @@ const groupedVouchersFreeship = voucherShip.reduce((acc, voucher, index) => {
           </div>
         ))}
       </section>
+      <FooterHome/>
     </div>
     
   );

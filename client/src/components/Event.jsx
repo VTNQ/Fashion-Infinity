@@ -402,7 +402,7 @@ function Event() {
                     </section>
                     <section className="content">
                         <div className="row">
-                            <div className="box box-primary" style={{ maxHeight: '543px' }}>
+                            <div className="box box-primary" style={{ maxHeight: '905px' }}>
                                 <div className="box-header">
                                     <h3 className="box-title">Quick Example</h3>
                                 </div>

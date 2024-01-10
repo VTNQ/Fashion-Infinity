@@ -29,33 +29,31 @@ import { useState, useEffect, useRef } from 'react';
 
 
 function Homepage() {
-    
+    const [Event,setEvent]=useState([]);
     const [slides, setSlides] = useState([
-        {
-            img: image1,
-            text1: "-10% Off",
-            text2: "This Week",
-            title0: "Phantom4",
-            title1: "Pro+ Obsidian",
-            price: "$900.00"
-          },
-          {
-            img: image2,
-            text1: "Black Friday",
-            text2: "This Week",
-            title0: "Work Desk",
-            title1: "Surface Studio 2023",
-            price: "$1599.00"
-          },
-          {
-            img: image3,
-            text1: "-10% Off",
-            text2: "This Week",
-            title0: "Phantom4",
-            title1: "Pro+ Obsidian",
-            price: "$900.00"
-          },
+      
     ]);
+    useEffect(()=>{
+      const fetchData=async()=>{
+        try{
+          const response=await axios.get("http://127.0.0.1:8000/api/displayEvent");
+          setEvent(response.data);
+          const formattedData = response.data.map(event => ({
+            img: `http://127.0.0.1:8000/${event.BannerUrl}`,
+            text1: event.Title,
+            text2: event.Description,
+            title0: event.Description,
+           title1:'Surface Studio 2023',
+            
+          }));
+          setSlides(formattedData)
+        }catch(error){
+          console.error('Error during fetch:', error);
+        }
+      }
+      fetchData();
+    },[])
+  
     
     // const [productNew, setproductNew] = useState([
     //     {img: ring1,name: "Swirl 1 Medium Pendant La ...",price: "152.00",category: 'NECKLACES'},

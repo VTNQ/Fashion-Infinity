@@ -149,16 +149,15 @@
     transition: all ease 0.5s;
 }
 .col-paypal{
-    background: #0070ba !important;
+    
     color: #fff !important;
 }
 .col-delivery{
-    background-color: #4CAF50 !important;
+   
     color: #fff !important;
 }
 .paypal-button:hover{
-    background: #0070ba !important;
-    color: #fff !important;
+    
     transition: all ease 0.5s;
 }
 

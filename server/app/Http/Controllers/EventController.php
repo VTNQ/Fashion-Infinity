@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\events;
 use Illuminate\Http\Request;
 
@@ -29,6 +29,15 @@ class EventController extends Controller
     }catch(\Exception $e){
       return response()->json(['error' => 'Failed to update category'], 500);
     }
+  }
+  public function displayEvent(){
+    try{
+      $event=events::whereDate("StartDate","<=",now())->whereDate("EndDate",">=",now())->get();
+      return response()->json($event, 200);
+    }catch(\Exception $e){
+      return response()->json(['error' => 'Failed to update category'], 500);
+    }
+   
   }
   public function coutEvent(){
     $event=events::count();

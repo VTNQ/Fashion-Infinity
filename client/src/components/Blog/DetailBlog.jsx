@@ -14,7 +14,7 @@ import product from '../menu/image/product.png';
 import product2 from '../menu/image/product2.png';
 import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
-
+import FooterHome from "../footer/FooterHome";
 import axios from "axios";
 const featureEnabled = window.location.pathname.includes("/DetailBlog");
 
@@ -461,34 +461,29 @@ function DetailBlog() {
                                     <nav>
                                         <ul id="menu"  >
                                             <li className="inline-block pr-[30px]">
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
+                                                <a href="" id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0', fontSize: '16px' }} onClick={() => navigate('/layout', { state: { username: username, ID: ID } })}>Home</a>
                                             </li>
                                             <li className="inline-block pr-[30px]">
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={() => navigate('/HomeProduct', { state: { username: username, ID: ID } })} >Product</a>
+                                                <a href="" id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={() => navigate('/HomeProduct', { state: { username: username, ID: ID } })} >Product</a>
 
                                             </li>
                                             <li className="inline-block pr-[30px]">
-                                                <a id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }} onClick={() => handleClick('/blog')} >Blog</a>
+                                                <a id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={() => handleClick('/blog')} >Blog</a>
 
                                             </li>
 
                                             <li className="inline-block pr-[30px]">
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>About US
+                                                <a id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={() => handleClick('/About')}>About US
 
                                                 </a>
                                             </li>
                                             <li className="inline-block pr-[30px]">
 
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>Contact
+                                                <a id="menu" className="font-bold text-white block uppercase relative cursor-pointer" style={{ padding: '18px 0' }} onClick={() => handleClick('/Contact')}>Contact
 
                                                 </a>
                                             </li>
-                                            <li className="inline-block pr-[30px]">
 
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>JeweLLery
-
-                                                </a>
-                                            </li>
 
 
                                         </ul>
@@ -831,7 +826,7 @@ function DetailBlog() {
                             <li>
                                 <a href="" style={{ textDecoration: 'none' }}>Home</a>
                             </li>
-                            <li className="active">Single Product</li>
+                            <li className="active">Detail Blog</li>
                         </ul>
                     </div>
                 </div>
@@ -883,7 +878,7 @@ function DetailBlog() {
                     </div>
                 </div>
             </div>
-
+            <FooterHome />
         </div>
 
 

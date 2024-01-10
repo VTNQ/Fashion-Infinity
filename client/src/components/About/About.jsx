@@ -12,12 +12,12 @@ return(
          <div className="breadcrumb-area">
                 <div className="container">
                     <div className="breadcrumb-content">
-                        <h2 className="font-bold" style={{ color: '#ffffff', textTransform: 'uppercase', textAlign: 'center', fontSize: '36px', marginBottom: '0', paddingBottom: '20px', fontFamily: '"Lato", sans-serif' }}>Single Product Type</h2>
+                        <h2 className="font-bold" style={{ color: '#ffffff', textTransform: 'uppercase', textAlign: 'center', fontSize: '36px', marginBottom: '0', paddingBottom: '20px', fontFamily: '"Lato", sans-serif' }}>Other</h2>
                         <ul>
                             <li>
                                 <a href="" style={{ textDecoration: 'none' }}>Home</a>
                             </li>
-                            <li className="active">Single Product</li>
+                            <li className="active">About US</li>
                         </ul>
                     </div>
                 </div>

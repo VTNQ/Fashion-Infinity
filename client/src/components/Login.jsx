@@ -2,7 +2,7 @@
 
 import logoimage from "../images/logo-trang-suc-5.png";
 import Swal from "sweetalert2";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 import { GoogleLogin } from "react-google-login";
 import { useNavigate } from 'react-router-dom';
@@ -91,7 +91,7 @@ function Login() {
     const [errors, setErrors] = useState({});
     const navigate=useNavigate();
     const isAuthenticated =false;
-    
+
     const [formData,setFormData]=useState({
         Email: '',
         Password: '',
@@ -120,6 +120,7 @@ function Login() {
     }
    
     const handleSubmit=async (e)=>{
+        e.preventDefault();
         if(formData.Email===''|| formData.Password===''){
             Swal.fire({
                 icon: "error",
@@ -128,7 +129,7 @@ function Login() {
                 timer: 2000
             });
         }else{
-            e.preventDefault(); // ngăn ko cho gửi form theo cách thông thường
+        // ngăn ko cho gửi form theo cách thông thường
             const response=await fetch('http://127.0.0.1:8000/api/Login', {
                 method:'POST',
                 headers: {
@@ -137,7 +138,7 @@ function Login() {
                 body: JSON.stringify(formData),
             });
             const responseData=await response.json();
-            if(response.ok){
+            if(response.ok && responseData.message){
                 console.log(responseData);
                if(responseData.message){
             
@@ -150,13 +151,18 @@ function Login() {
                     showConfirmButton: false,
                     timer: 1500
                 }).then(()=>{
-                    if(responseData.isSuperAdmin){
+                    if (responseData.isSuperAdmin) {
                         navigate('/superadmin', { state: { username: responseData.Username } });
-                    }else if(responseData.isAdmin){
-                        navigate('/admin', { state: { username: responseData.Username,ID:responseData.ID } });
-                    }else if(responseData.user){
-                        navigate('/layout',{state:{username:responseData.Username,ID:responseData.ID}})
-                    }
+                      } else if (responseData.isAdmin) {
+                        navigate('/admin', { state: { username: responseData.Username, ID: responseData.ID } })
+                        .then(() => {
+                          window.location.reload();
+                        });
+                      } else if (responseData.user) {
+                        
+                        navigate('/layout', { state: { username: responseData.Username, ID: responseData.ID } })
+                        window.location.reload();   
+                      }
                 });
                
             }
@@ -254,7 +260,7 @@ function Login() {
                             </div>
 
                             <div className="px-4 pb-2 pt-4">
-                                <button
+                                <button type="submit"
                                     className="uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none"
                                 >Login
                                 </button>

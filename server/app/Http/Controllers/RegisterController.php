@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AccountInfo;
+use App\Mail\ContactInfo;
 use App\Models\Account;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -74,6 +75,11 @@ class RegisterController extends Controller
         }
 
 
+    }
+    public function SendEmailContact(Request $request){
+        $token='';
+        Mail::to($request->input("Email"))->send(new ContactInfo($request->input('Name'),$token,$request->input('Email'),$request->input('Subject'),$request->input('Message')));
+        return response()->json(['message' => 'Register successful', 'Account' => $token]);
     }
     public function registerAdmin(Request $request)
     {

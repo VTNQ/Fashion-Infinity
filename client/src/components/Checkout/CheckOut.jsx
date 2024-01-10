@@ -16,7 +16,7 @@ import product from '../menu/image/product.png';
 import product2 from '../menu/image/product2.png';
 import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
-
+import FooterHome from "../footer/FooterHome";
 import axios from "axios";
 
 function CheckOut() {
@@ -69,18 +69,26 @@ function CheckOut() {
     }, [])
     const [apply, setapply] = useState(false);
     const applyFreeship = () => {
-        free.forEach(charge => {
-            if (voucherCode && charge.voucherCode.includes(voucherCode)) {
-                if (couttotalPrice - priceship < 0) {
-                    setcouttotalPrice(0);
-                } else {
-                    setcouttotalPrice(couttotalPrice - priceship);
-                }
+        const foundCharge = free.find(charge => charge.voucherCode.includes(voucherCode));
 
-
+        if (foundCharge) {
+            if (couttotalPrice - priceship < 0) {
+                setcouttotalPrice(0);
+            } else {
+                setcouttotalPrice(couttotalPrice - priceship);
             }
-        });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Voucher is unused or has expired",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            // You may choose not to modify the couttotalPrice in case of an error
+            // setcouttotalPrice(couttotalPrice); // Uncomment this line if you don't want to change the price
+        }
     };
+
     useEffect(() => {
         const fetchdelivery = async () => {
             try {
@@ -242,21 +250,28 @@ function CheckOut() {
     const [Direct, setDirect] = useState(false);
     const [Payment, setPayment] = useState(false);
     const AddCard = async () => {
-        if(username==="" || ID===""){
+        if (username === "" || ID === "") {
             Swal.fire({
                 icon: "error",
                 title: "Please login",
                 showConfirmButton: false,
                 timer: 1500
             });
-        }else{
+        } else if (formData.Address === '' || formData.FullName === '' || selectedCity?.value === undefined || selecteddistrict?.value === undefined || selectedWard?.value === undefined || formData.PostCode === '' || formData.Phone) {
+            Swal.fire({
+                icon: "error",
+                title: "Please enter in full",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        } else {
             try {
                 const response = await fetch("http://127.0.0.1:8000/api/Addorder", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-    
+
                     body: JSON.stringify(
                         {
                             id_Account: ID,
@@ -264,7 +279,7 @@ function CheckOut() {
                             id_ward: selectedWard.value,
                             id_district: selecteddistrict.value,
                             FullName: formData.FullName,
-    
+
                             PostCode: formData.PostCode,
                             Phone: formData.Phone,
                             Address: formData.Address,
@@ -274,11 +289,11 @@ function CheckOut() {
                             vouchercode: selectVoucher.label,
                             Freeship: voucherCode
                         }
-    
-    
+
+
                     ),
                 });
-            
+
                 const responseData = await response.json();
                 if (response.ok) {
                     Swal.fire({
@@ -288,11 +303,11 @@ function CheckOut() {
                         timer: 1500
                     });
                     const response = await fetch(`http://127.0.0.1:8000/api/DefaultOrder/${ID}`);
-    
+
                     if (response.ok) {
                         const data = await response.json();
                         setAccount(data);
-    
+
                         // Set formData based on Account values
                         setFormData({
                             Address: data.Address || '', // Set to empty string if null
@@ -310,12 +325,12 @@ function CheckOut() {
                         }
                     }
                 }
-    
+
             } catch (error) {
                 console.error('Error adding card:', error);
             }
         }
-       
+
     };
 
     // Helper function to show success message using SweetAlert
@@ -442,6 +457,10 @@ function CheckOut() {
     const handlePage = () => {
         setPage(!Page);
     }
+    const handlechange = () => {
+        navigate('/voucher', { state: { username: username, ID: ID } });
+        window.location.reload();
+    };
     const popupUsersetting = {
         display: userSetting ? 'block' : 'none',
         animation: 'cloudAnimation 0.5s'
@@ -528,7 +547,7 @@ function CheckOut() {
     const [selectVoucher, setselectVoucher] = useState(null);
     const handleVoucher = () => {
 
-        if (selectVoucher.value === undefined) {
+        if (selectVoucher?.value === undefined) {
             Swal.fire({
                 icon: "error",
                 title: "Please choose voucher",
@@ -587,6 +606,7 @@ function CheckOut() {
             });
 
             setVoucherDisabled(false);
+            setiscaculateship(true)
         }
         // Iterate over the del array
 
@@ -843,12 +863,7 @@ function CheckOut() {
 
                                                 </a>
                                             </li>
-                                            <li className="inline-block pr-[30px]">
-
-                                                <a href="" id="menu" className="font-bold text-white block uppercase relative" style={{ padding: '18px 0' }}>JeweLLery
-
-                                                </a>
-                                            </li>
+                    
 
 
                                         </ul>
@@ -1201,10 +1216,13 @@ function CheckOut() {
                     <div className="row">
                         <div className="col-12">
                             <div className="coupon-accordion">
-                                <h3 style={{ fontFamily: '"Lato", sans-serif', color: "#333333" }}>
-                                    Returning customer?
-                                    <span id="showlogin"> Click here to login</span>
-                                </h3>
+                                {ID==='' && (
+                                    <h3 style={{ fontFamily: '"Lato", sans-serif', color: "#333333" }}>
+                                        Returning customer?
+                                        <span id="showlogin"> Click here to login</span>
+                                    </h3>
+                                )}
+
                                 <h3 style={{ fontFamily: '"Lato", sans-serif', color: "#333333" }}>
                                     Have a coupon?
                                     <span id="showcoupon" onClick={toggleCouponVisible}>Click here to enter your code</span>
@@ -1227,7 +1245,7 @@ function CheckOut() {
                                     <div className="checkbox-form">
                                         <h3 style={{ fontFamily: '"Lato", sans-serif', color: '#333333', fontWeight: 'bold' }}>Billing Details</h3>
                                         <div className="row">
-                                          
+
                                             <div className="col-md-12">
                                                 <div className="checkout-form-list">
                                                     <label htmlFor="" style={{ marginBottom: '0.5rem', display: 'inline-block', fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px' }}>Full Name
@@ -1426,13 +1444,35 @@ function CheckOut() {
 
 
                                                     </div>
-                                                    <div className="card-body">
-
-                                                        <button className={`paypal-button col-paypal`} style={{ background: '#fff', color: '#000000CC', border: '1px solid rgba(0,0,0,.09)', padding: '10px', borderRadius: '5px', marginRight: '10px', outline: 'none' }} disabled={isVoucherDisabled} onClick={() => handleVoucher()}>
+                                                    <div className="card-body" >
+                                                <button href="" style={{ background:'#595959', border: '1px solid rgba(0,0,0,.09)',
+                                                                padding: '10px',
+                                                                borderRadius: '5px',
+                                                                marginRight: '10px',
+                                                                color:'white',
+                                                                marginTop:'8px',
+                                                                outline: 'none'}} onClick={()=>handlechange() }>List Voucher</button>
+                                                    </div>
+                                                    <div className="card-body" style={{marginTop:'8px'}}>
+                                                        <button
+                                                            className={`paypal-button col-paypal`}
+                                                            style={{
+                                                                background: isVoucherDisabled ? '#eee' : '#0070ba',
+                                                                color: isVoucherDisabled ? '#999' : '#000000CC',
+                                                                border: '1px solid rgba(0,0,0,.09)',
+                                                                padding: '10px',
+                                                                borderRadius: '5px',
+                                                                marginRight: '10px',
+                                                                outline: 'none'
+                                                            }}
+                                                            disabled={isVoucherDisabled}
+                                                            onClick={() => handleVoucher()}
+                                                        >
                                                             <i class="fa-brands fa-paypal"></i>
-                                                            caculate on voucher
+                                                            calculate on voucher
                                                         </button>
-                                                        <button className={`cod-button col-delivery`} style={{ background: '#fff', color: '#000000CC', border: '1px solid rgba(0,0,0,.09)', padding: '10px', borderRadius: '5px' }} disabled={iscaculateship} onClick={() => handleWard()}>
+
+                                                        <button className={`cod-button col-delivery`} style={{ background: iscaculateship ? '#eee' : '#4CAF50', color: '#000000CC', border: '1px solid rgba(0,0,0,.09)', padding: '10px', borderRadius: '5px' }} disabled={iscaculateship} onClick={() => handleWard()}>
                                                             caculate on ship
                                                         </button>
                                                     </div>
@@ -1450,6 +1490,7 @@ function CheckOut() {
                     </div>
                 </div>
             </div>
+            <FooterHome/>
         </div>
 
 

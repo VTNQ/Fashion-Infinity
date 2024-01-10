@@ -15,7 +15,7 @@ import product2 from '../menu/image/product2.png';
 import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
 import MenuHomepage from "../menu/MenuHomepage";
-
+import FooterHome from "../footer/FooterHome";
 import axios from "axios";
 function Myorder() {
     const location = useLocation();
@@ -43,7 +43,7 @@ function Myorder() {
                                     <img src={`http://127.0.0.1:8000/${product.link}`} alt={product.name} />
                                 </div>
                                 <div className="product-details">
-                                    <p className="product-name" style={{color:'#595959',fontFamily:'"Lato", sans-serif'}} onClick={() => navigate('/OrderDetail', { state: { username: username, ID: ID,IDproduct:product.idproduct,IDorder:product.idorder } })}>{product.Name}</p>
+                                    <p className="product-name cursor-pointer" style={{color:'#595959',fontFamily:'"Lato", sans-serif'}} onClick={() => navigate('/OrderDetail', { state: { username: username, ID: ID,IDproduct:product.idproduct,IDorder:product.idorder } })}>{product.Name}</p>
                                     <p className="product-quantity">Quantity: {product.Quality}</p>
                                     <p className="product-price">Total Price: ${product.Price}</p>
                                     {product.status === 0 && (
@@ -94,7 +94,7 @@ function Myorder() {
                                     <img src={`http://127.0.0.1:8000/${product.link}`} alt={product.name} />
                                 </div>
                                 <div className="product-details">
-                                    <p className="product-name">{product.name}</p>
+                                <p className="product-name cursor-pointer" style={{color:'#595959',fontFamily:'"Lato", sans-serif'}} onClick={() => navigate('/OrderDetail', { state: { username: username, ID: ID,IDproduct:product.idproduct,IDorder:product.idorder } })}>{product.Name}</p>
                                     <p className="product-quantity">Quantity: {product.Quality}</p>
                                     <p className="product-price">Total Price: ${product.Price}</p>
                                     {product.status === 0 && (
@@ -145,7 +145,7 @@ function Myorder() {
                                     <img src={`http://127.0.0.1:8000/${product.link}`} alt={product.name} />
                                 </div>
                                 <div className="product-details">
-                                    <p className="product-name">{product.name}</p>
+                                <p className="product-name cursor-pointer" style={{color:'#595959',fontFamily:'"Lato", sans-serif'}} onClick={() => navigate('/OrderDetail', { state: { username: username, ID: ID,IDproduct:product.idproduct,IDorder:product.idorder } })}>{product.Name}</p>
                                     <p className="product-quantity">Quantity: {product.Quality}</p>
                                     <p className="product-price">Total Price: ${product.Price}</p>
                                     {product.status === 0 && (
@@ -194,7 +194,7 @@ function Myorder() {
                                 <img src={`http://127.0.0.1:8000/${product.link}`} alt={product.name} />
                             </div>
                             <div className="product-details">
-                                <p className="product-name">{product.name}</p>
+                            <p className="product-name cursor-pointer" style={{color:'#595959',fontFamily:'"Lato", sans-serif'}} onClick={() => navigate('/OrderDetail', { state: { username: username, ID: ID,IDproduct:product.idproduct,IDorder:product.idorder } })}>{product.Name}</p>
                                 <p className="product-quantity">Quantity: {product.Quality}</p>
                                 <p className="product-price">Total Price: ${product.Price}</p>
                                 {product.status === 0 && (
@@ -300,7 +300,7 @@ function Myorder() {
                             <li>
                                 <a href="" style={{ textDecoration: 'none' }}>Home</a>
                             </li>
-                            <li className="active">Single Product</li>
+                            <li className="active">My Order</li>
                         </ul>
                     </div>
                 </div>
@@ -360,7 +360,7 @@ function Myorder() {
 
 
 
-
+<FooterHome/>
 
 
         </div>

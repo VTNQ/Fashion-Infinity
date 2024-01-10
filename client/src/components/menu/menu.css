@@ -150,7 +150,7 @@ ul .list{
     opacity: 1;
 }
 a:hover{
-    text-decoration: none;
+    text-decoration: none !important;
 }
  .minicart-btn_area .hiraola-btn {
     height: 60px;
