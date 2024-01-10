@@ -7,11 +7,11 @@ import Select from 'react-select';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
-import '../components/admin.css'
+import './admin/admin.css'
 function Transport_fee() {
 
     const [searchTerm, setSearchtem] = useState('');
-    const [loading, setloading] = useState(false);
+    const [loading, setloading] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [perPage, setperPage] = useState(5);
     const [Picture, setPicture] = useState([]);
@@ -23,7 +23,7 @@ function Transport_fee() {
     const [ward, setward] = useState([]);
     const [city, setCity] = useState([]);
 
-   
+
     const [selectedCity, setSelectedCity] = useState(null);
     const [Districts, setDistricts] = useState([]);
     const [selecteddistrict, setselecteddistrict] = useState(null);
@@ -44,14 +44,14 @@ function Transport_fee() {
             Price: value,
         };
         setCategories(updatedCategories);
-    
+
         // Assuming you want to update order.Price as well
         const updatedDelivery = [...delivery];
         updatedDelivery[index] = {
             ...updatedDelivery[index],
             Price: value,
         };
-       setdelivery(updatedDelivery);
+        setdelivery(updatedDelivery);
     };
     const handlePriceInputChange = (index, value) => {
         const updatedCategories = [...Categories];
@@ -71,15 +71,15 @@ function Transport_fee() {
                 },
                 body: JSON.stringify(updatedPrice),
             });
-    
+
             if (response.ok) {
                 console.log('Delivery charge updated successfully');
-              
+
             }
-    
-            
-    
-           
+
+
+
+
             // Perform any additional actions you need
         } catch (error) {
             console.error('Error updating delivery charge', error);
@@ -90,16 +90,16 @@ function Transport_fee() {
             try {
                 const response = await axios.get('http://127.0.0.1:8000/api/displaydelivery');
                 setdelivery(response.data);
-              
 
-           
+
+
             } catch (error) {
                 console.error('Error fetching districts', error);
             }
         }
         fetchdelivery()
     }, [])
- 
+
     useEffect(() => {
         const fetchDistricts = async () => {
             try {
@@ -155,14 +155,14 @@ function Transport_fee() {
     }
     const addSubmit = async (e) => {
         e.preventDefault();
-        if(formData.Price=='' || selecteddistrict===null || selectedWard===null || selectedCity===null){
+        if (formData.Price == '' || selecteddistrict === null || selectedWard === null || selectedCity === null) {
             Swal.fire({
                 icon: "error",
                 title: "City and warrd and district and price required",
                 showConfirmButton: false,
                 timer: 1500
             });
-        }else{
+        } else {
             try {
                 const response = await fetch('http://127.0.0.1:8000/api/Adddelivery_charges', {
                     method: 'POST',
@@ -195,7 +195,7 @@ function Transport_fee() {
                 console.error('error:', error);
             }
         }
-       
+
 
     }
     const filteredCategories = delivery.filter(category =>
@@ -205,6 +205,19 @@ function Transport_fee() {
     const handlePageclick = (data) => {
         setCurrentPage(data.selected);
     };
+    useEffect(() => {
+        const fetchdata = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/displaydelivery');
+                setdelivery(response.data);
+            } catch (error) {
+                console.error('Error during fetch:', error);
+            } finally {
+                setloading(false);
+            }
+        }
+        fetchdata();
+    }, [])
     const indexOflastCategory = (currentPage + 1) * perPage;
     const indexOfFirtCategory = indexOflastCategory - perPage;
     const currentCategories = filteredCategories.slice(indexOfFirtCategory, indexOflastCategory)
@@ -256,27 +269,19 @@ function Transport_fee() {
 
                         <ul className="sidebar-menu">
                             <li className="header">MAIN NAVIGATION</li>
-                            <li className="active treeview text-white">
+                            <li className='cursor-pointer'>
                                 <a className='cursor-pointer' onClick={() => navigate('/admin', { state: { username: username, ID: ID } })}>
-                                    <i className="fa fa-dashboard"></i> <span>Dashboard</span>
+                                    <i className="fa fa-dashboard" ></i> <span>Dashboard</span>
                                 </a>
 
                             </li>
-                            <li className="treeview">
 
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/layout/top-nav.html"><i className="fa fa-circle-o"></i> Top Navigation</a></li>
-                                    <li><a href="pages/layout/boxed.html"><i className="fa fa-circle-o"></i> Boxed</a></li>
-                                    <li><a href="pages/layout/fixed.html"><i className="fa fa-circle-o"></i> Fixed</a></li>
-                                    <li><a href="pages/layout/collapsed-sidebar.html"><i className="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-                                </ul>
-                            </li>
-                            <li className='active treeview text-white'>
+                            <li className="treeview text-white">
                                 <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>category</span>
                                 </a>
                             </li>
-                            <li className='active treeview text-white'>
+                            <li className="treeview text-white">
                                 <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Picture</span>
                                 </a>
@@ -291,82 +296,47 @@ function Transport_fee() {
                                     <i className="fa fa-th"></i> <span>Product</span>
                                 </a>
                             </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-pie-chart"></i>
-                                    <span>Charts</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/charts/morris.html"><i className="fa fa-circle-o"></i> Morris</a></li>
-                                    <li><a href="pages/charts/flot.html"><i className="fa fa-circle-o"></i> Flot</a></li>
-                                    <li><a href="pages/charts/inline.html"><i className="fa fa-circle-o"></i> Inline charts</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-laptop"></i>
-                                    <span>UI Elements</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/UI/general.html"><i className="fa fa-circle-o"></i> General</a></li>
-                                    <li><a href="pages/UI/icons.html"><i className="fa fa-circle-o"></i> Icons</a></li>
-                                    <li><a href="pages/UI/buttons.html"><i className="fa fa-circle-o"></i> Buttons</a></li>
-                                    <li><a href="pages/UI/sliders.html"><i className="fa fa-circle-o"></i> Sliders</a></li>
-                                    <li><a href="pages/UI/timeline.html"><i className="fa fa-circle-o"></i> Timeline</a></li>
-                                    <li><a href="pages/UI/modals.html"><i className="fa fa-circle-o"></i> Modals</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-edit"></i> <span>Forms</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/forms/general.html"><i className="fa fa-circle-o"></i> General Elements</a></li>
-                                    <li><a href="pages/forms/advanced.html"><i className="fa fa-circle-o"></i> Advanced Elements</a></li>
-                                    <li><a href="pages/forms/editors.html"><i className="fa fa-circle-o"></i> Editors</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-table"></i> <span>Tables</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/tables/simple.html"><i className="fa fa-circle-o"></i> Simple tables</a></li>
-                                    <li><a href="pages/tables/data.html"><i className="fa fa-circle-o"></i> Data tables</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="pages/calendar.html">
-                                    <i className="fa fa-calendar"></i> <span>Calendar</span>
-                                    <small className="label pull-right bg-red">3</small>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Edit</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="pages/mailbox/mailbox.html">
-                                    <i className="fa fa-envelope"></i> <span>Mailbox</span>
-                                    <small className="label pull-right bg-yellow">12</small>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/WareHouse', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>WareHouse</span>
                                 </a>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-folder"></i> <span>Examples</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/examples/invoice.html"><i className="fa fa-circle-o"></i> Invoice</a></li>
-                                    <li><a href="pages/examples/login.html"><i className="fa fa-circle-o"></i> Login</a></li>
-                                    <li><a href="pages/examples/register.html"><i className="fa fa-circle-o"></i> Register</a></li>
-                                    <li><a href="pages/examples/lockscreen.html"><i className="fa fa-circle-o"></i> Lockscreen</a></li>
-                                    <li><a href="pages/examples/404.html"><i className="fa fa-circle-o"></i> 404 Error</a></li>
-                                    <li><a href="pages/examples/500.html"><i className="fa fa-circle-o"></i> 500 Error</a></li>
-                                    <li><a href="pages/examples/blank.html"><i className="fa fa-circle-o"></i> Blank Page</a></li>
-                                </ul>
                             </li>
 
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Order', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Order</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Transport_fee', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Transport fee</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/AdminBlog', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Blog</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Category_Post', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Category Blog</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Event', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Event</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/login')}>
+                                    <i className="fa fa-th"></i> <span>Log out</span>
+                                </a>
+                            </li>
 
                         </ul>
                     </section>
@@ -377,19 +347,19 @@ function Transport_fee() {
                 <div className="content-wrapper">
                     <section className="content-header">
                         <h1>
-                            Order
+                            Transport fee
 
                         </h1>
                         <ol className="breadcrumb">
                             <li><a href="#"><i className="fa fa-dashboard"></i> Home</a></li>
-                            <li><a href="#">Category</a></li>
+                            <li><a href="#">Transport fee</a></li>
                         </ol>
                     </section>
                     <section className="content">
                         <div className="row">
                             <div className="box box-primary" >
                                 <div className="box-header">
-                                    <h3 className="box-title">Quick Example</h3>
+                                    <h3 className="box-title">Transport fee</h3>
                                 </div>
                                 <form role="form" onSubmit={addSubmit}>
                                     <div className="box-body">
@@ -480,29 +450,29 @@ function Transport_fee() {
                                                     <td>{order.Namedistrict}</td>
                                                     <td>{order.NameWard}</td>
                                                     <td>
-                        {editingOrderIndex === index ? (
-                            <input
-                                type="number"
-                                value={order.Price}
-                                className='form-control'
-                                onChange={(e) => handlePriceChange(index, e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        handleUpdatePrice(order.ID, { Update_Price: order.Price });
-                                        setEditingOrderIndex(null); // Switch back to label mode
-                                    }
-                                }}
-                                onBlur={() => {
-                                    handleUpdatePrice(order.ID, { Update_Price: order.Price });
-                                    setEditingOrderIndex(null); // Switch back to label mode
-                                }}
-                            />
-                        ) : (
-                            <label onClick={() => setEditingOrderIndex(index)}>
-                                {order.Price}
-                            </label>
-                        )}
-                    </td>
+                                                        {editingOrderIndex === index ? (
+                                                            <input
+                                                                type="number"
+                                                                value={order.Price}
+                                                                className='form-control'
+                                                                onChange={(e) => handlePriceChange(index, e.target.value)}
+                                                                onKeyDown={(e) => {
+                                                                    if (e.key === 'Enter') {
+                                                                        handleUpdatePrice(order.ID, { Update_Price: order.Price });
+                                                                        setEditingOrderIndex(null); // Switch back to label mode
+                                                                    }
+                                                                }}
+                                                                onBlur={() => {
+                                                                    handleUpdatePrice(order.ID, { Update_Price: order.Price });
+                                                                    setEditingOrderIndex(null); // Switch back to label mode
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <label onClick={() => setEditingOrderIndex(index)}>
+                                                                {order.Price}
+                                                            </label>
+                                                        )}
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>

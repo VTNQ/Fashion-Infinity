@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
-import '../components/admin.css'
+import './admin/admin.css'
 
 
 function EditProfile() {
@@ -42,42 +42,52 @@ function EditProfile() {
     };
     const handleUpdateSubmit = async (e) => {
         e.preventDefault();
-        if(formData.Username===''||formData.Avatar==null||formData.Email===''){
+        if (formData.Username === '' || formData.Avatar == null || formData.Email === '') {
             Swal.fire({
                 icon: "error",
                 title: "Username and Email And Avator is required",
                 showConfirmButton: false,
                 timer: 1500,
             });
-        }else{
+        } else {
             const formDataApi = new FormData();
-        formDataApi.append('Username', formData.Username); // Corrected from 'UserName'
-        formDataApi.append('Email', formData.Email);
-        formDataApi.append('Avatar', formData.Avatar);
-        try {
-            const response = await axios.post(`http://127.0.0.1:8000/api/Updateprofile/${ID}`, formDataApi, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-           
-        
-            if (response.data.message) {
-                Swal.fire({
-                    icon: "success",
-                    title: response.data.message,
-                    showConfirmButton: false,
-                    timer: 1500,
+            formDataApi.append('Username', formData.Username); // Corrected from 'UserName'
+            formDataApi.append('Email', formData.Email);
+            formDataApi.append('Avatar', formData.Avatar);
+            try {
+                const response = await axios.post(`http://127.0.0.1:8000/api/Updateprofile/${ID}`, formDataApi, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
                 });
-                const updatedResponse = await axios.get(`http://127.0.0.1:8000/api/ProfileInformation/${ID}`);
-            setAcc(updatedResponse.data);
 
-            const updatedUsername = formData.Username;
 
-            // Update the 'username' in the location state
-            navigate(`/Edit`, { state: { username: updatedUsername, ID } });
-            document.getElementById('imageInput').value = '';
-            }else{
+                if (response.data.message) {
+                    Swal.fire({
+                        icon: "success",
+                        title: response.data.message,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                    const updatedResponse = await axios.get(`http://127.0.0.1:8000/api/ProfileInformation/${ID}`);
+                    setAcc(updatedResponse.data);
+
+                    const updatedUsername = formData.Username;
+
+                    // Update the 'username' in the location state
+                    navigate(`/Edit`, { state: { username: updatedUsername, ID } });
+                    document.getElementById('imageInput').value = '';
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Username is exists",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                }
+                // Handle success
+            } catch (error) {
+                // Handle error
                 Swal.fire({
                     icon: "error",
                     title: "Username is exists",
@@ -85,18 +95,8 @@ function EditProfile() {
                     timer: 1500,
                 });
             }
-            // Handle success
-        } catch (error) {
-            // Handle error
-            Swal.fire({
-                icon: "error",
-                title: "Username is exists",
-                showConfirmButton: false,
-                timer: 1500,
-            });
         }
-        }
-        
+
     }
     useEffect(() => {
         const fetchdata = async () => {
@@ -162,117 +162,73 @@ function EditProfile() {
 
                         <ul className="sidebar-menu">
                             <li className="header">MAIN NAVIGATION</li>
-                            <li className="active treeview text-white">
-                                <a className='cursor-pointer' onClick={() => navigate('/admin', { state: { username: username,ID:ID  } })}>
-                                    <i className="fa fa-dashboard"></i> <span>Dashboard</span>
+                            <li className="active treeview">
+                                <a href="" onClick={() => navigate('/admin', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-dashboard" ></i> <span>Dashboard</span>
                                 </a>
 
                             </li>
-                            <li className="treeview">
 
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/layout/top-nav.html"><i className="fa fa-circle-o"></i> Top Navigation</a></li>
-                                    <li><a href="pages/layout/boxed.html"><i className="fa fa-circle-o"></i> Boxed</a></li>
-                                    <li><a href="pages/layout/fixed.html"><i className="fa fa-circle-o"></i> Fixed</a></li>
-                                    <li><a href="pages/layout/collapsed-sidebar.html"><i className="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-                                </ul>
-                            </li>
-                            <li className='active treeview text-white'>
-                                <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username,ID:ID  } })}>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/category', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>category</span>
                                 </a>
                             </li>
-                            <li className='active treeview text-white'>
-                                <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username,ID:ID  } })}>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Picture', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Picture</span>
                                 </a>
                             </li>
                             <li className="treeview text-white">
-                                <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username,ID:ID  } })}>
+                                <a className='cursor-pointer' onClick={() => navigate('/Provider', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Provider</span>
                                 </a>
                             </li>
                             <li className="treeview text-white">
-                                <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username,ID:ID  } })}>
+                                <a className='cursor-pointer' onClick={() => navigate('/Product', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Product</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Edit', { state: { username: username, ID: ID } })}>
                                     <i className="fa fa-th"></i> <span>Edit</span>
                                 </a>
                             </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-pie-chart"></i>
-                                    <span>Charts</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/charts/morris.html"><i className="fa fa-circle-o"></i> Morris</a></li>
-                                    <li><a href="pages/charts/flot.html"><i className="fa fa-circle-o"></i> Flot</a></li>
-                                    <li><a href="pages/charts/inline.html"><i className="fa fa-circle-o"></i> Inline charts</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-laptop"></i>
-                                    <span>UI Elements</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/UI/general.html"><i className="fa fa-circle-o"></i> General</a></li>
-                                    <li><a href="pages/UI/icons.html"><i className="fa fa-circle-o"></i> Icons</a></li>
-                                    <li><a href="pages/UI/buttons.html"><i className="fa fa-circle-o"></i> Buttons</a></li>
-                                    <li><a href="pages/UI/sliders.html"><i className="fa fa-circle-o"></i> Sliders</a></li>
-                                    <li><a href="pages/UI/timeline.html"><i className="fa fa-circle-o"></i> Timeline</a></li>
-                                    <li><a href="pages/UI/modals.html"><i className="fa fa-circle-o"></i> Modals</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-edit"></i> <span>Forms</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/forms/general.html"><i className="fa fa-circle-o"></i> General Elements</a></li>
-                                    <li><a href="pages/forms/advanced.html"><i className="fa fa-circle-o"></i> Advanced Elements</a></li>
-                                    <li><a href="pages/forms/editors.html"><i className="fa fa-circle-o"></i> Editors</a></li>
-                                </ul>
-                            </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-table"></i> <span>Tables</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/tables/simple.html"><i className="fa fa-circle-o"></i> Simple tables</a></li>
-                                    <li><a href="pages/tables/data.html"><i className="fa fa-circle-o"></i> Data tables</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="pages/calendar.html">
-                                    <i className="fa fa-calendar"></i> <span>Calendar</span>
-                                    <small className="label pull-right bg-red">3</small>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/WareHouse', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>WareHouse</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="pages/mailbox/mailbox.html">
-                                    <i className="fa fa-envelope"></i> <span>Mailbox</span>
-                                    <small className="label pull-right bg-yellow">12</small>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Order', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Order</span>
                                 </a>
                             </li>
-                            <li className="treeview">
-                                <a href="#">
-                                    <i className="fa fa-folder"></i> <span>Examples</span>
-                                    <i className="fa fa-angle-left pull-right"></i>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Transport_fee', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Transport fee</span>
                                 </a>
-                                <ul className="treeview-menu">
-                                    <li><a href="pages/examples/invoice.html"><i className="fa fa-circle-o"></i> Invoice</a></li>
-                                    <li><a href="pages/examples/login.html"><i className="fa fa-circle-o"></i> Login</a></li>
-                                    <li><a href="pages/examples/register.html"><i className="fa fa-circle-o"></i> Register</a></li>
-                                    <li><a href="pages/examples/lockscreen.html"><i className="fa fa-circle-o"></i> Lockscreen</a></li>
-                                    <li><a href="pages/examples/404.html"><i className="fa fa-circle-o"></i> 404 Error</a></li>
-                                    <li><a href="pages/examples/500.html"><i className="fa fa-circle-o"></i> 500 Error</a></li>
-                                    <li><a href="pages/examples/blank.html"><i className="fa fa-circle-o"></i> Blank Page</a></li>
-                                </ul>
                             </li>
-
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/AdminBlog', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Blog</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Category_Post', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Category Blog</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/Event', { state: { username: username, ID: ID } })}>
+                                    <i className="fa fa-th"></i> <span>Event</span>
+                                </a>
+                            </li>
+                            <li className="treeview text-white">
+                                <a className='cursor-pointer' onClick={() => navigate('/login')}>
+                                    <i className="fa fa-th"></i> <span>Log out</span>
+                                </a>
+                            </li>
 
                         </ul>
                     </section>
@@ -293,29 +249,29 @@ function EditProfile() {
                     </section>
                     <section className="content">
                         <div className="row">
-                         
 
 
-                                <div className="profile-container">
 
-                                    <div className="profile-header">
-                                        {selectedImage ? (
-                                            <img
-                                                src={selectedImage}
-                                                alt="Selected Avatar"
-                                                className="profile-avatar"
-                                            />
-                                        ) : (
-                                            <img
-                                                src={`http://127.0.0.1:8000/${Acc.user?.Avatar}` || Default}
-                                                alt="Avatar"
-                                                className="profile-avatar"
-                                            />
-                                        )}
+                            <div className="profile-container">
 
-                                        <h2 className="profile-username"></h2>
-                                    </div>
-                                    <form role='form' onSubmit={handleUpdateSubmit}>
+                                <div className="profile-header">
+                                    {selectedImage ? (
+                                        <img
+                                            src={selectedImage}
+                                            alt="Selected Avatar"
+                                            className="profile-avatar"
+                                        />
+                                    ) : (
+                                        <img
+                                            src={`http://127.0.0.1:8000/${Acc.user?.Avatar}` || Default}
+                                            alt="Avatar"
+                                            className="profile-avatar"
+                                        />
+                                    )}
+
+                                    <h2 className="profile-username"></h2>
+                                </div>
+                                <form role='form' onSubmit={handleUpdateSubmit}>
                                     <div className="profile-details">
                                         <div className="profile-section">
                                             <label >Name Product</label>
@@ -340,10 +296,10 @@ function EditProfile() {
                                         </div>
 
                                     </div>
-                                    </form>
-                                </div>
-                             
-                            
+                                </form>
+                            </div>
+
+
 
                         </div>
                     </section>

@@ -43,13 +43,12 @@ class ProductController extends Controller
         ->join('category_product', 'product.ID', '=', 'category_product.id_Product')
         ->join('category', 'category_product.id_Category', '=', 'category.ID')
         ->join('provider', 'product.id_provider', '=', 'provider.ID')
+        ->join('picture','picture.ID','=','category_product.id_Picture')
         ->select([
-          
             'product.Name as ProductName',
             'product.content',
             'provider.Name as ProviderName',
             'category.Name as NameCategory',
-
             'product.ID as IDproduct',
             'category_product.id_Product',
             'category_product.id_Category',
@@ -57,16 +56,14 @@ class ProductController extends Controller
             'provider.ID as ID_provider',
             'category_product.size',
             'product.Price',
-
             'category_product.id_Picture as Product_Picture'
         ])
+   
         ->groupBy([
-
             'product.Name',
             'product.content',
             'provider.Name',
             'category.Name',
-            
             'product.ID',
             'category_product.id_Product',
             'category_product.id_Category',
@@ -75,8 +72,7 @@ class ProductController extends Controller
             'category_product.size',
             'product.Price',
             'Product_Picture'
-        ])
-       
+        ])->where('picture.status',1)
         ->get();
     
         return response()->json($products, 200);

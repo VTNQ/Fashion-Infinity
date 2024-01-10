@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
 // import '../components/admin.css'
-import '../../components/admin.css'
+import '../admin/admin.css';
 
 function ProviderSuperadmin() {
     const navigate = useNavigate();

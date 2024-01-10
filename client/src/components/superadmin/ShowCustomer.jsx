@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import '../../../src/components/admin.css';
+import '../admin/admin.css'
 import Swal from 'sweetalert2';
 import image from '../../../src/images/user2-160x160.jpg';
 import Pagination from 'react-paginate';

@@ -2,11 +2,13 @@ import image from '../images/user2-160x160.jpg';
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import jsPDF from 'jspdf';
 import axios from 'axios';
+
 import { useLocation } from 'react-router-dom';
 import Pagination from 'react-paginate';
 import 'react-paginate/theme/basic/react-paginate.css';
-import '../components/admin.css'
+import './admin/admin.css'
 function DetailOrder() {
 
     const [searchTerm, setSearchtem] = useState('');
@@ -58,6 +60,80 @@ function DetailOrder() {
         }
         fetchdata();
     }, [IDorder])
+
+    const exportPdf = () => {
+        const doc = new jsPDF();
+    
+        // Add header
+        doc.setFont('Arial', 'bold');
+        doc.setFontSize(14);
+        doc.text('Fashion Infinity', 105, 10, { align: 'center' });
+        doc.text('Order Summary', 105, 20, { align: 'center' });
+        doc.line(20, 30, 190, 30);
+    
+        // Add customer information title
+        doc.setFont('Arial', 'bold');
+        doc.setFontSize(12);
+        doc.text('Information Customer', 20, 40);
+    
+        // Reset font for customer details
+        doc.setFont('Arial', 'normal');
+        doc.setFontSize(12);
+    
+        // Add customer information
+        doc.text(`Customer Name: ${customer ? customer.FullName : ""}`, 20, 50);
+        doc.text(`Address: ${customer ? customer.Address : ""}`, 20, 60);
+        doc.text(`City: ${customer ? customer.Namecity : ""}`, 20, 70);
+        doc.text(`Phone: ${customer ? customer.Phone : ""}`, 20, 80);
+    
+        let currentY = 90; // Adjust starting Y position based on customer info height
+    
+        // Add title for product details
+        doc.setFont('Arial', 'bold');
+        doc.setFontSize(12);
+        doc.text('Detail Product', 20, currentY);
+    
+        // Reset font for product details
+        doc.setFont('Arial', 'normal');
+        doc.setFontSize(12);
+    
+        // Increment currentY to make space for the title
+        currentY += 15;
+    
+        // Iterate through products and add to the PDF table
+        Product.forEach((product, index) => {
+            // Product Name
+            const productNameLines = doc.splitTextToSize(product.Nameproduct, 160); // Adjust the width based on your needs
+            productNameLines.forEach((line, lineIndex) => {
+                doc.text(line, 20, currentY + lineIndex * 10);
+            });
+    
+            // Quantity
+            doc.text(`Quantity: ${product.Quality}`, 20, currentY + productNameLines.length * 10);
+    
+            // Price
+            doc.text(`Price: $${product.Price}`, 20, currentY + productNameLines.length * 10 + 10);
+    
+            // Total
+            doc.text(`Total: $${(product.Quality * product.Price).toFixed(2)}`, 20, currentY + productNameLines.length * 10 + 20);
+    
+            currentY += productNameLines.length * 10 + 35; // Adjust spacing
+        });
+    
+        // Add total prices
+        uniqueTotalPrices.forEach((totalPrice, index) => {
+            doc.text(`Total pay: $${totalPrice.toFixed(2)}`, 20, currentY + index * 15);
+        });
+    
+        // Add ship price outside the table
+        if (shipprice.Price !== null && shipprice.Price !== undefined && shipprice.Price !== '') {
+            doc.text(`Ship price: $${shipprice.Price}`, 20, currentY + uniqueTotalPrices.length * 15);
+        }
+    
+        // Save the PDF
+        doc.save('order_summary.pdf');
+    };
+    
     const navigate = useNavigate();
 
     const uniqueTotalPrices = [...new Set(Product.map((card) => card.TotalPrice))];
@@ -304,7 +380,7 @@ function DetailOrder() {
                                                 <tr>
 
                                                     <td>{index + 1}</td>
-                                                    <td>{product.Name}</td>
+                                                    <td>{product.Nameproduct}</td>
                                                     <td>{product.Quality}</td>
                                                     <td>${product.Price}</td>
                                                     <td>${caculateTotalPrice(product.Quality, product.Price)}</td>
@@ -330,6 +406,16 @@ function DetailOrder() {
 
                                                 <td></td>
                                             </tr>
+                                            <tr> <button style={{
+                                                padding: '10px 20px',
+                                                fontSize: '16px',
+                                                fontWeight: 'bold',
+                                                backgroundColor: '#3498db',
+                                                color: '#ffffff',
+                                                border: 'none',
+                                                borderRadius: '5px',
+                                                cursor: 'pointer',
+                                            }} onClick={exportPdf}>Export PDF</button></tr>
                                         </tbody>
 
                                     </table>

@@ -79,7 +79,7 @@ body {
   position: relative;
 }
 .layout-boxed {
-  background: url('../images/boxed-bg.jpg') repeat fixed;
+  background: url('./boxed-bg.jpg') repeat fixed;
 }
 /*
  * Content Wrapper - contins main content
