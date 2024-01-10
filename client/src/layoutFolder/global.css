@@ -857,6 +857,24 @@ body{
     .card1:active {
       transform: scale(0.95) rotateZ(1.7deg);
     }
+    .slider-container {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .slider {
+      display: flex;
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    .slide {
+      min-width: calc(100% / 5); /* Assuming 5 slides shown at once */
+      box-sizing: border-box;
+    }
+
+    
+    
+    
 
     
     
