@@ -101,50 +101,56 @@ function DetailProduct() {
         }
     };
     const handleAddToCard = async (ProductID) => {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/addCard/${ProductID}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id_Account: ID,
-                }),
-            });
+        if (ID === "") {
+            navigate('/login');
+            window.location.reload();
+        } else {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/addCard/${ProductID}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id_Account: ID,
+                    }),
+                });
 
-            if (!response.ok) {
-                throw new Error('Failed to add card');
-            }
+                if (!response.ok) {
+                    throw new Error('Failed to add card');
+                }
 
-            const data = await response.json();
-            if (data.message) {
-                toast.success("Card added successfully", {
+                const data = await response.json();
+                if (data.message) {
+                    toast.success("Card added successfully", {
+                        position: 'top-right',
+                        autoClose: 3000,
+                    });
+                    const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setCardData(data);
+                    }
+                } else {
+                    toast.success("Card added successfully", {
+                        position: 'top-right',
+                        autoClose: 3000,
+                    });
+                    const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setCardData(data);
+                    }
+
+                }
+            } catch (error) {
+                toast.error("product is out of stock", {
                     position: 'top-right',
                     autoClose: 3000,
                 });
-                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setCardData(data);
-                }
-            } else {
-                toast.success("Card added successfully", {
-                    position: 'top-right',
-                    autoClose: 3000,
-                });
-                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setCardData(data);
-                }
-
             }
-        } catch (error) {
-            toast.error("product is out of stock", {
-                position: 'top-right',
-                autoClose: 3000,
-            });
         }
+
     };
     const handleAddFeedback = async () => {
         if (formData.Comment === '' || rating === 0) {
@@ -188,48 +194,54 @@ function DetailProduct() {
 
     }
     const handleAddCard = async () => {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/AddCardDetail/${IDProduct}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id_Account: ID,
-                    Quality: formData.Quality
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to add card');
-            }
-
-            const data = await response.json();
-            if (data.message) {
-                toast.success("Card added successfully", {
-                    position: 'top-right',
-                    autoClose: 3000,
+        if (ID == "") {
+            navigate('/login');
+            window.location.reload();
+        } else {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/AddCardDetail/${IDProduct}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id_Account: ID,
+                        Quality: formData.Quality
+                    }),
                 });
-                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setCardData(data);
-                }
-            } else {
-                toast.success("Card added successfully", {
-                    position: 'top-right',
-                    autoClose: 3000,
-                });
-                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setCardData(data);
+
+                if (!response.ok) {
+                    throw new Error('Failed to add card');
                 }
 
+                const data = await response.json();
+                if (data.message) {
+                    toast.success("Card added successfully", {
+                        position: 'top-right',
+                        autoClose: 3000,
+                    });
+                    const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setCardData(data);
+                    }
+                } else {
+                    toast.success("Card added successfully", {
+                        position: 'top-right',
+                        autoClose: 3000,
+                    });
+                    const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setCardData(data);
+                    }
+
+                }
+            } catch (error) {
+                console.error('Error adding card:', error);
             }
-        } catch (error) {
-            console.error('Error adding card:', error);
         }
+
     };
     useEffect(() => {
         const fetchProduct = async () => {
@@ -1414,7 +1426,7 @@ function DetailProduct() {
                                         <div className="qty-btn_area" style={{ paddingTop: '30px' }}>
                                             <ul>
                                                 <li>
-                                                    <a className="qty-cart_btn" onClick={() => handleAddCard()}>Add To Cart</a>
+                                                    <a className="qty-cart_btn cursor-pointer" onClick={() => handleAddCard()}>Add To Cart</a>
                                                 </li>
                                                 <li>
 
@@ -1605,7 +1617,7 @@ function DetailProduct() {
                                                                 </ul>
                                                             </div>
                                                             <div className="product-buttons" style={{ paddingTop: '12px' }}>
-                                                              
+
                                                                 <button className="btn btn-success" onClick={() => handleAddToCard(product.id)}     >
                                                                     Add to Cart
                                                                 </button>
@@ -1675,9 +1687,11 @@ function DetailProduct() {
                                                     </div>
                                                     <div className="hiraola-product_content">
                                                         <div className="product-desc_info">
-                                                            <h6 style={{ fontFamily: "Lato, sans-serif", color: "#333333", fontWeight: "700" , overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",}}>
+                                                            <h6 style={{
+                                                                fontFamily: "Lato, sans-serif", color: "#333333", fontWeight: "700", overflow: "hidden",
+                                                                textOverflow: "ellipsis",
+                                                                whiteSpace: "nowrap",
+                                                            }}>
                                                                 <a href="" style={{ fontFamily: "Lato, sans-serif", color: "#333333", fontWeight: "700" }} className="product-name">{product.name}</a>
                                                             </h6>
                                                             <div className="price-box">
@@ -1712,7 +1726,7 @@ function DetailProduct() {
                                                                 </ul>
                                                             </div>
                                                             <div className="product-buttons" style={{ paddingTop: '12px' }}>
-                                                              
+
                                                                 <button className="btn btn-success" onClick={() => handleAddToCard(product.id)}     >
                                                                     Add to Cart
                                                                 </button>

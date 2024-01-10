@@ -259,46 +259,55 @@ function ProductUser() {
 		animation: 'flipright 0.5s',
 	};
 	const handleAddCardetail=async()=>{
-		try {
-			const response = await fetch(`http://127.0.0.1:8000/api/AddCardDetail/${formData.IDProduct}`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					id_Account: ID,
-					Quality:formData.Quality
-				}),
-			});
-	
-			if (!response.ok) {
-				throw new Error('Failed to add card');
-			}
-	
-			const data = await response.json();
-			if (data.message) {
-				toast.success("Card added successfully", {
-					position: 'top-right',
-					autoClose: 3000,
+		if(ID===''){
+			navigate('/login');
+			window.location.reload(); 
+		}else{
+			try {
+				const response = await fetch(`http://127.0.0.1:8000/api/AddCardDetail/${formData.IDProduct}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						id_Account: ID,
+						Quality:formData.Quality
+					}),
 				});
-				const response=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-				if(response.ok){
-					const data=await response.json();
-					setCardData(data);
+		
+				if (!response.ok) {
+					throw new Error('Failed to add card');
 				}
-			} else {
-				toast.success("Card added successfully", {
+		
+				const data = await response.json();
+				if (data.message) {
+					Swal.fire({
+						icon: "success",
+						title: "Add Success",
+						showConfirmButton: false,
+						timer: 1500
+					  });
+					  setPopupVisibility(false);
+					const response=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+					if(response.ok){
+						const data=await response.json();
+						setCardData(data);
+					}
+				} else {
+					toast.success("Card added successfully", {
+						position: 'top-right',
+						autoClose: 3000,
+					});
+					
+				}
+			} catch (error) {
+				toast.error("product is out of stock", {
 					position: 'top-right',
 					autoClose: 3000,
 				});
-				
 			}
-		} catch (error) {
-			toast.error("product is out of stock", {
-				position: 'top-right',
-				autoClose: 3000,
-			});
 		}
+		
 	}
 	const handleDetailProduct = async (Productid) => {
 		try {
@@ -512,45 +521,51 @@ function ProductUser() {
 	const indexOfFirtCategory = indexOflastCategory - perPage;
 	const currentCategories = filteredProducts.slice(indexOfFirtCategory, indexOflastCategory)
 	const handleAddCard = async (IDproduct) => {
-    try {
-        const response = await fetch(`http://127.0.0.1:8000/api/addCard/${IDproduct}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id_Account: ID,
-            }),
-        });
-console.log(ID)
-        if (!response.ok) {
-            throw new Error('Failed to add card');
-        }
-
-        const data = await response.json();
-        if (data.message) {
-            toast.success("Card added successfully", {
-				position: 'top-right',
-				autoClose: 3000,
-			});
-			const responsedata=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
-				if(responsedata.ok){
-					const data=await responsedata.json();
-					setCardData(data);
+		if(ID===""){
+			navigate('/login');
+			window.location.reload(); 
+		}else{
+			try {
+				const response = await fetch(`http://127.0.0.1:8000/api/addCard/${IDproduct}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						id_Account: ID,
+					}),
+				});
+		console.log(ID)
+				if (!response.ok) {
+					throw new Error('Failed to add card');
 				}
-        } else {
-			toast.success("Card added successfully", {
-				position: 'top-right',
-				autoClose: 3000,
-			});
-        
-        }
-    } catch (error) {
-		toast.error("product is out of stock", {
-			position: 'top-right',
-			autoClose: 3000,
-		});
-    }
+		
+				const data = await response.json();
+				if (data.message) {
+					toast.success("Card added successfully", {
+						position: 'top-right',
+						autoClose: 3000,
+					});
+					const responsedata=await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+						if(responsedata.ok){
+							const data=await responsedata.json();
+							setCardData(data);
+						}
+				} else {
+					toast.success("Card added successfully", {
+						position: 'top-right',
+						autoClose: 3000,
+					});
+				
+				}
+			} catch (error) {
+				toast.error("product is out of stock", {
+					position: 'top-right',
+					autoClose: 3000,
+				});
+			}
+		}
+    
 };
 const handleIncreaseQuality = () => {
 	const totalQuantity = formData.WareHouseQuality || 0;
@@ -1531,7 +1546,7 @@ const handleIncreaseQuality = () => {
 					</div>
 				</div>
 			)}
-<FooterHome/>
+
 		</div>
 
 

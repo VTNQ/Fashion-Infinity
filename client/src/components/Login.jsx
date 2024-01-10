@@ -155,9 +155,7 @@ function Login() {
                         navigate('/superadmin', { state: { username: responseData.Username } });
                       } else if (responseData.isAdmin) {
                         navigate('/admin', { state: { username: responseData.Username, ID: responseData.ID } })
-                        .then(() => {
-                          window.location.reload();
-                        });
+                      
                       } else if (responseData.user) {
                         
                         navigate('/', { state: { username: responseData.Username, ID: responseData.ID } })
