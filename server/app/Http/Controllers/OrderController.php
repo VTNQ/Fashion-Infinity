@@ -202,7 +202,7 @@ if ($freeShipCode !== null && strpos($freeShipCode, 'FSH') === 0) {
     // Nếu Freeship không phải là null và bắt đầu bằng 'FSH', thì thực hiện cập nhật quantity + 1
     DB::table('voucher')
         ->where('voucherCode', $freeShipCode)
-        ->update(['quantity' => DB::raw('quantity + 1')]);
+        ->update(['quantity' => DB::raw('quantity - 1')]);
 }
                 }
 
@@ -289,18 +289,18 @@ if ($freeShipCode !== null && strpos($freeShipCode, 'FSH') === 0) {
                 $voucherCode = $request->input('vouchercode');
                 $freeShipCode = $request->input('Freeship');
                 
-                if ($voucherCode !== null) {
+                if (isset($voucherCode) && $voucherCode !== null) {
                     // Nếu voucherCode không phải là null, thì thực hiện cập nhật quantity - 1
                     DB::table('voucher')
                         ->where('voucherCode', $voucherCode)
                         ->update(['quantity' => DB::raw('quantity - 1')]);
                 }
                 
-                if ($freeShipCode !== null && strpos($freeShipCode, 'FSH') === 0) {
+                if ($freeShipCode !== null && strpos($freeShipCode, 'FSH') === 0 && isset($freeShipCode)) {
                     // Nếu Freeship không phải là null và bắt đầu bằng 'FSH', thì thực hiện cập nhật quantity + 1
                     DB::table('voucher')
                         ->where('voucherCode', $freeShipCode)
-                        ->update(['quantity' => DB::raw('quantity + 1')]);
+                        ->update(['quantity' => DB::raw('quantity - 1')]);
                 }
                 return response()->json(['message' => 'Account does not meet the criteria for placing an order']);
             }
