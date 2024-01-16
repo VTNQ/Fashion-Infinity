@@ -100,6 +100,15 @@
     background: #f4f4f4;
     margin-top: 8px;
 }
+.input-text{
+    background-color: transparent;
+    border: 1px solid #e5e5e5;
+    border-radius: 0;
+    height: 36px;
+    padding-left: 10px;
+    width: 170px;
+    outline: none;
+}
 .payment-method .payment-accordion .card-body {
     padding: 0;
 }
@@ -235,6 +244,25 @@
     -o-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
     width: inherit;
+}
+.button{
+    background: #595959;
+    border: medium none;
+    border-radius: 0;
+    color: #ffffff;
+    height: 36px;
+    cursor: pointer;
+    margin-left: 6px;
+    padding: 5px 10px;
+    transition: all 0.3s ease 0s;
+    width: inherit;
+
+border-radius: 5px;
+
+}
+.button:hover{
+    background-color: #cda557 !important;
+
 }
 .checkbox-form h3 {
     border-bottom: 1px solid #e5e5e5;

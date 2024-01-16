@@ -30,11 +30,7 @@ function Product() {
         setCurrentPage(data.selected);
     };
     const [Act,setAct]=useState(true);
-    useEffect(() => {
-      if (!ID && Act) {
-       navigate(-1); 
-      }
-    }, [ID, navigate]);
+    
     const username = location.state?.username || 'Default Username';
     const ID = location.state?.ID || '';
     const popupContentStyle = {
@@ -402,7 +398,11 @@ function Product() {
     const indexOflastCategory = (currentPage + 1) * perPage;
     const indexOfFirtCategory = indexOflastCategory - perPage;
     const currentCategories = filteredCategories.slice(indexOfFirtCategory, indexOflastCategory)
-
+    useEffect(() => {
+        if (!ID && Act) {
+         navigate(-1); 
+        }
+      }, [ID, navigate]);
     return (
         <div>
             {loading && (

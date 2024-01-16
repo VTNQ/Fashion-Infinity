@@ -66,8 +66,8 @@ return(
                                     </a>
                                 </div>
                                 <div className="team-content text-center">
-                                    <h3>Timothy Beck</h3>
-                                    <p>IT Expert</p>
+                                    <h3>Tran Nguyen Thanh Phong</h3>
+                                    <p>Member</p>
                                     <a href="" style={{color:"#595959",textDecoration:'none'}}>info@example.com</a>
                                     <div className="hiraola-social_link">
                                         <ul>
@@ -109,8 +109,8 @@ return(
                                     </a>
                                 </div>
                                 <div className="team-content text-center">
-                                    <h3>Timothy Beck</h3>
-                                    <p>IT Expert</p>
+                                    <h3>Nguyen Thanh Cong</h3>
+                                    <p>Member</p>
                                     <a href="" style={{color:"#595959",textDecoration:'none'}}>info@example.com</a>
                                     <div className="hiraola-social_link">
                                         <ul>
@@ -144,92 +144,8 @@ return(
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-3 col-md-6 col-sm-6">
-                            <div className="team-member">
-                                <div className="team-thumb img-hover_effect">
-                                    <a href="">
-                                        <img src={beck} alt="" />
-                                    </a>
-                                </div>
-                                <div className="team-content text-center">
-                                    <h3>Timothy Beck</h3>
-                                    <p>IT Expert</p>
-                                    <a href="" style={{color:"#595959",textDecoration:'none'}}>info@example.com</a>
-                                    <div className="hiraola-social_link">
-                                        <ul>
-                                            <li className="facebook">
-                                                <a href="" target="_blank">
-                                                    <i className="fab fa-facebook" style={{color:'#595959'}}></i>
-                                                </a>
-                                            </li>
-                                            <li className="twitter">
-                                                <a href="" target="_blank">
-                                                    <i className="fab fa-twitter-square" style={{color:'#595959'}}></i>
-                                                </a>
-                                            </li>
-                                            <li className="youtube">
-                                                <a href="" target="_blank">
-                                                    <i className="fab fa-youtube" style={{color:'#595959'}}></i>
-                                                </a>
-                                            </li>
-                                            <li className="google-plus">
-                                                <a href="" target="_blank">
-                                                    <i className="fab fa-google-plus" style={{color:'#595959'}}></i>
-                                                </a>
-                                            </li>
-                                            <li className="instagram">
-                                                <a href="" target="_blank">
-                                                    <i className="fab fa-instagram" style={{color:'#595959'}}></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6 col-sm-6">
-                            <div className="team-member">
-                                <div className="team-thumb img-hover_effect">
-                                    <a href="">
-                                        <img src={beck} alt="" />
-                                    </a>
-                                </div>
-                                <div className="team-content text-center">
-                                    <h3>Timothy Beck</h3>
-                                    <p>IT Expert</p>
-                                    <a href="" style={{color:"#595959",textDecoration:'none'}}>info@example.com</a>
-                                    <div className="hiraola-social_link">
-                                        <ul>
-                                            <li className="facebook">
-                                                <a href="" target="_blank">
-                                                    <i className="fab fa-facebook" style={{color:'#595959'}}></i>
-                                                </a>
-                                            </li>
-                                            <li className="twitter">
-                                                <a href="" target="_blank">
-                                                    <i className="fab fa-twitter-square" style={{color:'#595959'}}></i>
-                                                </a>
-                                            </li>
-                                            <li className="youtube">
-                                                <a href="" target="_blank">
-                                                    <i className="fab fa-youtube" style={{color:'#595959'}}></i>
-                                                </a>
-                                            </li>
-                                            <li className="google-plus">
-                                                <a href="" target="_blank">
-                                                    <i className="fab fa-google-plus" style={{color:'#595959'}}></i>
-                                                </a>
-                                            </li>
-                                            <li className="instagram">
-                                                <a href="" target="_blank">
-                                                    <i className="fab fa-instagram" style={{color:'#595959'}}></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       
+                        
                     </div>
                 </div>
             </div>

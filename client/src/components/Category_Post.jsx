@@ -273,7 +273,7 @@ function Category_Post() {
                     </section>
                     <section className="content">
                         <div className="row">
-                            <div className="box box-primary" style={{ maxHeight: '400px' }}>
+                            <div className="box box-primary" style={{ maxHeight: '486px' }}>
                                 <div className="box-header">
                                     <h3 className="box-title">Category Blog</h3>
                                 </div>

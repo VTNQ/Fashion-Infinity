@@ -528,7 +528,7 @@ const [currentSlide, setCurrentSlide] = useState(0);
             <p className="text-[2.5rem] font-bold" style={{color: "#333333",fontFamily: 'lato',animation: 'focusIn 1s ease forwards'}}>{slide.price}</p>
             
             </div>
-			<h4 className="hover:text-black"><a class="button col " href="#">Shopping Now</a></h4>
+			<h4 className="hover:text-black"><a id="button" class=" col " href="#">Shopping Now</a></h4>
             </div>
 			
 		  </div>
@@ -658,13 +658,13 @@ const [currentSlide, setCurrentSlide] = useState(0);
                     <h1 className="text-[2rem] m-0 md-max:text-[1.7rem]" style={{color: "#EA4755",fontFamily: 'lato'}}>{bannerData1.text1}</h1>
                     <h1 className="text-[2rem] m-0 md-max:text-[1.7rem]"  style={{color: "#333333",fontFamily: 'lato'}}>{bannerData1.text2}</h1>
                 </div>
-                <h1 class="text-[5.5rem] m-0 font-semibold md-max:text-[4.5rem] xs-max:text-[3rem]"  style={{color: "#333333",fontFamily: 'lato'}}>{bannerData1.title1}</h1>
+                <h1 class="text-[2.5rem] m-0 font-semibold md-max:text-[4.5rem] xs-max:text-[3rem]"  style={{color: "#333333",fontFamily: 'lato'}}>{bannerData1.title1}</h1>
                 <h1 class=" text-[5rem] m-0 font-medium md-max:text-[4.5rem] xs-max:text-[3rem]"  style={{color: "#333333",fontFamily: 'lato'}}>{bannerData1.title2}</h1>
                 <div className="flex gap-3 mt-7 xs-max:mt-3">
                     <p className="text-[2.5rem] font-bold md-max:text-[2rem]" style={{color: "#333333",fontFamily: 'lato'}}>Staring at</p>
                     <p className="text-[2.5rem] font-bold md-max:text-[2rem]" style={{color: "#EA4755",fontFamily: 'lato'}}>{bannerData1.price}</p>
                 </div>
-                <h4 className="hover:text-black"><a class="button col " href="#">Shopping Now</a></h4>
+                <h4 className="hover:text-black"><a id="button" class=" col " href="#">Shopping Now</a></h4>
 
 
             </div>

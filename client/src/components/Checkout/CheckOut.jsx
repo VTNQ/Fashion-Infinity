@@ -18,11 +18,18 @@ import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
 import FooterHome from "../footer/FooterHome";
 import axios from "axios";
+const featureEnabled = window.location.pathname.includes("/Check");
 
+if (featureEnabled) {
+	require("./Check.css");
+
+}
 function CheckOut() {
+   
     const [selectedWard, setSelectedWard] = useState(null);
     const [ward, setward] = useState([]);
     const [city, setCity] = useState([]);
+    const[freeship,setfreeship]=useState(true);
     const [isVoucherDisabled, setVoucherDisabled] = useState(true);
     const [iscaculateship, setiscaculateship] = useState(false);
     const [del, setdel] = useState([]);
@@ -47,7 +54,8 @@ function CheckOut() {
         City: '',
         PostCode: '',
         Phone: '',
-        Email: ''
+        Email: '',
+        feecoupon:''
     });
     const [TotalQuantity, setTotalQuantity] = useState(1);
     const [Tol, setTol] = useState(1);
@@ -69,14 +77,14 @@ function CheckOut() {
     }, [])
     const [apply, setapply] = useState(false);
     const applyFreeship = () => {
-        const foundCharge = free.find(charge => charge.voucherCode.includes(voucherCode));
-
+        const foundCharge = free.find(charge => charge.voucherCode.includes(formData.feecoupon));
         if (foundCharge) {
             if (couttotalPrice - priceship < 0) {
                 setcouttotalPrice(0);
             } else {
                 setcouttotalPrice(couttotalPrice - priceship);
             }
+            setfreeship(true);
         } else {
             Swal.fire({
                 icon: "error",
@@ -250,6 +258,7 @@ function CheckOut() {
     const [Direct, setDirect] = useState(false);
     const [Payment, setPayment] = useState(false);
     const AddCard = async () => {
+    
         if (username === "" || ID === "") {
             Swal.fire({
                 icon: "error",
@@ -257,7 +266,7 @@ function CheckOut() {
                 showConfirmButton: false,
                 timer: 1500
             });
-        } else if (formData.Address === '' || formData.FullName === '' || selectedCity?.value === undefined || selecteddistrict?.value === undefined || selectedWard?.value === undefined || formData.PostCode === '' || formData.Phone) {
+        } else if (formData.Address === '' || formData.FullName === '' || selectedCity?.value === undefined || selecteddistrict?.value === undefined || selectedWard?.value === undefined || formData.PostCode === '' || formData.Phone==='') {
             Swal.fire({
                 icon: "error",
                 title: "Please enter in full",
@@ -286,14 +295,14 @@ function CheckOut() {
                             TotalPrice: couttotalPrice,
                             id_product: checkout.map(card => card.ID),
                             Quality: checkout.map(card => card.TotalQuantity),
-                            vouchercode: selectVoucher.label,
-                            Freeship: voucherCode
+                            vouchercode: selectVoucher?.label,
+                            Freeship: formData.feecoupon
                         }
 
 
                     ),
                 });
-
+               
                 const responseData = await response.json();
                 if (response.ok) {
                     Swal.fire({
@@ -316,8 +325,13 @@ function CheckOut() {
                             PostCode: data.PostCode || '',
                             Phone: data.Phone || ''
                         });
+                        selectedCity.value=undefined;
+                        selectedWard.value=undefined;
+                        selecteddistrict.value=undefined;
+                        selectVoucher.label=undefined;
                         setcouttotalPrice(0);
-
+                        setpriceship(0);
+                        settotalPriceVoucher(0);
                         const responsedata = await fetch(`http://127.0.0.1:8000/api/ShowMiniCart/${ID}`);
                         if (response.ok) {
                             const data = await responsedata.json();
@@ -545,6 +559,7 @@ function CheckOut() {
     };
     const [couttotalPrice, setcouttotalPrice] = useState(0);
     const [selectVoucher, setselectVoucher] = useState(null);
+    const [totalPricevoucher, settotalPriceVoucher] = useState(0);
     const handleVoucher = () => {
 
         if (selectVoucher?.value === undefined) {
@@ -560,7 +575,7 @@ function CheckOut() {
             if (matchingCharge) {
                 const totalPercent = couttotalPrice;
                 const total = totalPercent - matchingCharge.value;
-
+                settotalPriceVoucher(matchingCharge.value);
                 if (total <= 0) {
                     setcouttotalPrice(0);
                 } else {
@@ -571,7 +586,8 @@ function CheckOut() {
                 console.error('No matching charge found for the selected voucher.');
             }
             setVoucherDisabled(true);
-            setiscaculateship(true)
+            setiscaculateship(true);
+            setfreeship(false)
         }
 
 
@@ -607,6 +623,7 @@ function CheckOut() {
 
             setVoucherDisabled(false);
             setiscaculateship(true)
+            setfreeship(false);
         }
         // Iterate over the del array
 
@@ -1401,22 +1418,29 @@ function CheckOut() {
                                                     </div>
                                                 </div>
                                                 <div className="card">
-                                                    <div className="card-header" id="payment-1">
+                                                    {priceship > 0 && (
+                                                        <div className="card-header" id="payment-1">
+                                                            <h5 className="panel-title">
+                                                                <a className="collapsed" style={{ color: '#595959', textDecoration: 'none' }} onClick={tooglePayment}>
+
+                                                                    Ship payment:{priceship}
+
+                                                                </a>
+                                                            </h5>
+                                                        </div>
+                                                    )}
+                                                    {totalPricevoucher >0 &&(
+                                                        <div className="card-header" id="payment-1" style={{marginTop:'5px'}}>
                                                         <h5 className="panel-title">
                                                             <a className="collapsed" style={{ color: '#595959', textDecoration: 'none' }} onClick={tooglePayment}>
 
-                                                                Cheque Payment
+                                                                Price voucher:{totalPricevoucher}
 
                                                             </a>
                                                         </h5>
                                                     </div>
-                                                    <div className={`coupon-checkout-content ${Payment ? 'visible' : 'hidden'}`}>
-                                                        <div className="card-body">
-                                                            <p style={{ fontFamily: '"Lato", sans-serif', color: '#595959', fontSize: '16px', marginTop: '0', marginBottom: '1rem' }}>
-                                                                Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.
-                                                            </p>
-                                                        </div>
-                                                    </div>
+                                                    )}
+
                                                     <div className="card">
                                                         <div className="coupon-all">
                                                             <div className="coupon">
@@ -1424,12 +1448,12 @@ function CheckOut() {
                                                                     name="voucherCode"
                                                                     type="text"
                                                                     id="coupon_code"
-                                                                    value={voucherCode}
-                                                                    onChange={handleCouponCodeChange}
+                                                                    value={formData.feecoupon}
+                                                                    onChange={(e) => setFormData({ ...formData, feecoupon: e.target.value })}
                                                                     className="input-text"
                                                                     placeholder="Coupon code"
                                                                 />
-                                                                <input type="button" className="button" name="apply_coupon" value={"Apply coupon"} onClick={() => applyFreeship()} />
+                                                                <button className="button"   name="apply_coupon" disabled={freeship} onClick={() => applyFreeship()}>Apply coupon</button>
                                                                 {/* <button 
                                                     type="button" 
                                                     className="button" 

@@ -30,12 +30,7 @@ function Myorder() {
     const handleTabChange = (tabID) => {
         setActiveTab(tabID);
     }
-    const [Act,setAct]=useState(true);
-    useEffect(() => {
-      if (!ID && Act) {
-       navigate(-1); 
-      }
-    }, [ID, navigate]);
+    
     const navigate = useNavigate();
     const renderTabContent = () => {
         switch (ActiveTab) {
@@ -292,6 +287,12 @@ function Myorder() {
         }
         fetchdata();
     }, [])
+    const [Act,setAct]=useState(true);
+    useEffect(() => {
+      if (!ID && Act) {
+       navigate(-1); 
+      }
+    }, [ID, navigate]);
     return (
 
         <div>

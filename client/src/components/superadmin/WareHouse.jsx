@@ -26,12 +26,7 @@ useEffect(() => {
   fetchData();
 }, []);
 const navigate = useNavigate();
-const [Act,setAct]=useState(true);
-useEffect(() => {
-  if ( Act) {
-   navigate(-1); 
-  }
-}, [ navigate]);
+
 
 const [currentPage, setCurrentPage] = useState(0);
   const perPage = 8;

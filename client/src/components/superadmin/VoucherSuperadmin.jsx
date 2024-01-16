@@ -15,12 +15,7 @@ function VoucherSuperadmin(){
     const [voucherCode, setVoucherCode] = useState('');
     const [voucherCodeError, setVoucherCodeError] = useState(false);   
     const navigate = useNavigate();
-  const [Act,setAct]=useState(true);
-  useEffect(() => {
-    if ( Act) {
-     navigate(-1); 
-    }
-  }, [ navigate]);
+ 
     const handleVoucherCodeChange = (e) => {
       const value = e.target.value.toUpperCase(); 
       if (value.length <= 6) {

@@ -943,7 +943,7 @@ function MiniCart() {
                                     <div className="col-lg-6">
                                         <div className="blog-item">
                                             <div className="blog-img img-hover_effect">
-                                                <a onClick={() => navigate('/DetailBlog', { state: { IDBlog: order.ID } })} >
+                                                <a onClick={() => navigate('/DetailBlog', { state: { IDBlog: order.ID,username: username, ID: ID } })} >
                                                     <img src={`http://127.0.0.1:8000/${order.Blog_image}`} alt="" />
                                                 </a>
                                             </div>

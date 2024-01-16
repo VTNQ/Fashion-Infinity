@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Magnifier } from 'react-image-magnify';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import '../menu/menu.css';
-import './MiniCart.css';
+import '../Minicart/MiniCart.css';
 import Swal from 'sweetalert2';
 import us from '../menu/image/us.png';
 import France from '../menu/image/France.png';
@@ -16,7 +16,11 @@ import product3 from '../menu/image/product3.png';
 import logo2 from '../menu/image/logorespon.png';
 import jewry from './2-2.png';
 import axios from "axios";
-
+const featureEnabled = window.location.pathname.includes("/MiniCart");
+if (featureEnabled) {
+	require("../Minicart/MiniCart.css");
+	
+}
 function MiniCart() {
 
     const [paymentUrl, setPaymentUrl] = useState('');
@@ -27,11 +31,7 @@ function MiniCart() {
         setSelectedBank(event.target.value);
     };
     const [Act,setAct]=useState(true);
-    useEffect(() => {
-      if (!ID && Act) {
-       navigate(-1); 
-      }
-    }, [ID, navigate]);
+  
 
     const location = useLocation();
     const ID = location.state?.ID || '';
@@ -361,10 +361,15 @@ function MiniCart() {
             if (data.message) {
                 Swal.fire({
                     icon: "success",
-                    title: "Delete Successfull",
+                    title: "Update Successfull",
                     showConfirmButton: false,
                     timer: 1500
                 });
+                const response = await fetch(`http://127.0.0.1:8000/api/getcart/${ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setCardData(data);
+                }
             }
         } catch (error) {
             console.error('Error adding card:', error);
@@ -418,7 +423,11 @@ function MiniCart() {
             }, 2000); // Simulate a delay of 2 seconds
         });
     };
-
+    useEffect(() => {
+        if (!ID && Act) {
+         navigate(-1); 
+        }
+      }, [ID, navigate]);
     return (
 
         <div>

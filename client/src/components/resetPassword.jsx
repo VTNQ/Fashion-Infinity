@@ -11,6 +11,7 @@ function ResetPassword() {
         otp:'',
 
     });
+    const history=useNavigate();
     const[countDown,setCountdown]=useState(120);
     const handleInputChange = (index, value,e) => {
         
@@ -25,11 +26,7 @@ function ResetPassword() {
     };
     const [Act,setAct]=useState(true);
     const navigate = useNavigate();
-    useEffect(() => {
-      if (  Act) {
-       navigate(-1); 
-      }
-    }, [ navigate]);
+   
 const handlekeyDown=(index,event)=>{
     if(event.key==='Backspace' && !otpInputs[index] && index>0){
         inputRefs[index-1].current.focus();
@@ -66,6 +63,8 @@ const sendOtpRequest = async () => {
                     title: responseData.message,
                     showConfirmButton: false,
                     timer: 1500
+                }).then(()=>{
+                    history('/Login');
                 });
            
             } else {
@@ -123,7 +122,7 @@ const seconds = Math.max(countDown % 60,0);
 <div>
             <section className="min-h-screen flex items-stretch text-white ">
                 {/* Left side with background image */}
-                <div className="bg-img lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center">
+                <div className="bg-img lg:flex w-1/2  bg-gray-500 bg-no-repeat bg-cover relative items-center">
                     <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
                     <div className="w-full px-24 z-10">
                         <h1 className="text-5xl font-bold text-left tracking-wide">Keep it special</h1>

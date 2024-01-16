@@ -26,12 +26,7 @@ function DetailOrder() {
     const caculateTotalPrice = (quanlity, Price) => {
         return (quanlity * Price);
     }
-    const [Act,setAct]=useState(true);
-    useEffect(() => {
-      if (!ID && Act) {
-       navigate(-1); 
-      }
-    }, [ID, navigate]);
+   
     useEffect(() => {
         const fetchdata = async () => {
             try {
@@ -142,6 +137,7 @@ function DetailOrder() {
     const navigate = useNavigate();
 
     const uniqueTotalPrices = [...new Set(Product.map((card) => card.TotalPrice))];
+   
     return (
         <div>
             {loading && (

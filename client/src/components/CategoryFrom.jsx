@@ -25,11 +25,7 @@ function CategoryFrom() {
   const [categories, setCategories] = useState([]);
   const [IsClosingPopup, setIsClosingPopup] = useState(false);
   const [Act,setAct]=useState(true);
-  useEffect(() => {
-    if (!ID && Act) {
-     navigate(-1); 
-    }
-  }, [ID, navigate]);
+ 
   useEffect(() => {
     const fetchdata = async () => {
       try {

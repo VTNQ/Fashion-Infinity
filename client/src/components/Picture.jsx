@@ -16,12 +16,7 @@ function Picture() {
   const [Picture, setPicture] = useState([]);
 
 
-  const [Act,setAct]=useState(true);
-  useEffect(() => {
-    if (!ID && Act) {
-     navigate(-1); 
-    }
-  }, [ID, navigate]);
+  
   useEffect(() => {
     const fetchdata = async () => {
       try {
@@ -280,7 +275,12 @@ function Picture() {
       }
     }
   };
-
+  const [Act,setAct]=useState(true);
+  useEffect(() => {
+    if (!ID && Act) {
+     navigate(-1); 
+    }
+  }, [ID, navigate]);
 
   const indexOflastCategory = (currentPage + 1) * perPage;
   const indexOfFirtCategory = indexOflastCategory - perPage;
@@ -422,7 +422,7 @@ function Picture() {
           </section>
           <section className="content">
             <div className="row">
-              <div className="box box-primary" style={{ maxHeight: '400px' }}>
+              <div className="box box-primary" style={{ maxHeight: '500px' }}>
                 <div className="box-header">
                   <h3 className="box-title">Picture</h3>
                 </div>

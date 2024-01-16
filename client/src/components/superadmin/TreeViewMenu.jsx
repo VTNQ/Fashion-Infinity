@@ -8,13 +8,7 @@ const TreeviewMenu = ({ title, children }) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
-  const navigate = useNavigate();
-  const [Act,setAct]=useState(true);
-  useEffect(() => {
-    if ( Act) {
-     navigate(-1); 
-    }
-  }, [ navigate]);
+
   return (
     <li className={`treeview ${isOpen ? 'active' : ''}`}>
       <a href="#" onClick={toggleMenu}>
