@@ -40,7 +40,6 @@ function DetailOrder() {
             } catch (error) {
                 console.error("error fetching product", error)
             }
-
         }
         fetchdata();
     }, [IDorder])
@@ -77,7 +76,7 @@ function DetailOrder() {
         doc.text('Order Summary', 105, 20, { align: 'center' });
         doc.line(20, 30, 190, 30);
     
-        // Add customer information title
+        
         doc.setFont('Arial', 'bold');
         doc.setFontSize(12);
         doc.text('Information Customer', 20, 40);
